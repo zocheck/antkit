@@ -14,9 +14,9 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v5
         with:
           node-version-file: .nvmrc
           cache: pnpm
@@ -36,6 +36,11 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
+      # Declaring any of these replaces the default set rather than adding to
+      # it, so `contents: read` has to be spelled out — without it `checkout`
+      # gets a token that cannot read the repository, and a private one comes
+      # back as "not found" rather than "forbidden".
+      contents: read
       pages: write
       id-token: write
 
@@ -44,9 +49,9 @@ jobs:
       url: ${{ steps.pages.outputs.page_url }}
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v5
         with:
           node-version-file: .nvmrc
           cache: pnpm
@@ -55,7 +60,7 @@ jobs:
       # project page, `/` once a custom domain is set — so neither the build
       # nor the generated markdown has to hard-code it.
       - id: pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - run: pnpm install --frozen-lockfile
 
@@ -69,8 +74,11 @@ jobs:
         env:
           DOCS_BASE: ${{ steps.pages.outputs.base_path }}/
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: apps/docs/dist
+          # `.nojekyll` starts with a dot, and hidden files are dropped by
+          # default.
+          include-hidden-files: true
 
-      - uses: actions/deploy-pages@v4
+      - uses: actions/deploy-pages@v5
