@@ -1,0 +1,7 @@
+/* transfer, and the components it renders: button, checkbox, empty, input */
+@import './base.css';
+@source '../src/components/button';
+@source '../src/components/checkbox';
+@source '../src/components/empty';
+@source '../src/components/input';
+@source '../src/components/transfer';

@@ -1,0 +1,6 @@
+/* time-picker, and the components it renders: button, date-picker, popover */
+@import './base.css';
+@source '../src/components/button';
+@source '../src/components/date-picker';
+@source '../src/components/popover';
+@source '../src/components/time-picker';

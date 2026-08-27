@@ -1,12 +1,11 @@
 @import 'tailwindcss';
-@import '@antkit/styles';
 
 /*
- * Tailwind skips node_modules, so the class names inside @antkit/react would
- * never reach the stylesheet. Point it at the package source explicitly —
- * pnpm symlinks it and Tailwind follows the link.
+ * Brings the tokens and points Tailwind at the component source. The docs put
+ * every component on screen, so they take the all-in-one entry; an app using a
+ * handful would import `@antkit/react/css/<component>.css` instead.
  */
-@source '../../../packages/react/src';
+@import '@antkit/react/styles.css';
 
 /*
  * Docs-only surfaces. Code blocks need their own background: `--muted` is the
@@ -44,6 +43,82 @@
 @theme inline {
   --color-code: var(--code);
   --color-code-foreground: var(--code-foreground);
+}
+
+/*
+ * The landing hero's panel, turned a few degrees so it reads as a product
+ * shot rather than a screenshot. Only above the breakpoint where it stops
+ * sharing a column with the headline — tilted type is unreadable.
+ */
+@media (min-width: 64rem) {
+  .hero-tilt {
+    transform: perspective(1100px) rotateY(-11deg) rotateX(3deg);
+    transform-origin: right center;
+  }
+}
+
+/*
+ * Landing-page motion. `rise` is the entrance every block shares — the hero
+ * runs it on a stagger, everything below it on scroll. The easing overshoots
+ * nothing: a docs page that bounces reads as a toy.
+ */
+@keyframes antkit-rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* The hero panel arrives from its own side, so the two halves do not march. */
+@keyframes antkit-rise-right {
+  from {
+    opacity: 0;
+    transform: translateX(2.5rem) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Slow enough to be felt rather than watched. */
+@keyframes antkit-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(3rem, -2rem, 0) scale(1.12);
+  }
+}
+
+.rise {
+  animation: antkit-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.rise-right {
+  animation: antkit-rise-right 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.drift {
+  animation: antkit-drift 22s ease-in-out infinite;
+}
+
+.drift-reverse {
+  animation: antkit-drift 30s ease-in-out infinite reverse;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise,
+  .rise-right,
+  .drift,
+  .drift-reverse {
+    animation: none;
+  }
 }
 
 .tok-comment {

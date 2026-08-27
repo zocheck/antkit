@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 
-import { cn } from '../../utils';
+import { cn, isEmpty } from '../../utils';
 import { ChevronDownIcon, XIcon } from 'lucide-react';
 
-import { useUiConfig } from '../../lib/ui-config';
+import { useConfig } from '../../lib/config';
+import { Empty } from '../empty';
 import { Input } from '../input';
 import { Popover, PopoverContent, PopoverTrigger } from '../popover';
 import { Tree } from '../tree';
@@ -76,7 +77,7 @@ const filterTree = (nodes: TreeNode[], query: string): TreeNode[] => {
 };
 
 /**
- * Ant Design-shaped tree select: `Tree` in a dropdown, for picking from a
+ * A tree select: `Tree` in a dropdown, for picking from a
  * hierarchy — a category, a department, a permission node.
  *
  * ```tsx
@@ -87,7 +88,7 @@ const filterTree = (nodes: TreeNode[], query: string): TreeNode[] => {
  *   treeData={permissions}
  *   value={granted}
  *   onChange={setGranted}
- *   placeholder="Chọn quyền"
+ *   placeholder="Choose permissions"
  * />
  * ```
  *
@@ -118,7 +119,7 @@ export const TreeSelect = ({
   'aria-invalid': ariaInvalid,
   'aria-describedby': ariaDescribedBy,
 }: TreeSelectProps) => {
-  const { translate } = useUiConfig();
+  const { locale, renderEmpty } = useConfig();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
 
@@ -127,7 +128,7 @@ export const TreeSelect = ({
   // `Form.Item` seeds an empty field with '', which is not a valid multi value.
   const selected = useMemo<string[]>(() => {
     if (Array.isArray(value)) return value;
-    if (value === undefined || value === null || value === '') return [];
+    if (isEmpty(value)) return [];
     return [value];
   }, [value]);
 
@@ -187,7 +188,7 @@ export const TreeSelect = ({
           <span className="flex min-w-0 flex-1 flex-wrap items-center gap-1 py-1 text-left">
             {selected.length === 0 && (
               <span className="text-muted-foreground">
-                {placeholder ?? translate('selectPlaceholder')}
+                {placeholder ?? locale.common?.selectPlaceholder ?? 'Select…'}
               </span>
             )}
 
@@ -201,7 +202,7 @@ export const TreeSelect = ({
                     <span
                       role="button"
                       tabIndex={-1}
-                      aria-label={translate('remove')}
+                      aria-label={locale.common?.remove ?? 'Remove'}
                       onClick={(event) => {
                         // The trigger would otherwise open the popover.
                         event.stopPropagation();
@@ -230,7 +231,7 @@ export const TreeSelect = ({
             <span
               role="button"
               tabIndex={-1}
-              aria-label={translate('clear')}
+              aria-label={locale.common?.clear ?? 'Clear'}
               onClick={(event) => {
                 event.stopPropagation();
                 emit([]);
@@ -251,7 +252,9 @@ export const TreeSelect = ({
             <Input
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              placeholder={searchPlaceholder ?? translate('search')}
+              placeholder={
+                searchPlaceholder ?? locale.common?.search ?? 'Search…'
+              }
               className="h-8"
             />
           </div>
@@ -259,9 +262,13 @@ export const TreeSelect = ({
 
         <div className="max-h-64 overflow-y-auto p-1">
           {visible.length === 0 ? (
-            <p className="px-2 py-3 text-center text-sm text-muted-foreground">
-              {notFoundContent ?? translate('noData')}
-            </p>
+            notFoundContent ? (
+              <p className="px-2 py-3 text-center text-sm text-muted-foreground">
+                {notFoundContent}
+              </p>
+            ) : (
+              (renderEmpty?.('tree-select') ?? <Empty size="sm" />)
+            )
           ) : (
             <Tree
               data={visible}

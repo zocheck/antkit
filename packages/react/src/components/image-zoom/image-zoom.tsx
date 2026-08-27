@@ -4,6 +4,8 @@ import { createPortal } from 'react-dom';
 
 import { cn } from '../../utils';
 
+import { useLocale } from '../../lib/config';
+
 export type ImageZoomProps = Omit<ComponentProps<'span'>, 'children'> & {
   /** Usually an `<img>`, but anything with a size works. */
   children: ReactNode;
@@ -50,7 +52,7 @@ const measure = (trigger: HTMLElement): Origin => {
  *
  * ```tsx
  * <ImageZoom>
- *   <img src={proof} alt="Ảnh chuyển khoản" className="rounded-md" />
+ *   <img src={proof} alt="Payment receipt" className="rounded-md" />
  * </ImageZoom>
  * ```
  *
@@ -68,11 +70,12 @@ export const ImageZoom = ({
   zoomed: zoomedProp,
   onZoomChange,
   disabled = false,
-  zoomLabel = 'Phóng to ảnh',
-  unzoomLabel = 'Thu nhỏ ảnh',
+  zoomLabel,
+  unzoomLabel,
   className,
   ...props
 }: ImageZoomProps) => {
+  const locale = useLocale();
   const triggerRef = useRef<HTMLSpanElement>(null);
   // `origin` keeps the overlay mounted through the closing animation; `active`
   // is what the transform follows.
@@ -195,7 +198,13 @@ export const ImageZoom = ({
         data-zoomed={active || undefined}
         role={disabled ? undefined : 'button'}
         tabIndex={disabled ? undefined : 0}
-        aria-label={disabled ? undefined : active ? unzoomLabel : zoomLabel}
+        aria-label={
+          disabled
+            ? undefined
+            : active
+              ? (unzoomLabel ?? locale.image?.unzoom ?? 'Zoom out of the image')
+              : (zoomLabel ?? locale.image?.zoom ?? 'Zoom in on the image')
+        }
         className={cn(
           // `w-fit` keeps the hit area on the image even when the wrapper is a
           // stretched grid or flex item.
@@ -224,7 +233,9 @@ export const ImageZoom = ({
             data-slot="image-zoom-overlay"
             role="dialog"
             aria-modal="true"
-            aria-label={unzoomLabel}
+            aria-label={
+              unzoomLabel ?? locale.image?.unzoom ?? 'Zoom out of the image'
+            }
             className="fixed inset-0 z-50"
             onClick={close}
           >

@@ -1,12 +1,17 @@
 /*
  * antkit design tokens.
  *
- * Import once, after Tailwind, and point Tailwind at the component source so
- * it can see the class names inside the package:
+ * Using `@antkit/react`? Import its stylesheet instead — it pulls this file in
+ * and also points Tailwind at the component source:
+ *
+ *   @import 'tailwindcss';
+ *   @import '@antkit/react/styles.css';
+ *
+ * This file on its own is the tokens and nothing else, for a project that
+ * wants the palette without the components:
  *
  *   @import 'tailwindcss';
  *   @import '@antkit/styles';
- *   @source '../node_modules/@antkit/react/src';
  */
 
 @custom-variant dark (&:is(.dark *));
@@ -106,6 +111,21 @@
   --text-5xl: 48px;
   --text-5xl--line-height: 60px;
 
+  /*
+   * Which elements get the hand. Ant Design's answer by default; redeclare one
+   * of these to change the whole product without touching a component.
+   */
+  --cursor-button: pointer;
+  --cursor-link: pointer;
+  --cursor-menu-item: pointer;
+  --cursor-option: pointer;
+  --cursor-checkbox: pointer;
+  --cursor-radio: pointer;
+  --cursor-switch: pointer;
+  --cursor-slider-thumb: grab;
+  --cursor-slider-thumb-active: grabbing;
+  --cursor-disabled: not-allowed;
+
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
@@ -128,8 +148,15 @@
  * shadcn/ui semantic tokens, mapped onto the brand palette above so the
  * generated components in `src/components/ui` inherit the product's look.
  * Change a value here and every shadcn component follows.
+ *
+ * `.light` carries the same block so a subtree can go back to light inside a
+ * dark page — clearing the `dark` class alone would not, since the values
+ * would still inherit from the `.dark` ancestor. Source order between the two
+ * never decides anything: they only ever match different elements, and a
+ * custom property comes from the nearest ancestor that declares it.
  */
-:root {
+:root,
+.light {
   color-scheme: light;
 
   --radius: 12px;
@@ -265,6 +292,66 @@
    */
   table {
     font-variant-numeric: tabular-nums;
+  }
+
+  /*
+   * Cursors, as tokens rather than as a decision baked into the components —
+   * the shape Radix Themes and Chakra both landed on, because which elements
+   * get the hand is a house style, not a fact.
+   *
+   * The defaults are Ant Design's: the hand on anything that responds. Radix
+   * Themes ships the opposite (arrow on everything but links, the macOS
+   * reading) and Chakra sits between them. Redeclare a variable to move.
+   *
+   * `:where()` keeps every rule at the same specificity, so source order
+   * decides and the specific ones below win over the general one above. Any
+   * `cursor-*` utility on a component still beats all of it, which is how a
+   * `Tree` row with nothing to select keeps its arrow.
+   */
+  :where(a[href]) {
+    cursor: var(--cursor-link);
+  }
+
+  :where(button, summary, [role='button'], [role='tab']):not(:disabled) {
+    cursor: var(--cursor-button);
+  }
+
+  :where([role='menuitem'], [role='menuitemcheckbox'], [role='menuitemradio']) {
+    cursor: var(--cursor-menu-item);
+  }
+
+  :where([role='option']) {
+    cursor: var(--cursor-option);
+  }
+
+  :where([role='checkbox']) {
+    cursor: var(--cursor-checkbox);
+  }
+
+  :where([role='radio']) {
+    cursor: var(--cursor-radio);
+  }
+
+  :where([role='switch']) {
+    cursor: var(--cursor-switch);
+  }
+
+  :where([role='slider']) {
+    cursor: var(--cursor-slider-thumb);
+  }
+
+  :where([role='slider']:active) {
+    cursor: var(--cursor-slider-thumb-active);
+  }
+
+  /*
+   * All three libraries agree here, and it is the one they agree on: refusal
+   * reads better than a dead hand. `cursor` inherits, so marking the disabled
+   * wrapper covers the label and icon inside it — right, since neither does
+   * anything either.
+   */
+  :where(button:disabled, [aria-disabled='true'], [data-disabled]) {
+    cursor: var(--cursor-disabled);
   }
 }
 

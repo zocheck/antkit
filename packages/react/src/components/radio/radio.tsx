@@ -13,8 +13,8 @@ export type RadioGroupProps = ComponentProps<typeof RadioGroupPrimitive.Root>;
  *
  * ```tsx
  * <RadioGroup defaultValue="now">
- *   <Radio value="now">Chạy ngay</Radio>
- *   <Radio value="cron" description="Theo lịch đã đặt">Đặt lịch</Radio>
+ *   <Radio value="now">Run now</Radio>
+ *   <Radio value="cron" description="On the schedule you set">Schedule</Radio>
  * </RadioGroup>
  * ```
  *

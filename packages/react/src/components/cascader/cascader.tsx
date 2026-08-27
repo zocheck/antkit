@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import { cn } from '../../utils';
 import { ChevronDownIcon, ChevronRightIcon, XIcon } from 'lucide-react';
 
-import { useUiConfig } from '../../lib/ui-config';
+import { useLocale } from '../../lib/config';
 import { Popover, PopoverContent, PopoverTrigger } from '../popover';
 
 export type CascaderOption = {
@@ -59,22 +59,22 @@ const resolvePath = (
 };
 
 /**
- * Ant Design-shaped cascader: drill through a fixed-depth hierarchy one column
- * at a time. The classic case here is tỉnh / quận / phường.
+ * A cascader: drill through a fixed-depth hierarchy one column
+ * at a time — country / region / city, or any fixed set of levels.
  *
  * ```tsx
  * <Cascader
  *   options={regions}
  *   value={area}
  *   onChange={setArea}
- *   placeholder="Chọn khu vực"
+ *   placeholder="Choose an area"
  *   allowClear
  * />
  * ```
  *
  * By default only a leaf commits a value, so a half-finished path leaves the
  * field alone. `changeOnSelect` commits at every level instead, which is what
- * you want when "cả tỉnh" is a legitimate answer.
+ * you want when a whole branch is a legitimate answer.
  *
  * It takes `value`/`onChange`/`onBlur` and the aria props, so it drops straight
  * into a `Form.Item`. For an arbitrary-depth hierarchy, use `TreeSelect`.
@@ -96,7 +96,7 @@ export const Cascader = ({
   'aria-invalid': ariaInvalid,
   'aria-describedby': ariaDescribedBy,
 }: CascaderProps) => {
-  const { translate } = useUiConfig();
+  const locale = useLocale();
   const [open, setOpen] = useState(false);
   // The path being browsed, which runs ahead of `value` until it commits.
   const [active, setActive] = useState<string[]>([]);
@@ -180,7 +180,7 @@ export const Cascader = ({
           <span className="min-w-0 flex-1 truncate text-left">
             {labels.length === 0 ? (
               <span className="text-muted-foreground">
-                {placeholder ?? translate('selectPlaceholder')}
+                {placeholder ?? locale.common?.selectPlaceholder ?? 'Select…'}
               </span>
             ) : (
               (displayRender?.(labels, committedOptions) ?? labels.join(' / '))
@@ -191,7 +191,7 @@ export const Cascader = ({
             <span
               role="button"
               tabIndex={-1}
-              aria-label={translate('clear')}
+              aria-label={locale.common?.clear ?? 'Clear'}
               onClick={(event) => {
                 // The trigger would otherwise open the popover.
                 event.stopPropagation();

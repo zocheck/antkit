@@ -1,0 +1,4 @@
+/* kanban, and the components it renders: card */
+@import './base.css';
+@source '../src/components/card';
+@source '../src/components/kanban';

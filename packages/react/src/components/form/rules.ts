@@ -1,7 +1,11 @@
 import type { FieldValues, Validate } from 'react-hook-form';
 
+import { isEmpty } from '../../utils';
+import type { Locale } from '../../lib/config';
+
 /**
- * Declarative validation, shaped after Ant Design's `Form.Item rules`.
+ * Declarative validation: rules listed on the field itself, not a schema
+ * declared beside it.
  *
  * A rule object may combine several constraints; each is checked in turn and
  * the first failure wins. Rules compile down to react-hook-form validators, so
@@ -30,7 +34,7 @@ export type Rule<TFieldValues extends FieldValues = FieldValues> = {
   /**
    * Message shown when this rule fails.
    *
-   * Rendered through `UiConfigProvider`'s `translate`, so it can be an i18n key
+   * Rendered through `ConfigProvider`'s `translate`, so it can be an i18n key
    * or literal text — i18next returns an unknown key unchanged. For messages
    * that interpolate (`"at least 8 characters"`), translate in the component
    * where you declare the rule and pass the result here.
@@ -53,12 +57,6 @@ const DEFAULT_MESSAGES = {
 } as const;
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-const isEmpty = (value: unknown) =>
-  value === undefined ||
-  value === null ||
-  value === '' ||
-  (Array.isArray(value) && value.length === 0);
 
 const isUrl = (value: string) => {
   try {
@@ -172,3 +170,17 @@ export const rulesToValidate = <TFieldValues extends FieldValues>(
 /** True when any rule in the list makes the field mandatory. */
 export const hasRequiredRule = (rules: Rule<never>[] | undefined) =>
   !!rules?.some((rule) => rule.required);
+
+/**
+ * Turns a `validation.*` fallback key back into the sentence the active locale
+ * wants. A rule that carried its own `message` never produced a key, so that
+ * text falls through unchanged.
+ */
+export const localiseRuleMessage = (message: string, locale: Locale) => {
+  const key = message.startsWith('validation.') ? message.slice(11) : '';
+
+  return key
+    ? (locale.validation?.[key as keyof NonNullable<Locale['validation']>] ??
+        message)
+    : message;
+};

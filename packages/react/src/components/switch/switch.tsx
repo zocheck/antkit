@@ -11,9 +11,9 @@ export type SwitchProps = Omit<
   size?: 'sm' | 'default';
   /** Blocks interaction and spins the knob. */
   loading?: boolean;
-  /** Text inside the track when on — e.g. `Bật`. */
+  /** Text inside the track when on — e.g. `On`. */
   checkedChildren?: ReactNode;
-  /** Text inside the track when off — e.g. `Tắt`. */
+  /** Text inside the track when off — e.g. `Off`. */
   uncheckedChildren?: ReactNode;
 };
 
@@ -23,7 +23,7 @@ export type SwitchProps = Omit<
  *
  * ```tsx
  * <Switch checked={active} onCheckedChange={setActive} />
- * <Switch defaultChecked checkedChildren="Bật" uncheckedChildren="Tắt" />
+ * <Switch defaultChecked checkedChildren="On" uncheckedChildren="Off" />
  * ```
  */
 export const Switch = ({

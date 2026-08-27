@@ -1,0 +1,4 @@
+/* form, and the components it renders: label */
+@import './base.css';
+@source '../src/components/form';
+@source '../src/components/label';

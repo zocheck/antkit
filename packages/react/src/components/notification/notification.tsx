@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 
 import { cn } from '../../utils';
+import { useLocale } from '../../lib/config';
 import {
   CircleAlertIcon,
   CircleCheckIcon,
@@ -22,7 +23,7 @@ export type NotificationPlacement =
   | 'bottomRight';
 
 export type NotificationConfig = {
-  /** The headline. Ant Design calls this `message`; it is not the body text. */
+  /** The headline, named `message`. The body text is `description`. */
   message: ReactNode;
   description?: ReactNode;
   type?: NotificationType;
@@ -53,16 +54,11 @@ type NotificationItem = NotificationConfig & {
   closing?: boolean;
 };
 
-/** Ant Design's defaults: top right, four and a half seconds. */
+/** Defaults: top right, four and a half seconds. */
 type NotificationDefaults = Required<
   Pick<
     NotificationConfig,
-    | 'placement'
-    | 'duration'
-    | 'closable'
-    | 'showProgress'
-    | 'pauseOnHover'
-    | 'closeLabel'
+    'placement' | 'duration' | 'closable' | 'showProgress' | 'pauseOnHover'
   >
 >;
 
@@ -72,7 +68,6 @@ let defaults: NotificationDefaults = {
   closable: true,
   showProgress: false,
   pauseOnHover: true,
-  closeLabel: 'Đóng',
 };
 
 const TYPE_ICON = {
@@ -83,7 +78,7 @@ const TYPE_ICON = {
 } as const;
 
 /**
- * Ant Design's status palette rather than the app's own tokens, so a
+ * A fixed status palette rather than the app's own tokens, so a
  * `notification` and a `message` read as the same family. Override on the
  * provider:
  *
@@ -176,7 +171,7 @@ const shortcut = (type: NotificationType) => (config: NotificationConfig) =>
   open({ ...config, type });
 
 /**
- * Ant Design-shaped notifications: a 384px card in a screen corner, with a
+ * Notifications: a card in a screen corner, with a
  * headline, a body and somewhere to put an action.
  *
  * Mount `<NotificationProvider />` once near the app root, then call it from
@@ -184,17 +179,17 @@ const shortcut = (type: NotificationType) => (config: NotificationConfig) =>
  *
  * ```tsx
  * notification.success({
- *   message: 'Đã lưu chiến dịch',
- *   description: 'Lịch gửi bắt đầu từ 9:00 sáng mai.',
+ *   message: 'Campaign saved',
+ *   description: 'Sending starts at 9:00 tomorrow morning.',
  * });
  *
  * notification.open({
  *   key: 'import',
  *   type: 'warning',
- *   message: 'Nhập liệu chưa xong',
- *   description: '3 dòng bị bỏ qua vì thiếu email.',
+ *   message: 'Import finished with gaps',
+ *   description: '3 rows were skipped for a missing email.',
  *   duration: 0,
- *   btn: <Button size="sm" onClick={review}>Xem lại</Button>,
+ *   btn: <Button size="sm" onClick={review}>Review</Button>,
  * });
  * ```
  *
@@ -255,7 +250,7 @@ const PLACEMENT_CLASS: Record<NotificationPlacement, string> = {
   topLeft: 'top-5 left-5 items-start',
   topRight: 'top-5 right-5 items-end',
   // Reversed so the oldest card stays pinned to the edge and new ones stack
-  // upward, which is what antd does for the bottom placements.
+  // upward, which is what the bottom placements need.
   bottom: 'inset-x-0 bottom-5 flex-col-reverse items-center',
   bottomLeft: 'bottom-5 left-5 flex-col-reverse items-start',
   bottomRight: 'bottom-5 right-5 flex-col-reverse items-end',
@@ -264,12 +259,13 @@ const PLACEMENT_CLASS: Record<NotificationPlacement, string> = {
 const PLACEMENTS = Object.keys(PLACEMENT_CLASS) as NotificationPlacement[];
 
 const NotificationCard = ({ item }: { item: NotificationItem }) => {
+  const locale = useLocale();
   const {
     duration = defaults.duration,
     closable = defaults.closable,
     showProgress = defaults.showProgress,
     pauseOnHover = defaults.pauseOnHover,
-    closeLabel = defaults.closeLabel,
+    closeLabel = locale.common?.close ?? 'Close',
     type,
   } = item;
 
@@ -313,12 +309,11 @@ const NotificationCard = ({ item }: { item: NotificationItem }) => {
         animationFillMode: 'both',
       }}
       className={cn(
-        // antd's shape at a tighter scale: 352px rather than 384, 14px/16px
-        // padding rather than 20px/24px, and `borderRadiusLG` at 8px. Override
-        // the width with `className="w-96"`.
+        // 352px wide, 14px/16px padding, 8px radius. Override the width with
+        // `className="w-96"`.
         'pointer-events-auto relative w-88 max-w-[calc(100vw-2rem)] overflow-hidden rounded-md bg-popover px-4 py-3.5 text-popover-foreground',
-        // Same `boxShadowSecondary` as `message`, and no border — the two are
-        // one family, and antd lifts both with shadow alone.
+        // The same shadow as `message`, and no border — the two are one
+        // family, and shadow alone is what lifts them.
         'shadow-[0_6px_16px_0_rgb(0_0_0/0.08),0_3px_6px_-4px_rgb(0_0_0/0.12),0_9px_28px_8px_rgb(0_0_0/0.05)]',
         'dark:shadow-[0_6px_16px_0_rgb(0_0_0/0.35)] dark:ring-1 dark:ring-white/10',
         item.onClick && 'cursor-pointer',

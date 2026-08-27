@@ -9,6 +9,8 @@ import type {
 import { cn } from '../../utils';
 import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 
+import { useLocale } from '../../lib/config';
+
 export type InputNumberProps = Omit<
   ComponentProps<'input'>,
   'value' | 'defaultValue' | 'onChange' | 'size' | 'prefix' | 'type'
@@ -88,7 +90,7 @@ const clamp = (value: number, min?: number, max?: number) => {
 };
 
 /**
- * A number field with steppers, bounds and a unit — antd's `InputNumber`.
+ * A number field with steppers, bounds and a unit.
  *
  * ```tsx
  * <InputNumber value={fee} onChange={setFee} min={0} step={50_000} addonAfter="₫" />
@@ -121,8 +123,8 @@ export const InputNumber = ({
   addonAfter,
   onPressEnter,
   invalid,
-  stepUpLabel = 'Increase',
-  stepDownLabel = 'Decrease',
+  stepUpLabel,
+  stepDownLabel,
   disabled,
   readOnly,
   className,
@@ -132,6 +134,7 @@ export const InputNumber = ({
   onKeyDown,
   ...props
 }: InputNumberProps) => {
+  const locale = useLocale();
   const [internal, setInternal] = useState<number | null>(defaultValue ?? null);
   const isControlled = value !== undefined;
   const current = isControlled ? value : internal;
@@ -358,8 +361,18 @@ export const InputNumber = ({
             STEPPER_CLASS[size],
           )}
         >
-          {stepper(stepUpLabel, <ChevronUpIcon />, 1, atMax)}
-          {stepper(stepDownLabel, <ChevronDownIcon />, -1, atMin)}
+          {stepper(
+            stepUpLabel ?? locale.inputNumber?.increase ?? 'Increase',
+            <ChevronUpIcon />,
+            1,
+            atMax,
+          )}
+          {stepper(
+            stepDownLabel ?? locale.inputNumber?.decrease ?? 'Decrease',
+            <ChevronDownIcon />,
+            -1,
+            atMin,
+          )}
         </span>
       )}
     </div>

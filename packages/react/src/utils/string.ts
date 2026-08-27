@@ -1,41 +1,63 @@
-/* oxlint-disable no-useless-escape */
-export const slugify = (alias?: string) => {
-  if (!alias) return alias;
-  let slug = alias.toLowerCase();
-  // Đổi ký tự có dấu thành không dấu
-  slug = slug.replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a');
-  slug = slug.replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e');
-  slug = slug.replace(/i|í|ì|ỉ|ĩ|ị/gi, 'i');
-  slug = slug.replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o');
-  slug = slug.replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u');
-  slug = slug.replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y');
-  slug = slug.replace(/đ/gi, 'd');
-  // Xóa các ký tự đặt biệt
-  slug = slug.replace(
-    /\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi,
-    '',
-  );
-  // Đổi khoảng trắng thành ký tự gạch ngang
-  slug = slug.replace(/ /gi, '-');
-  // Đổi nhiều ký tự gạch ngang liên tiếp thành 1 ký tự gạch ngang
-  // Phòng trường hợp người nhập vào quá nhiều ký tự trắng
-  slug = slug.replace(/\-\-\-\-\-/gi, '-');
-  slug = slug.replace(/\-\-\-\-/gi, '-');
-  slug = slug.replace(/\-\-\-/gi, '-');
-  slug = slug.replace(/\-\-/gi, '-');
-  // Xóa các ký tự gạch ngang ở đầu và cuối
-  slug = '@' + slug + '@';
-  slug = slug.replace(/\@\-|\-\@|\@/gi, '');
+import { isEmpty } from './is-empty';
 
-  return slug;
+/**
+ * `Nguyễn Thị Ánh Nguyệt` → `nguyen-thi-anh-nguyet`.
+ *
+ * Unicode normalisation splits an accented letter into its base plus a
+ * combining mark, so stripping the marks folds every Latin script — Vietnamese,
+ * French, Polish — in one pass rather than one regex per vowel. `đ`, `ø` and
+ * `ł` are the exceptions: they are letters in their own right rather than
+ * composed ones, so nothing decomposes and each has to be named.
+ */
+export const slugify = (value?: string) => {
+  if (!value) return value;
+
+  return value
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[đĐ]/g, 'd')
+    .replace(/[øØ]/g, 'o')
+    .replace(/[łŁ]/g, 'l')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 };
 
-export const formatterNparserCurrency: {
+export type CurrencyFormat = {
+  /** For `InputNumber`'s `formatter`. */
   formatter: (value?: string | number | null) => string;
+  /** For `InputNumber`'s `parser` — the inverse, back to bare digits. */
   parser: (value?: string) => string;
-} = {
-  formatter: (value) => `đ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-  parser: (value) => (value ? value.replace(/\đ\s?|(,*)/g, '') : ''),
+};
+
+/**
+ * A `formatter` / `parser` pair for `InputNumber`, built from the locale rather
+ * than from hand-rolled regexes, so grouping and the symbol's side are whatever
+ * that locale actually does.
+ *
+ * ```tsx
+ * const usd = currencyFormat('en-US', 'USD');
+ * <InputNumber {...usd} value={price} onChange={setPrice} />
+ *
+ * const vnd = currencyFormat('vi-VN', 'VND');
+ * ```
+ */
+export const currencyFormat = (
+  locale = 'en-US',
+  currency = 'USD',
+): CurrencyFormat => {
+  const format = new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency,
+    maximumFractionDigits: 0,
+  });
+
+  return {
+    formatter: (value) => (isEmpty(value) ? '' : format.format(Number(value))),
+    // Everything that is not a digit is grouping, spacing or the symbol, and
+    // none of those belong in the value the caller gets back.
+    parser: (value) => (value ? value.replace(/\D/g, '') : ''),
+  };
 };
 
 export const parseYoutubeIdFromUrl = (url: string) => {

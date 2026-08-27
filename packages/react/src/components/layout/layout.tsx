@@ -4,6 +4,8 @@ import { cn } from '../../utils';
 import { ChevronLeftIcon } from 'lucide-react';
 import { Children, isValidElement, useState } from 'react';
 
+import { useLocale } from '../../lib/config';
+
 /**
  * The metrics the app shell uses, so a `Layout` page and a `Sidebar` page line
  * up pixel for pixel — same rail widths, same 50px header, same 24px gutter.
@@ -153,12 +155,13 @@ export const LayoutSider = ({
   triggerVariant = 'edge',
   side = 'left',
   trigger,
-  triggerLabel = 'Thu gọn menu',
+  triggerLabel,
   className,
   children,
   style,
   ...props
 }: LayoutSiderProps) => {
+  const locale = useLocale();
   const [uncontrolled, setUncontrolled] = useState(defaultCollapsed);
   const isCollapsed = collapsed ?? uncontrolled;
   const currentWidth = isCollapsed ? collapsedWidth : width;
@@ -205,7 +208,9 @@ export const LayoutSider = ({
         <button
           type="button"
           onClick={toggle}
-          aria-label={triggerLabel}
+          aria-label={
+            triggerLabel ?? locale.layout?.collapseMenu ?? 'Collapse the menu'
+          }
           aria-expanded={!isCollapsed}
           className={cn(
             // Above the sticky header (z-30): the trigger hangs over the
@@ -228,7 +233,9 @@ export const LayoutSider = ({
         <button
           type="button"
           onClick={toggle}
-          aria-label={triggerLabel}
+          aria-label={
+            triggerLabel ?? locale.layout?.collapseMenu ?? 'Collapse the menu'
+          }
           aria-expanded={!isCollapsed}
           className={cn(
             'flex h-10 shrink-0 cursor-pointer items-center justify-center gap-2 border-t border-border',

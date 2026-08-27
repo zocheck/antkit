@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img">
+  <rect width="640" height="400" fill="#9ca3af"/>
+  <circle cx="512" cy="88" r="44" fill="#d1d5db"/>
+  <path d="M0 300 L160 190 L280 300 Z" fill="#6b7280"/>
+  <path d="M220 300 L400 160 L560 300 Z" fill="#4b5563"/>
+  <rect y="300" width="640" height="100" fill="#374151"/>
+  <text x="24" y="44" font-family="system-ui" font-size="24" fill="#f9fafb">Trước</text>
+</svg>

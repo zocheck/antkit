@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { ComponentProps, KeyboardEvent, ReactNode } from 'react';
 
 import { cn } from '../../utils';
+import { XIcon } from 'lucide-react';
 
 import {
   EMPTY_PARTS,
@@ -290,7 +291,7 @@ export const DateInputBox = ({
     data-disabled={disabled || undefined}
     aria-invalid={invalid || undefined}
     className={cn(
-      'flex h-9 w-full min-w-0 items-center gap-1 rounded-md border border-input bg-transparent py-1 pr-1 pl-3 shadow-xs transition-[color,box-shadow] dark:bg-input/30',
+      'group/date-input flex h-9 w-full min-w-0 items-center gap-1 rounded-md border border-input bg-transparent py-1 pr-1 pl-3 shadow-xs transition-[color,box-shadow] dark:bg-input/30',
       'focus-within:border-ring focus-within:ring-2 focus-within:ring-ring/20',
       'data-disabled:cursor-not-allowed data-disabled:opacity-50',
       'aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40',
@@ -301,6 +302,82 @@ export const DateInputBox = ({
     <div className="flex min-w-0 flex-1 items-center">{children}</div>
     {suffix}
   </div>
+);
+
+export type FieldSuffixProps = {
+  /** The clear affordance, or nothing when there is no value to clear. */
+  clear?: ReactNode;
+  /** The trailing icon — a calendar or clock trigger. */
+  children?: ReactNode;
+};
+
+/**
+ * The trailing cell of a picker field, holding one control at a time.
+ *
+ * The clear button takes the icon's place on hover
+ * rather than sitting beside it, so the field never changes width and the row
+ * never shows two competing affordances. Hiding the icon costs nothing here —
+ * `useFieldDisclosure` opens the panel from anywhere in the field, so the
+ * calendar is still one click away while the clear is showing.
+ *
+ * Revealed on hover, and on the clear button's own `focus-visible` so it stays
+ * reachable by keyboard.
+ */
+export const FieldSuffix = ({ clear, children }: FieldSuffixProps) => {
+  if (!clear) return children;
+
+  return (
+    <span
+      data-slot="date-input-suffix"
+      // Sized like the icon button it covers, so a field with only a clear
+      // button reserves the same cell and nothing shifts on hover.
+      className="relative inline-flex size-8 shrink-0 items-center justify-center"
+    >
+      <span className="inline-flex items-center transition-opacity group-hover/date-input:opacity-0">
+        {children}
+      </span>
+      {clear}
+    </span>
+  );
+};
+
+export type FieldClearProps = {
+  label: string;
+  onClear: () => void;
+};
+
+/** The `×`. Small on purpose — it is a footnote, not an action of its own. */
+export const FieldClear = ({ label, onClear }: FieldClearProps) => (
+  <button
+    type="button"
+    data-slot="date-input-clear"
+    aria-label={label}
+    /*
+     * The field opens its panel on mousedown, so clearing has to stop the
+     * event there — by `click` the panel would already be up. Preventing the
+     * default also keeps focus on whichever segment had it.
+     */
+    onMouseDown={(event) => {
+      event.preventDefault();
+      event.stopPropagation();
+    }}
+    onClick={(event) => {
+      event.stopPropagation();
+      onClear();
+    }}
+    className={cn(
+      'absolute inset-0 flex cursor-pointer items-center justify-center rounded-md',
+      'text-muted-foreground transition-opacity hover:text-foreground',
+      // Invisible and inert until the pointer is over the field: an
+      // always-clickable transparent button would swallow the icon's clicks.
+      'pointer-events-none opacity-0',
+      'group-hover/date-input:pointer-events-auto group-hover/date-input:opacity-100',
+      'focus-visible:pointer-events-auto focus-visible:opacity-100',
+      'outline-hidden focus-visible:ring-2 focus-visible:ring-ring',
+    )}
+  >
+    <XIcon className="size-3.5" />
+  </button>
 );
 
 /** Whether a typed date falls outside the allowed window. */

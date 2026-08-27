@@ -1,0 +1,38 @@
+/*
+ * The Tailwind entry for @antkit/react. One import, in your app's CSS, and
+ * there is nothing else to wire up:
+ *
+ *   @import 'tailwindcss';
+ *   @import '@antkit/react/styles.css';
+ *
+ * It brings the design tokens and points Tailwind at the component source, so
+ * the class names inside the package reach your stylesheet.
+ *
+ * `@source` resolves relative to the file it sits in, which is why this lives
+ * in the package rather than in your app: `./src` is right wherever npm, pnpm
+ * or a monorepo happens to put this file, and wherever your own CSS lives. The
+ * older instruction — `@source '../node_modules/@antkit/react/src'` in the
+ * app's CSS — was a guess about both, and when the guess was wrong nothing
+ * errored: you got unstyled components and a long afternoon.
+ *
+ * This scans every component, so the CSS is a flat ~19 KB gzip however many
+ * you import — paid even by an app that imports none. That is the trade for
+ * having no per-component setup, and it is roughly what one photo costs.
+ *
+ * An app that uses a handful of components can pay for a handful instead, by
+ * importing one entry per component rather than this file:
+ *
+ *   @import '@antkit/react/styles/base.css';
+ *   @import '@antkit/react/styles/select.css';
+ *
+ * Measured on a four-component app: 19.3 KB → 7.8 KB gzip. Each entry already
+ * carries the components its own component renders — `select.css` brings
+ * `popover` — because getting that list wrong is invisible until a dropdown
+ * lands in the wrong place. `pnpm gen:styles` writes them; do not hand-roll
+ * the `@source` lines in your app's CSS, where the path is a guess about your
+ * node_modules layout and a wrong guess fails silently.
+ */
+
+@import '@antkit/styles';
+
+@source './src';

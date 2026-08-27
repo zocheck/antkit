@@ -4,9 +4,10 @@ import type { ReactNode } from 'react';
 import { cn } from '../../utils';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 
-import { useUiConfig } from '../../lib/ui-config';
+import { useConfig } from '../../lib/config';
 import { Button } from '../button';
 import { Checkbox } from '../checkbox';
+import { Empty } from '../empty';
 import { Input } from '../input';
 
 export type TransferItem = {
@@ -44,7 +45,7 @@ type PanelProps = {
   title: ReactNode;
   showSearch: boolean;
   searchPlaceholder: string;
-  emptyText: string;
+  emptyText: ReactNode;
   render?: (item: TransferItem) => ReactNode;
   listHeight: number;
   disabled: boolean;
@@ -140,7 +141,9 @@ const Panel = ({
         aria-multiselectable="true"
       >
         {visible.length === 0 ? (
-          <li className="px-2 py-6 text-center text-sm text-muted-foreground">
+          // The panel has a fixed height, so the blank state centres in it
+          // rather than clinging to the top edge.
+          <li className="flex h-full items-center justify-center">
             {emptyText}
           </li>
         ) : (
@@ -158,9 +161,9 @@ const Panel = ({
                     off
                       ? 'cursor-not-allowed opacity-50'
                       : 'hover:bg-accent hover:text-accent-foreground',
-                    // Ant Design tints a checked row rather than leaving the
-                    // checkbox to carry it alone — which half of a long list
-                    // is about to move should be readable at a glance.
+                    // A checked row is tinted rather than left for the
+                    // checkbox to carry alone — which half of a long list is
+                    // about to move should be readable at a glance.
                     on && !off && 'bg-accent text-accent-foreground',
                   )}
                 >
@@ -197,7 +200,7 @@ const Panel = ({
 };
 
 /**
- * Ant Design-shaped transfer: two panels and a pair of arrows, for splitting a
+ * A transfer: two panels and a pair of arrows, for splitting a
  * set into "not chosen" and "chosen".
  *
  * ```tsx
@@ -206,7 +209,7 @@ const Panel = ({
  *   dataSource={allPermissions}
  *   targetKeys={granted}
  *   onChange={setGranted}
- *   titles={['Chưa cấp', 'Đã cấp']}
+ *   titles={['Available', 'Granted']}
  * />
  * ```
  *
@@ -230,7 +233,7 @@ export const Transfer = ({
   id,
   className,
 }: TransferProps) => {
-  const { translate } = useUiConfig();
+  const { locale, renderEmpty } = useConfig();
   // Checks are scratch state: they say what to move next, not what is chosen.
   const [checked, setChecked] = useState<string[]>([]);
 
@@ -278,10 +281,10 @@ export const Transfer = ({
         items={left}
         checked={checked}
         onCheckedChange={setChecked}
-        title={titles?.[0] ?? translate('transferSource')}
+        title={titles?.[0] ?? locale.transfer?.source ?? 'Source'}
         showSearch={showSearch}
-        searchPlaceholder={translate('search')}
-        emptyText={translate('noData')}
+        searchPlaceholder={locale.common?.search ?? 'Search…'}
+        emptyText={renderEmpty?.('transfer') ?? <Empty size="sm" />}
         render={render}
         listHeight={listHeight}
         disabled={disabled}
@@ -291,7 +294,7 @@ export const Transfer = ({
         <Button
           size="icon-sm"
           variant="outline"
-          aria-label={translate('transferToTarget')}
+          aria-label={locale.transfer?.toTarget ?? 'Move to target'}
           disabled={disabled || !canMove(left)}
           onClick={() => move('right')}
         >
@@ -300,7 +303,7 @@ export const Transfer = ({
         <Button
           size="icon-sm"
           variant="outline"
-          aria-label={translate('transferToSource')}
+          aria-label={locale.transfer?.toSource ?? 'Move to source'}
           disabled={disabled || !canMove(right)}
           onClick={() => move('left')}
         >
@@ -312,10 +315,10 @@ export const Transfer = ({
         items={right}
         checked={checked}
         onCheckedChange={setChecked}
-        title={titles?.[1] ?? translate('transferTarget')}
+        title={titles?.[1] ?? locale.transfer?.target ?? 'Target'}
         showSearch={showSearch}
-        searchPlaceholder={translate('search')}
-        emptyText={translate('noData')}
+        searchPlaceholder={locale.common?.search ?? 'Search…'}
+        emptyText={renderEmpty?.('transfer') ?? <Empty size="sm" />}
         render={render}
         listHeight={listHeight}
         disabled={disabled}

@@ -1,0 +1,4 @@
+/* gantt, and the components it renders: tooltip */
+@import './base.css';
+@source '../src/components/gantt';
+@source '../src/components/tooltip';

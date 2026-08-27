@@ -19,7 +19,7 @@ const VERTICAL_PADDING = 16;
  * A multi-line text field.
  *
  * ```tsx
- * <Textarea placeholder="Ghi chú" autoSize={{ minRows: 2, maxRows: 6 }} />
+ * <Textarea placeholder="Notes" autoSize={{ minRows: 2, maxRows: 6 }} />
  * <Textarea maxLength={200} showCount />
  * ```
  */

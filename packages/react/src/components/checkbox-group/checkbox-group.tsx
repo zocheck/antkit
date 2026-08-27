@@ -64,7 +64,7 @@ export type CheckboxGroupProps = Omit<
  * ```tsx
  * <CheckboxGroup defaultValue={['email']} onValueChange={setChannels}>
  *   <CheckboxOption value="email">Email</CheckboxOption>
- *   <CheckboxOption value="sms" description="Tính phí theo tin nhắn">SMS</CheckboxOption>
+ *   <CheckboxOption value="sms" description="Charged per message">SMS</CheckboxOption>
  * </CheckboxGroup>
  * ```
  */

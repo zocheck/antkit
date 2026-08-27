@@ -6,6 +6,38 @@ import { DropdownMenu as DropdownMenuPrimitive } from 'radix-ui';
 
 import { cn } from '../../utils';
 
+/**
+ * A menu hanging off a button: plain items, checkboxes, radios, groups and
+ * submenus. The content portals, so an ancestor's `overflow: hidden` cannot
+ * clip it.
+ *
+ * ```tsx
+ * <DropdownMenu>
+ *   <DropdownMenuTrigger asChild>
+ *     <Button variant="ghost" size="icon" aria-label="Row actions">
+ *       <EllipsisIcon />
+ *     </Button>
+ *   </DropdownMenuTrigger>
+ *   <DropdownMenuContent align="end">
+ *     <DropdownMenuLabel>Actions</DropdownMenuLabel>
+ *     <DropdownMenuItem onSelect={() => edit(row)}>Edit</DropdownMenuItem>
+ *     <DropdownMenuSeparator />
+ *     <DropdownMenuItem variant="destructive" onSelect={() => remove(row)}>
+ *       Delete
+ *     </DropdownMenuItem>
+ *   </DropdownMenuContent>
+ * </DropdownMenu>
+ * ```
+ *
+ * `Select` when the choice is a form value, `Popover` when the panel holds
+ * anything other than a list of commands, `Popconfirm` for a destructive item
+ * that needs confirming.
+ *
+ * Items fire `onSelect`, not `onClick`, and the menu closes itself afterwards.
+ * That includes checkbox and radio items, which is rarely what you want for a
+ * column-visibility menu — call `event.preventDefault()` in the handler to
+ * keep it open.
+ */
 const DropdownMenu = ({
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) => {
@@ -74,7 +106,7 @@ const DropdownMenuItem = ({
       data-inset={inset}
       data-variant={variant}
       className={cn(
-        "relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground data-[variant=destructive]:*:[svg]:text-destructive!",
+        "relative flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground data-[variant=destructive]:*:[svg]:text-destructive!",
         className,
       )}
       {...props}
@@ -92,7 +124,7 @@ const DropdownMenuCheckboxItem = ({
     <DropdownMenuPrimitive.CheckboxItem
       data-slot="dropdown-menu-checkbox-item"
       className={cn(
-        "relative flex cursor-default items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "relative flex items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
       )}
       checked={checked}
@@ -128,7 +160,7 @@ const DropdownMenuRadioItem = ({
     <DropdownMenuPrimitive.RadioItem
       data-slot="dropdown-menu-radio-item"
       className={cn(
-        "relative flex cursor-default items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "relative flex items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
       )}
       {...props}
@@ -211,7 +243,7 @@ const DropdownMenuSubTrigger = ({
       data-slot="dropdown-menu-sub-trigger"
       data-inset={inset}
       className={cn(
-        "flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[inset]:pl-8 data-[state=open]:bg-accent data-[state=open]:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground",
+        "flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[inset]:pl-8 data-[state=open]:bg-accent data-[state=open]:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground",
         className,
       )}
       {...props}

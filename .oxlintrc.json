@@ -47,6 +47,13 @@
       }
     },
     {
+      "files": ["scripts/**", "packages/react/bin/**"],
+      "rules": {
+        "no-console": "off",
+        "no-await-in-loop": "off"
+      }
+    },
+    {
       "files": ["packages/react/src/**"],
       "rules": {
         "react/purity": "off",

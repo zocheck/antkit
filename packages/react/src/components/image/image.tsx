@@ -13,6 +13,7 @@ import { Dialog as DialogPrimitive } from 'radix-ui';
 import { useEffect, useState } from 'react';
 
 import { Skeleton } from '../skeleton';
+import { useLocale } from '../../lib/config';
 
 const MIN_SCALE = 0.25;
 const MAX_SCALE = 4;
@@ -32,6 +33,15 @@ export type ImageProps = Omit<ComponentProps<'img'>, 'placeholder'> & {
   previewLabels?: ImagePreviewLabels;
 };
 
+const IMAGE_LABELS = {
+  open: 'View image',
+  close: 'Close',
+  zoomIn: 'Zoom in',
+  zoomOut: 'Zoom out',
+  rotateLeft: 'Rotate left',
+  rotateRight: 'Rotate right',
+};
+
 export type ImagePreviewLabels = {
   open: string;
   close: string;
@@ -41,21 +51,12 @@ export type ImagePreviewLabels = {
   rotateRight: string;
 };
 
-const DEFAULT_LABELS: ImagePreviewLabels = {
-  open: 'Xem ảnh',
-  close: 'Đóng',
-  zoomIn: 'Phóng to',
-  zoomOut: 'Thu nhỏ',
-  rotateLeft: 'Xoay trái',
-  rotateRight: 'Xoay phải',
-};
-
 /**
  * An image that knows how to be loading, broken, and zoomable.
  *
  * ```tsx
- * <Image src={avatar} alt="Ảnh học viên" width={160} className="rounded-lg" />
- * <Image src={proof} alt="Ảnh chuyển khoản" placeholder preview={false} />
+ * <Image src={avatar} alt="Student photo" width={160} className="rounded-lg" />
+ * <Image src={proof} alt="Payment receipt" placeholder preview={false} />
  * ```
  */
 export const Image = ({
@@ -72,11 +73,12 @@ export const Image = ({
   onError,
   ...props
 }: ImageProps) => {
+  const locale = useLocale();
   const [status, setStatus] = useState<'loading' | 'loaded' | 'error'>(
     'loading',
   );
   const [open, setOpen] = useState(false);
-  const labels = { ...DEFAULT_LABELS, ...previewLabels };
+  const labels = { ...IMAGE_LABELS, ...locale.image, ...previewLabels };
 
   // A new src is a new load, so the previous outcome must not stick around.
   useEffect(() => {

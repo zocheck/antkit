@@ -59,9 +59,9 @@ export type ResultProps = Omit<ComponentProps<'div'>, 'title'> & {
  * ```tsx
  * <Result
  *   status="success"
- *   title="Đã tạo chiến dịch"
- *   subTitle="Email sẽ gửi lúc 09:00 ngày mai."
- *   extra={<Button>Về danh sách</Button>}
+ *   title="Campaign created"
+ *   subTitle="Email goes out at 09:00 tomorrow."
+ *   extra={<Button>Back to the list</Button>}
  * />
  * ```
  */

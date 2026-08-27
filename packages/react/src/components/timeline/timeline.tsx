@@ -58,10 +58,10 @@ export type TimelineProps = ComponentProps<'ol'>;
  *     <TimelineIndicator />
  *     <TimelineContent>
  *       <TimelineHeader>
- *         <TimelineTitle>Đã gửi email</TimelineTitle>
+ *         <TimelineTitle>Email sent</TimelineTitle>
  *         <TimelineTime dateTime="2026-08-27T09:00:00Z">09:00</TimelineTime>
  *       </TimelineHeader>
- *       <TimelineDescription>12 người nhận</TimelineDescription>
+ *       <TimelineDescription>12 recipients</TimelineDescription>
  *     </TimelineContent>
  *   </TimelineItem>
  * </Timeline>
@@ -108,18 +108,18 @@ export type TimelineIndicatorProps = Omit<ComponentProps<'div'>, 'color'> & {
    */
   status?: TimelineStatus;
   /**
-   * `dot` is the bare 10px node, the size Ant Design uses. `icon` is the 24px
+   * `dot` is the bare 10px node. `icon` is the 24px
    * badge that can hold a glyph. Defaults to `icon` when there are children.
    */
   size?: 'dot' | 'icon';
   /**
-   * Ant Design's `variant`: `outlined` is a ring, `filled` is solid. Defaults
+   * `outlined` is a ring, `filled` is solid. Defaults
    * to solid for the statuses that have already happened.
    */
   variant?: 'filled' | 'outlined';
   /** Any CSS colour, for a state this component has no status for. */
   color?: string;
-  /** Replaces the node with a spinner — Ant Design's `loading` item. */
+  /** Replaces the node with a spinner, for a step still running. */
   loading?: boolean;
   /** Hide the line running down to the next item. */
   connector?: boolean;

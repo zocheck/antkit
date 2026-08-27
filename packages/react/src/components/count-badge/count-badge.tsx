@@ -24,8 +24,7 @@ export type CountBadgeProps = {
 };
 
 /**
- * Ant Design's `Badge`: the small count or dot that rides on the corner of
- * something else.
+ * The small count or dot that rides on the corner of something else.
  *
  * ```tsx
  * <CountBadge count={unread}>
@@ -41,7 +40,7 @@ export type CountBadgeProps = {
  * ```
  *
  * Not to be confused with this kit's `Badge`, which is a text chip — see `Tag`
- * for the Ant Design-shaped version of that.
+ * for the removable version of that.
  */
 export const CountBadge = ({
   children,

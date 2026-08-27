@@ -1,0 +1,3 @@
+/* Design tokens only — no component classes. Pair it with one entry per
+ * component you use, or with '@antkit/react/styles.css' for all of them. */
+@import '@antkit/styles';

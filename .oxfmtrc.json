@@ -8,5 +8,13 @@
   "arrowParens": "always",
   "bracketSpacing": true,
   "endOfLine": "lf",
-  "ignore": ["dist", "dist-ssr", "node_modules", "public", "yarn.lock"]
+  "ignorePatterns": [
+    "apps/docs/public",
+    "dist",
+    "dist-ssr",
+    "node_modules",
+    "packages/react/skills/antkit-react/COMPONENTS.md",
+    "packages/react/skills/antkit-react/catalogue.json",
+    "yarn.lock"
+  ]
 }

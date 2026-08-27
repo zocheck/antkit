@@ -1,0 +1,4 @@
+/* statistic, and the components it renders: skeleton */
+@import './base.css';
+@source '../src/components/skeleton';
+@source '../src/components/statistic';

@@ -28,13 +28,13 @@ export type DescriptionsProps = Omit<ComponentProps<'div'>, 'title'> & {
  *
  * ```tsx
  * <Descriptions
- *   title="Học viên"
+ *   title="Student"
  *   bordered
  *   column={2}
  *   items={[
- *     { label: 'Họ tên', children: 'Nguyễn Thị Ánh Nguyệt' },
- *     { label: 'Khoá học', children: 'IELTS 6.5+' },
- *     { label: 'Ghi chú', children: 'Ưu tiên gọi buổi tối', span: 2 },
+ *     { label: 'Full name', children: 'Nguyen Thi Anh Nguyet' },
+ *     { label: 'Course', children: 'IELTS 6.5+' },
+ *     { label: 'Notes', children: 'Prefers evening calls', span: 2 },
  *   ]}
  * />
  * ```

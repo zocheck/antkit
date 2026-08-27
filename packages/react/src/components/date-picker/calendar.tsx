@@ -4,6 +4,7 @@ import type { KeyboardEvent, ReactNode } from 'react';
 import { cn } from '../../utils';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 
+import { useLocale } from '../../lib/config';
 import { Button } from '../button';
 import {
   addDays,
@@ -27,18 +28,18 @@ import {
   type WeekDay,
 } from './utils';
 
+const CALENDAR_LABELS = {
+  previousMonth: 'Previous month',
+  nextMonth: 'Next month',
+  monthSelect: 'Month',
+  yearSelect: 'Year',
+};
+
 export type CalendarLabels = {
   previousMonth: string;
   nextMonth: string;
   monthSelect: string;
   yearSelect: string;
-};
-
-const DEFAULT_LABELS: CalendarLabels = {
-  previousMonth: 'Previous month',
-  nextMonth: 'Next month',
-  monthSelect: 'Month',
-  yearSelect: 'Year',
 };
 
 export type CalendarBaseProps = {
@@ -64,7 +65,7 @@ export type CalendarBaseProps = {
   today?: Date;
   /** Moves keyboard focus into the grid on mount. */
   autoFocus?: boolean;
-  /** Rendered under the grid — a "Hôm nay" shortcut, a hint, a legend. */
+  /** Rendered under the grid — a "Today" shortcut, a hint, a legend. */
   footer?: ReactNode;
   labels?: Partial<CalendarLabels>;
   className?: string;
@@ -109,6 +110,7 @@ const anchorOf = (props: CalendarProps) =>
  * calendar on its own when it should stay open on the page.
  */
 export const Calendar = (props: CalendarProps) => {
+  const strings = useLocale();
   const {
     month,
     defaultMonth,
@@ -131,7 +133,11 @@ export const Calendar = (props: CalendarProps) => {
   } = props;
 
   const captionId = useId();
-  const text = { ...DEFAULT_LABELS, ...labels };
+  const text = {
+    ...CALENDAR_LABELS,
+    ...strings.datePicker?.calendar,
+    ...labels,
+  };
   const today = useMemo(() => startOfDay(todayProp ?? new Date()), [todayProp]);
   const anchor = anchorOf(props);
 

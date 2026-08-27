@@ -3,11 +3,11 @@ import type { CSSProperties, ReactNode } from 'react';
 import { cn } from '../../utils';
 import { XIcon } from 'lucide-react';
 
-import { useUiConfig } from '../../lib/ui-config';
+import { useLocale } from '../../lib/config';
 
 /**
  * The named colours. Anything else in `color` is treated as a CSS colour and
- * painted solid, which is what Ant Design does with an arbitrary value.
+ * painted solid.
  */
 export type TagPresetColor =
   | 'default'
@@ -74,11 +74,11 @@ export type TagProps = {
 };
 
 /**
- * Ant Design-shaped tag: a small label for a record's state, a filter chip, or
+ * A tag: a small label for a record's state, a filter chip, or
  * a keyword.
  *
  * ```tsx
- * <Tag color="success">Đang hoạt động</Tag>
+ * <Tag color="success">Active</Tag>
  * <Tag color="#7c3aed" icon={<StarIcon />}>VIP</Tag>
  * <Tag closable onClose={() => removeFilter('ielts')}>IELTS 6.5+</Tag>
  * ```
@@ -101,7 +101,7 @@ export const Tag = ({
   className,
   style,
 }: TagProps) => {
-  const { translate } = useUiConfig();
+  const locale = useLocale();
 
   const preset = isPreset(color);
   // A custom colour is painted solid with white text, so any hue stays legible
@@ -140,7 +140,7 @@ export const Tag = ({
           // close affordance is a role-button span in both cases for symmetry.
           role="button"
           tabIndex={0}
-          aria-label={translate('close')}
+          aria-label={locale.common?.close ?? 'Close'}
           onClick={(event) => {
             // Otherwise a closable tag inside a clickable one fires both.
             event.stopPropagation();

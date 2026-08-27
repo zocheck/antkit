@@ -25,7 +25,7 @@ export type TimeFormat = {
 export const DEFAULT_TIME_FORMAT = 'HH:mm:ss';
 
 /**
- * Reads the shape of the field off an antd-style format string.
+ * Reads the shape of the field off a format string.
  *
  * Only which tokens are present matters — the segments are rendered as
  * spinbuttons with a fixed `:` between them, so `HH:mm` and `HH.mm` produce

@@ -28,7 +28,7 @@ type PendingConfirm = {
 };
 
 /**
- * Imperative confirmation dialogs, in the shape of antd v5's `Modal.useModal`.
+ * Imperative confirmation dialogs: one you `await` rather than render.
  *
  * ```tsx
  * const [modal, contextHolder] = Modal.useModal();

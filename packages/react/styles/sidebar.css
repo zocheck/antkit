@@ -1,0 +1,9 @@
+/* sidebar, and the components it renders: button, input, separator, sheet, skeleton, tooltip */
+@import './base.css';
+@source '../src/components/button';
+@source '../src/components/input';
+@source '../src/components/separator';
+@source '../src/components/sheet';
+@source '../src/components/sidebar';
+@source '../src/components/skeleton';
+@source '../src/components/tooltip';

@@ -1,6 +1,30 @@
 import { cn } from '../../utils';
 import React from 'react';
 
+/**
+ * A bordered block of content. Every part is optional and every one is a plain
+ * `<div>`, so a card is composed rather than configured.
+ *
+ * ```tsx
+ * <Card>
+ *   <CardHeader>
+ *     <CardTitle>Monthly report</CardTitle>
+ *     <CardDescription>Generated on the first of each month.</CardDescription>
+ *   </CardHeader>
+ *   <CardContent>{summary}</CardContent>
+ *   <CardFooter className="justify-end">
+ *     <Button>Download</Button>
+ *   </CardFooter>
+ * </Card>
+ * ```
+ *
+ * `Descriptions` for label/value pairs, `Statistic` for a single number,
+ * `Modal` when the content should interrupt rather than sit in the page.
+ *
+ * The root owns the vertical padding and the parts own the horizontal, so a
+ * full-bleed image inside `CardContent` wants `-mx-6` rather than a padding
+ * override on the card.
+ */
 function Card({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div

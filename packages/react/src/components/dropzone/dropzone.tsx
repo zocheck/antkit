@@ -11,6 +11,8 @@ import type { ComponentProps, DragEvent, ReactNode } from 'react';
 
 import { cn } from '../../utils';
 import { FileIcon, UploadIcon, XIcon } from 'lucide-react';
+import { useLocale } from '../../lib/config';
+import type { Locale } from '../../lib/config';
 
 export type FileRejectionCode =
   | 'file-invalid-type'
@@ -30,6 +32,29 @@ export type FileRejection = {
  */
 export type DropzoneAccept = string | Record<string, string[]>;
 
+const DROPZONE_LABELS: Required<NonNullable<Locale['dropzone']>> = {
+  title: 'Drop files here',
+  description: 'or click to choose from your device',
+  remove: 'Remove file',
+  files: (count) => `${count} file${count === 1 ? '' : 's'} selected`,
+  hint: ({ accept, minSize, maxSize, maxFiles }) => {
+    const parts: string[] = [];
+
+    if (accept) parts.push(accept);
+    if (minSize && maxSize) {
+      parts.push(`${formatBytes(minSize)} – ${formatBytes(maxSize)}`);
+    } else if (maxSize) parts.push(`up to ${formatBytes(maxSize)}`);
+    else if (minSize) parts.push(`at least ${formatBytes(minSize)}`);
+    if (maxFiles && maxFiles > 1) parts.push(`up to ${maxFiles} files`);
+
+    return parts.length ? parts.join(' · ') : null;
+  },
+  rejectedType: (name) => `${name}: file type not accepted`,
+  rejectedTooLarge: (name, max) => `${name}: larger than ${max}`,
+  rejectedTooSmall: (name, min) => `${name}: smaller than ${min}`,
+  rejectedTooMany: (name, limit) => `${name}: over the ${limit} file limit`,
+};
+
 export type DropzoneLabels = {
   title: string;
   description: string;
@@ -42,25 +67,6 @@ export type DropzoneLabels = {
     maxFiles?: number;
   }) => ReactNode;
   files: (count: number) => string;
-};
-
-const DEFAULT_LABELS: DropzoneLabels = {
-  title: 'Kéo thả tệp vào đây',
-  description: 'hoặc bấm để chọn từ máy',
-  remove: 'Xoá tệp',
-  files: (count) => `${count} tệp đã chọn`,
-  hint: ({ accept, minSize, maxSize, maxFiles }) => {
-    const parts: string[] = [];
-
-    if (accept) parts.push(accept);
-    if (minSize && maxSize) {
-      parts.push(`${formatBytes(minSize)} – ${formatBytes(maxSize)}`);
-    } else if (maxSize) parts.push(`tối đa ${formatBytes(maxSize)}`);
-    else if (minSize) parts.push(`tối thiểu ${formatBytes(minSize)}`);
-    if (maxFiles && maxFiles > 1) parts.push(`tối đa ${maxFiles} tệp`);
-
-    return parts.length ? parts.join(' · ') : null;
-  },
 };
 
 const UNITS = ['B', 'KB', 'MB', 'GB', 'TB'];
@@ -127,7 +133,7 @@ type DropzoneContextValue = {
   dragging: boolean;
   labels: DropzoneLabels;
   onRemove?: (file: File, index: number) => void;
-  /** Opens the file dialog — for a "Chọn tệp" button outside the drop area. */
+  /** Opens the file dialog — for a "Choose files" button outside the drop area. */
   open: () => void;
 };
 
@@ -210,6 +216,7 @@ export const Dropzone = ({
   children,
   ...props
 }: DropzoneProps) => {
+  const locale = useLocale();
   const inputRef = useRef<HTMLInputElement>(null);
   // A drag over a child fires `dragleave` on the parent, so the state has to
   // count enters and leaves rather than toggle on each one.
@@ -218,7 +225,10 @@ export const Dropzone = ({
 
   const patterns = useMemo(() => toAcceptList(accept), [accept]);
   const acceptAttribute = patterns.join(',') || undefined;
-  const text = useMemo(() => ({ ...DEFAULT_LABELS, ...labels }), [labels]);
+  const text = useMemo(
+    () => ({ ...DROPZONE_LABELS, ...locale.dropzone, ...labels }),
+    [locale, labels],
+  );
   const limit = multiple ? maxFiles : 1;
 
   const open = useCallback(() => {
@@ -234,25 +244,25 @@ export const Dropzone = ({
         rejected.push({
           file,
           code: 'file-invalid-type',
-          message: `${file.name}: định dạng không được chấp nhận`,
+          message: text.rejectedType(file.name),
         });
       } else if (maxSize !== undefined && file.size > maxSize) {
         rejected.push({
           file,
           code: 'file-too-large',
-          message: `${file.name}: lớn hơn ${formatBytes(maxSize)}`,
+          message: text.rejectedTooLarge(file.name, formatBytes(maxSize)),
         });
       } else if (minSize !== undefined && file.size < minSize) {
         rejected.push({
           file,
           code: 'file-too-small',
-          message: `${file.name}: nhỏ hơn ${formatBytes(minSize)}`,
+          message: text.rejectedTooSmall(file.name, formatBytes(minSize)),
         });
       } else if (limit !== undefined && accepted.length >= limit) {
         rejected.push({
           file,
           code: 'too-many-files',
-          message: `${file.name}: vượt quá ${limit} tệp`,
+          message: text.rejectedTooMany(file.name, limit),
         });
       } else {
         accepted.push(file);

@@ -1,0 +1,4 @@
+/* pagination, and the components it renders: button */
+@import './base.css';
+@source '../src/components/button';
+@source '../src/components/pagination';

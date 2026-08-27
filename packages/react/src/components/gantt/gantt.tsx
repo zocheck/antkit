@@ -314,7 +314,7 @@ const layoutRow = (
  * <Gantt
  *   unit="day"
  *   rows={rows}
- *   markers={[{ id: 'ship', date: releaseDate, label: 'Bàn giao' }]}
+ *   markers={[{ id: 'ship', date: releaseDate, label: 'Handover' }]}
  *   onItemClick={(item) => open(item.id)}
  * />
  * ```
@@ -655,7 +655,7 @@ export const Gantt = ({
                         <TooltipContent side="top" className="max-w-xs">
                           <p className="font-medium">{item.name}</p>
                           <p className="text-muted-foreground">
-                            {formatRange(item, locale)} · {span} ngày
+                            {formatRange(item, locale)} · {span}d
                           </p>
                         </TooltipContent>
 

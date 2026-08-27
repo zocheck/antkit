@@ -94,7 +94,7 @@ export type TimePanelProps = {
   /** Time-of-day bounds; the date halves are ignored. */
   min?: Date;
   max?: Date;
-  /** Greys out individual cells — antd's `disabledTime`, one segment at a time. */
+  /** Greys out individual cells, one segment at a time. */
   isTimeDisabled?: (value: number, segment: TimeSegmentType) => boolean;
   /** The day a picked time is stamped onto when there is no value yet. */
   reference?: Date | null;
@@ -152,7 +152,7 @@ export const TimePanel = ({
    *
    * A whole hour is only out of bounds when no minute inside it would work, so
    * with `min` at 09:30 the 9 stays pickable and only its minutes below 30 go
-   * grey — the same coarse-to-fine narrowing antd's `disabledTime` produces.
+   * grey — the same coarse-to-fine narrowing, one segment at a time.
    */
   const outOfBounds = (segment: TimeSegmentType, next: number) => {
     if (segment === 'dayPeriod') return false;

@@ -19,4 +19,6 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm lint
       - run: pnpm format:check
+      - run: pnpm check:docs
+      - run: pnpm check:styles
       - run: pnpm build

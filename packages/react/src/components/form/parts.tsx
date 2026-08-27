@@ -5,7 +5,8 @@ import { cn } from '../../utils';
 import { Slot } from 'radix-ui';
 import { useFormContext, useFormState } from 'react-hook-form';
 
-import { useUiConfig } from '../../lib/ui-config';
+import { useLocale } from '../../lib/config';
+import { localiseRuleMessage } from './rules';
 import { Label } from '../label';
 
 /**
@@ -73,9 +74,8 @@ export function FormLabel({
       {...props}
     >
       {/*
-        antd puts the marker before the label — `.ant-form-item-required::before`
-        with a 4px gap — not after it. `-mr-1` trims the label's own 8px gap
-        down to that 4.
+        The marker goes before the label, not after it, with a 4px gap.
+        `-mr-1` trims the label's own 8px gap down to that 4.
       */}
       {required && (
         <span aria-hidden className="-mr-1 text-destructive">
@@ -105,12 +105,15 @@ export function FormDescription({ className, ...props }: ComponentProps<'p'>) {
 }
 
 export function FormMessage({ className, ...props }: ComponentProps<'p'>) {
-  const { translate } = useUiConfig();
+  const locale = useLocale();
   const { error, formMessageId } = useFormField();
 
-  // Rule messages are i18n keys by default; the host wires `translate` through
-  // `UiConfigProvider`. Literal text passes through unchanged.
-  const body = error ? translate(String(error.message ?? '')) : props.children;
+  // A rule that carried no `message` of its own failed with a
+  // `validation.*` key instead; anything else is literal text the caller
+  // wrote, and passes through untouched.
+  const body = error
+    ? localiseRuleMessage(String(error.message ?? ''), locale)
+    : props.children;
 
   if (!body) return null;
 

@@ -141,11 +141,11 @@ const FormItem = <
           />
 
           {/*
-            Error first, hint second — that is antd's order. `FormItemInput`
+            Error first, hint second: once a field is wrong, the correction
+            matters more than the advice that came with it. `FormItemInput`
             renders `explain` then `extra`, so the message sits right under the
             control it belongs to and the hint stays put at the bottom of the
             field instead of being pushed around by an error appearing above it.
-            (shadcn does the opposite; this component follows antd.)
           */}
           <FormMessage />
           {!!description && <FormDescription>{description}</FormDescription>}

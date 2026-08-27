@@ -10,7 +10,7 @@ import {
   XIcon,
 } from 'lucide-react';
 
-import { useUiConfig } from '../../lib/ui-config';
+import { useLocale } from '../../lib/config';
 
 export type AlertType = 'success' | 'info' | 'warning' | 'error';
 
@@ -44,7 +44,7 @@ const ICON_CLASS: Record<AlertType, string> = {
 };
 
 export type AlertProps = Omit<ComponentProps<'div'>, 'title'> & {
-  /** The headline. Named `message` to match Ant Design. */
+  /** The headline. Named `message`; the body underneath is `description`. */
   message: ReactNode;
   /** Second line. Its presence switches the alert to the taller layout. */
   description?: ReactNode;
@@ -63,15 +63,15 @@ export type AlertProps = Omit<ComponentProps<'div'>, 'title'> & {
 };
 
 /**
- * Ant Design-shaped inline alert.
+ * An inline alert.
  *
  * ```tsx
  * <Alert
  *   type="warning"
  *   showIcon
  *   closable
- *   message="Sắp hết hạn hợp đồng"
- *   description="3 hợp đồng hết hạn trong tuần này."
+ *   message="Contracts expiring soon"
+ *   description="Three contracts expire this week."
  *   action={<Button size="sm" variant="ghost">Xem</Button>}
  * />
  * ```
@@ -93,7 +93,7 @@ export const Alert = ({
   className,
   ...props
 }: AlertProps) => {
-  const { translate } = useUiConfig();
+  const locale = useLocale();
   const [closed, setClosed] = useState(false);
 
   if (closed) return null;
@@ -149,7 +149,7 @@ export const Alert = ({
         <button
           type="button"
           onClick={handleClose}
-          aria-label={translate('close')}
+          aria-label={locale.common?.close ?? 'Close'}
           className={cn(
             'shrink-0 cursor-pointer rounded-sm opacity-60 transition-opacity hover:opacity-100',
             'outline-hidden focus-visible:ring-2 focus-visible:ring-ring',

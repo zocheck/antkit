@@ -38,7 +38,7 @@ const SIZE = {
 } as const;
 
 /**
- * Ant Design-shaped star rating.
+ * A star rating.
  *
  * ```tsx
  * <Rate value={score} onChange={setScore} allowHalf />

@@ -1,6 +1,6 @@
 import type { ComponentProps, ReactElement, ReactNode } from 'react';
 
-import { cn } from '../../utils';
+import { cn, isEmpty } from '../../utils';
 import { Tooltip as TooltipPrimitive } from 'radix-ui';
 
 /**
@@ -72,8 +72,8 @@ export type RadixPlacement = {
 };
 
 /**
- * Ant Design names a side and an alignment in one string; Radix wants two.
- * Shared with every other antd-shaped component that takes a `placement`.
+ * A `placement` names a side and an alignment in one string; Radix wants the
+ * two separately. Shared with every component here that takes one.
  */
 export const PLACEMENT: Record<TooltipPlacement, RadixPlacement> = {
   top: { side: 'top', align: 'center' },
@@ -91,7 +91,7 @@ export const PLACEMENT: Record<TooltipPlacement, RadixPlacement> = {
 };
 
 export type TooltipProps = {
-  /** Nothing renders when this is empty — matching antd. */
+  /** Nothing renders when this is empty, so an optional label needs no guard. */
   title?: ReactNode;
   placement?: TooltipPlacement;
   children: ReactElement;
@@ -104,10 +104,10 @@ export type TooltipProps = {
 };
 
 /**
- * Ant Design-shaped tooltip: one wrapper, a `title`, and a `placement`.
+ * A tooltip: one wrapper, a `title`, and a `placement`.
  *
  * ```tsx
- * <Tooltip title="Xoá bản ghi" placement="topRight">
+ * <Tooltip title="Delete record" placement="topRight">
  *   <Button variant="ghost" size="icon"><Trash2Icon /></Button>
  * </Tooltip>
  * ```
@@ -126,9 +126,9 @@ export const Tooltip = ({
   mouseEnterDelay,
   className,
 }: TooltipProps) => {
-  // antd renders the bare child when there is no title; doing the same means a
+  // Rendering the bare child when there is no title means a
   // caller can pass a maybe-empty label without branching.
-  if (title === undefined || title === null || title === '') return children;
+  if (isEmpty(title)) return children;
 
   const { side, align } = PLACEMENT[placement];
 

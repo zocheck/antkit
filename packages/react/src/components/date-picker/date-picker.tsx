@@ -4,6 +4,8 @@ import type { ComponentProps, ReactNode } from 'react';
 import { cn } from '../../utils';
 import { CalendarIcon } from 'lucide-react';
 
+import { useLocale } from '../../lib/config';
+
 import { useFieldDisclosure } from '../../lib/use-field-disclosure';
 import { Button } from '../button';
 import {
@@ -76,7 +78,7 @@ export const DatePicker = ({
   today,
   footer,
   calendarLabels,
-  openLabel = 'Open calendar',
+  openLabel,
   align = 'start',
   side,
   prefix,
@@ -89,6 +91,7 @@ export const DatePicker = ({
   readOnly,
   ...fieldProps
 }: DatePickerProps) => {
+  const strings = useLocale();
   const [internalValue, setInternalValue] = useState<Date | null>(
     defaultValue ?? null,
   );
@@ -141,7 +144,11 @@ export const DatePicker = ({
                     type="button"
                     variant="ghost"
                     size="icon-sm"
-                    aria-label={openLabel}
+                    aria-label={
+                      openLabel ??
+                      strings.datePicker?.openCalendar ??
+                      'Open calendar'
+                    }
                     {...disclosure.toggleProps}
                     disabled={disabled}
                     className="text-muted-foreground"

@@ -4,7 +4,8 @@ import type { ReactNode } from 'react';
 import { cn } from '../../utils';
 import { CheckIcon, ChevronDownIcon, Loader2Icon, XIcon } from 'lucide-react';
 
-import { useUiConfig } from '../../lib/ui-config';
+import { useConfig } from '../../lib/config';
+import { Empty } from '../empty';
 import { Popover, PopoverContent, PopoverTrigger } from '../popover';
 import {
   Command,
@@ -13,7 +14,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from './command';
+} from '../command-menu/parts';
 
 export type SelectOption = {
   label: string;
@@ -31,6 +32,8 @@ export type SelectValue = string | string[] | undefined;
 export type SelectProps = {
   options: (SelectOption | SelectOptionGroup)[];
   value?: SelectValue;
+  /** Starting selection when the caller does not hold the value. */
+  defaultValue?: SelectValue;
   /** Receives a `string` in single mode, `string[]` in multiple/tags. */
   onChange?: (value: SelectValue) => void;
   onBlur?: () => void;
@@ -87,8 +90,9 @@ const toGroups = (
 };
 
 /**
- * Ant Design-shaped select, covering the variants antd splits across props:
- * single, `mode="multiple"`, `mode="tags"`, with or without `showSearch`.
+ * One select covering every variant other kits split across separate
+ * components: single, `mode="multiple"`, `mode="tags"`, with or without
+ * `showSearch`.
  *
  * ```tsx
  * <Select
@@ -113,6 +117,7 @@ const toGroups = (
 export const Select = ({
   options,
   value,
+  defaultValue,
   onChange,
   onBlur,
   mode,
@@ -130,19 +135,23 @@ export const Select = ({
   'aria-invalid': ariaInvalid,
   'aria-describedby': ariaDescribedBy,
 }: SelectProps) => {
-  const { translate } = useUiConfig();
+  const { locale, renderEmpty } = useConfig();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
+  // Only read while uncontrolled; `value` wins the moment it is supplied.
+  const [inner, setInner] = useState<SelectValue>(defaultValue);
 
   const multiple = mode === 'multiple' || mode === 'tags';
   const searchable = showSearch ?? multiple;
+  const controlled = value !== undefined;
+  const current = controlled ? value : inner;
 
   // `Form.Item` seeds an empty field with '', which is not a valid multi value.
   const selected = useMemo<string[]>(() => {
-    if (Array.isArray(value)) return value;
-    if (value === undefined || value === null || value === '') return [];
-    return [value];
-  }, [value]);
+    if (Array.isArray(current)) return current;
+    if (current === undefined || current === null || current === '') return [];
+    return [current];
+  }, [current]);
 
   const groups = useMemo(() => toGroups(options), [options]);
 
@@ -155,7 +164,10 @@ export const Select = ({
   }, [groups]);
 
   const emit = (next: string[]) => {
-    onChange?.(multiple ? next : next[0]);
+    const value = multiple ? next : next[0];
+
+    if (!controlled) setInner(value);
+    onChange?.(value);
   };
 
   const toggle = (optionValue: string) => {
@@ -216,7 +228,7 @@ export const Select = ({
           <span className="flex min-w-0 flex-1 flex-wrap items-center gap-1 py-1 text-left">
             {selected.length === 0 && (
               <span className="text-muted-foreground">
-                {placeholder ?? translate('selectPlaceholder')}
+                {placeholder ?? locale.common?.selectPlaceholder ?? 'Select…'}
               </span>
             )}
 
@@ -230,7 +242,7 @@ export const Select = ({
                     <span
                       role="button"
                       tabIndex={-1}
-                      aria-label={translate('remove')}
+                      aria-label={locale.common?.remove ?? 'Remove'}
                       onClick={(event) => {
                         // The trigger would otherwise open the popover.
                         event.stopPropagation();
@@ -263,7 +275,7 @@ export const Select = ({
             <span
               role="button"
               tabIndex={-1}
-              aria-label={translate('clear')}
+              aria-label={locale.common?.clear ?? 'Clear'}
               onClick={(event) => {
                 event.stopPropagation();
                 clear();
@@ -288,13 +300,17 @@ export const Select = ({
             <CommandInput
               value={search}
               onValueChange={setSearch}
-              placeholder={searchPlaceholder ?? translate('search')}
+              placeholder={
+                searchPlaceholder ?? locale.common?.search ?? 'Search…'
+              }
             />
           )}
 
           <CommandList>
-            <CommandEmpty>
-              {notFoundContent ?? translate('noData')}
+            <CommandEmpty className={notFoundContent ? undefined : 'py-0'}>
+              {notFoundContent ?? renderEmpty?.('select') ?? (
+                <Empty size="sm" />
+              )}
             </CommandEmpty>
 
             {!!typedTag && (

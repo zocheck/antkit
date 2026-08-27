@@ -49,7 +49,7 @@ const TITLE: Record<StepStatus, string> = {
 const RAIL_OFFSET = { default: '1rem', sm: '0.75rem' } as const;
 
 /**
- * Ant Design-shaped progress through a multi-step task — a wizard, an import,
+ * Progress through a multi-step task — a wizard, an import,
  * an approval chain.
  *
  * ```tsx
@@ -57,9 +57,9 @@ const RAIL_OFFSET = { default: '1rem', sm: '0.75rem' } as const;
  *   current={step}
  *   onChange={setStep}
  *   items={[
- *     { title: 'Thông tin', description: 'Họ tên, liên hệ' },
- *     { title: 'Khoá học' },
- *     { title: 'Thanh toán' },
+ *     { title: 'Details', description: 'Name and contact' },
+ *     { title: 'Course' },
+ *     { title: 'Payment' },
  *   ]}
  * />
  * ```

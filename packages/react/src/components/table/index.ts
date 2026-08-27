@@ -1,5 +1,4 @@
 export * from './table';
-export * from './pagination';
 export * from './use-column-widths';
 export {
   TableBody,

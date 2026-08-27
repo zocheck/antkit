@@ -1,0 +1,1622 @@
+{
+  "package": "@antkit/react",
+  "groups": [
+    {
+      "id": "general",
+      "label": "General"
+    },
+    {
+      "id": "layout",
+      "label": "Layout"
+    },
+    {
+      "id": "navigation",
+      "label": "Navigation"
+    },
+    {
+      "id": "dataEntry",
+      "label": "Data Entry"
+    },
+    {
+      "id": "dataDisplay",
+      "label": "Data Display"
+    },
+    {
+      "id": "feedback",
+      "label": "Feedback"
+    }
+  ],
+  "components": [
+    {
+      "slug": "button",
+      "title": "Button",
+      "group": "general",
+      "summary": "Six variants, five sizes, a loading state and an icon slot at each end.",
+      "doc": "A button. `asChild` renders it as another element — a router link, say —\nwhile keeping the styling and the focus ring.\n\n`variant` is `'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' |\n'link'`, `size` is `'xs' | 'sm' | 'md' | 'lg' | 'xl'` plus the square\n`'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg'`, and `radius` is `'none' | 'sm' |\n'md' | 'lg' | 'xl' | 'full'`.\n\n```tsx\n<Button variant=\"outline\" loading={saving} prefix={<SaveIcon />}>\n  Save\n</Button>\n\n<Button asChild variant=\"link\">\n  <a href=\"/pricing\">See pricing</a>\n</Button>\n```\n\nReach for `DropdownMenu` when the click opens a list of actions rather than\nperforming one, and `Popconfirm` when it needs confirming first.\n\n`loading` implies `disabled` and takes over the `prefix` slot for the\nspinner, so `suffix` is hidden while it is on. An icon-only button still\nneeds an accessible name — give it `aria-label`.",
+      "exports": [
+        "Button",
+        "buttonStyles"
+      ],
+      "props": [
+        "asChild",
+        "prefix",
+        "suffix",
+        "loading",
+        "loadingLabel",
+        "wave"
+      ],
+      "file": "src/components/button/button.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "typography",
+      "title": "Typography",
+      "group": "general",
+      "summary": "Headings, paragraphs and inline text on the @antkit/styles type scale.",
+      "doc": "Inline text with modifiers.\n\n```tsx\n<Text type=\"secondary\">Updated 5 minutes ago</Text>\n<Text copyable>HV-2026-0042</Text>\n<Text ellipsis>{row.note}</Text>\n```\n\n`ellipsis` and `copyable` are the two that earn their keep in a table cell —\na long note that must not break the row height, and an id worth copying.",
+      "exports": [
+        "Paragraph",
+        "Text",
+        "Title",
+        "Typography"
+      ],
+      "props": [],
+      "file": "src/components/typography/typography.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "layout",
+      "title": "Layout",
+      "group": "layout",
+      "summary": "Page frame: header, collapsible sider, content and footer.",
+      "doc": "The page shell — header, sider, content, footer — dressed like the app\nitself: a 220px rail that collapses to a 66px icon strip, a 50px header, a\n24px content gutter.\n\n```tsx\n<Layout className=\"h-dvh\">\n  <LayoutSider collapsible>\n    <div className=\"px-4 pt-4 pb-2 font-medium\">Luma</div>\n    <nav className=\"grid gap-1 p-2\">…</nav>\n    <LayoutFooter>Luma © 0.0.0</LayoutFooter>\n  </LayoutSider>\n  <Layout>\n    <LayoutHeader>…</LayoutHeader>\n    <LayoutContent>…</LayoutContent>\n  </Layout>\n</Layout>\n```\n\n`Sidebar` is the full navigation rail with its own provider, mobile drawer\nand menu parts — that is what the real shell is built on. `Layout` is the\nplain frame for a screen that only needs regions.",
+      "exports": [
+        "LAYOUT_SIDER_COLLAPSED_WIDTH",
+        "LAYOUT_SIDER_WIDTH",
+        "Layout",
+        "LayoutContent",
+        "LayoutFooter",
+        "LayoutHeader",
+        "LayoutSider"
+      ],
+      "props": [
+        "hasSider"
+      ],
+      "file": "src/components/layout/layout.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "sidebar",
+      "title": "Sidebar",
+      "group": "layout",
+      "summary": "The navigation rail: menu groups, submenus, and an icon-only collapsed mode.",
+      "doc": "The navigation rail. Twenty-three parts, so here is the whole surface and\nthe shape they go in — the doc block on `Sidebar` itself is further down.\n\n`SidebarProvider` `Sidebar` `SidebarTrigger` `SidebarRail` `SidebarInset`\n`SidebarInput` `SidebarHeader` `SidebarFooter` `SidebarContent`\n`SidebarGroup` `SidebarGroupLabel` `SidebarGroupAction`\n`SidebarGroupContent` `SidebarMenu` `SidebarMenuItem` `SidebarMenuButton`\n`SidebarMenuAction` `SidebarMenuBadge` `SidebarMenuSkeleton`\n`SidebarMenuSub` `SidebarMenuSubItem` `SidebarMenuSubButton`\n`SidebarSeparator` `useSidebar` `sidebarMenuButton`\n\n```tsx\n<SidebarProvider>\n  <Sidebar collapsible=\"icon\">\n    <SidebarHeader>{brand}</SidebarHeader>\n    <SidebarContent>\n      <SidebarGroup>\n        <SidebarGroupLabel>Workspace</SidebarGroupLabel>\n        <SidebarGroupContent>\n          <SidebarMenu>\n            <SidebarMenuItem>\n              <SidebarMenuButton isActive tooltip=\"Inbox\" asChild>\n                <a href=\"/inbox\">\n                  <InboxIcon />\n                  <span>Inbox</span>\n                </a>\n              </SidebarMenuButton>\n              <SidebarMenuBadge>12</SidebarMenuBadge>\n            </SidebarMenuItem>\n          </SidebarMenu>\n        </SidebarGroupContent>\n      </SidebarGroup>\n    </SidebarContent>\n    <SidebarFooter>{account}</SidebarFooter>\n  </Sidebar>\n  <SidebarInset>\n    <SidebarTrigger />\n    {page}\n  </SidebarInset>\n</SidebarProvider>\n```\n\n`Layout` is the simpler frame — header, sider, content, footer — when the\nnavigation is a plain list and none of this is needed.",
+      "exports": [
+        "Sidebar",
+        "SidebarContent",
+        "SidebarFooter",
+        "SidebarGroup",
+        "SidebarGroupAction",
+        "SidebarGroupContent",
+        "SidebarGroupLabel",
+        "SidebarHeader",
+        "SidebarInput",
+        "SidebarInset",
+        "SidebarMenu",
+        "SidebarMenuAction",
+        "SidebarMenuBadge",
+        "SidebarMenuButton",
+        "SidebarMenuItem",
+        "SidebarMenuSkeleton",
+        "SidebarMenuSub",
+        "SidebarMenuSubButton",
+        "SidebarMenuSubItem",
+        "SidebarProvider",
+        "SidebarRail",
+        "SidebarSeparator",
+        "SidebarTrigger",
+        "useSidebar"
+      ],
+      "props": [],
+      "file": "src/components/sidebar/sidebar.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "card",
+      "title": "Card",
+      "group": "layout",
+      "summary": "A content block with a header, description, body and footer.",
+      "doc": "A bordered block of content. Every part is optional and every one is a plain\n`<div>`, so a card is composed rather than configured.\n\n```tsx\n<Card>\n  <CardHeader>\n    <CardTitle>Monthly report</CardTitle>\n    <CardDescription>Generated on the first of each month.</CardDescription>\n  </CardHeader>\n  <CardContent>{summary}</CardContent>\n  <CardFooter className=\"justify-end\">\n    <Button>Download</Button>\n  </CardFooter>\n</Card>\n```\n\n`Descriptions` for label/value pairs, `Statistic` for a single number,\n`Modal` when the content should interrupt rather than sit in the page.\n\nThe root owns the vertical padding and the parts own the horizontal, so a\nfull-bleed image inside `CardContent` wants `-mx-6` rather than a padding\noverride on the card.",
+      "exports": [
+        "Card",
+        "CardContent",
+        "CardDescription",
+        "CardFooter",
+        "CardHeader",
+        "CardTitle"
+      ],
+      "props": [],
+      "file": "src/components/card/card.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "separator",
+      "title": "Separator",
+      "group": "layout",
+      "summary": "A horizontal or vertical rule between blocks of content.",
+      "doc": "A rule between blocks of content, horizontal or vertical.\n\n```tsx\n<Separator className=\"my-4\" />\n<Separator orientation=\"vertical\" className=\"h-4\" />\n```\n\nA `Card` already separates itself from what is around it, and a heading\nusually divides a page better than a line does.\n\n`decorative` defaults to on, which keeps the rule out of the accessibility\ntree. Turn it off only when the line is the sole thing marking the change of\nsection. A vertical separator has no height of its own — give it one, or put\nit in a flex row with stretched items.",
+      "exports": [
+        "Separator"
+      ],
+      "props": [],
+      "file": "src/components/separator/separator.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "scroll-shadow",
+      "title": "ScrollShadow",
+      "group": "layout",
+      "summary": "A scroll container that fades whichever edge still has content past it.",
+      "doc": "A scroll container that fades its content at whichever edge has more to\nshow, so an overflowing list looks cut off rather than finished.\n\n```tsx\n<ScrollShadow className=\"h-72\">\n  {notifications.map((item) => (\n    <Notice key={item.id} {...item} />\n  ))}\n</ScrollShadow>\n\n<ScrollShadow orientation=\"horizontal\" hideScrollBar className=\"w-full\">\n  <div className=\"flex gap-2\">{tabs}</div>\n</ScrollShadow>\n```\n\n`Marquee` when the content should move on its own, `Table` when the rows\nneed sticky headers and a horizontal scroll of their own.\n\nIt needs a bounded size to have anything to overflow — `h-72`, a flex\nchild with `min-h-0`, a grid track. Without one it grows to fit its content\nand no fade ever appears.",
+      "exports": [
+        "ScrollShadow"
+      ],
+      "props": [
+        "orientation",
+        "size",
+        "offset",
+        "hideScrollBar",
+        "enabled",
+        "visibility",
+        "onVisibilityChange"
+      ],
+      "file": "src/components/scroll-shadow/scroll-shadow.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "breadcrumb",
+      "title": "Breadcrumb",
+      "group": "navigation",
+      "summary": "The trail of ancestors above the current page.",
+      "doc": "The trail of ancestors above the current page.\n\n```tsx\n<Breadcrumb>\n  <BreadcrumbList>\n    <BreadcrumbItem>\n      <BreadcrumbLink href=\"/\">Home</BreadcrumbLink>\n    </BreadcrumbItem>\n    <BreadcrumbSeparator />\n    <BreadcrumbItem>\n      <BreadcrumbPage>Invoices</BreadcrumbPage>\n    </BreadcrumbItem>\n  </BreadcrumbList>\n</Breadcrumb>\n```\n\n`Steps` for progress through a task — a breadcrumb says where a page sits,\nnot how far along you are.\n\nThe last crumb is a `BreadcrumbPage`, not a `BreadcrumbLink`: it carries\n`aria-current=\"page\"` and does not link to where you already are.\n`BreadcrumbLink` takes `asChild` for a router link, and\n`BreadcrumbEllipsis` collapses the middle of a long trail.",
+      "exports": [
+        "Breadcrumb",
+        "BreadcrumbEllipsis",
+        "BreadcrumbItem",
+        "BreadcrumbLink",
+        "BreadcrumbList",
+        "BreadcrumbPage",
+        "BreadcrumbSeparator"
+      ],
+      "props": [],
+      "file": "src/components/breadcrumb/breadcrumb.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "dropdown-menu",
+      "title": "Dropdown Menu",
+      "group": "navigation",
+      "summary": "A menu off a button: plain items, checkboxes, radios, groups and submenus.",
+      "doc": "A menu hanging off a button: plain items, checkboxes, radios, groups and\nsubmenus. The content portals, so an ancestor's `overflow: hidden` cannot\nclip it.\n\n```tsx\n<DropdownMenu>\n  <DropdownMenuTrigger asChild>\n    <Button variant=\"ghost\" size=\"icon\" aria-label=\"Row actions\">\n      <EllipsisIcon />\n    </Button>\n  </DropdownMenuTrigger>\n  <DropdownMenuContent align=\"end\">\n    <DropdownMenuLabel>Actions</DropdownMenuLabel>\n    <DropdownMenuItem onSelect={() => edit(row)}>Edit</DropdownMenuItem>\n    <DropdownMenuSeparator />\n    <DropdownMenuItem variant=\"destructive\" onSelect={() => remove(row)}>\n      Delete\n    </DropdownMenuItem>\n  </DropdownMenuContent>\n</DropdownMenu>\n```\n\n`Select` when the choice is a form value, `Popover` when the panel holds\nanything other than a list of commands, `Popconfirm` for a destructive item\nthat needs confirming.\n\nItems fire `onSelect`, not `onClick`, and the menu closes itself afterwards.\nThat includes checkbox and radio items, which is rarely what you want for a\ncolumn-visibility menu — call `event.preventDefault()` in the handler to\nkeep it open.",
+      "exports": [
+        "DropdownMenu",
+        "DropdownMenuCheckboxItem",
+        "DropdownMenuContent",
+        "DropdownMenuGroup",
+        "DropdownMenuItem",
+        "DropdownMenuLabel",
+        "DropdownMenuPortal",
+        "DropdownMenuRadioGroup",
+        "DropdownMenuRadioItem",
+        "DropdownMenuSeparator",
+        "DropdownMenuShortcut",
+        "DropdownMenuSub",
+        "DropdownMenuSubContent",
+        "DropdownMenuSubTrigger",
+        "DropdownMenuTrigger"
+      ],
+      "props": [],
+      "file": "src/components/dropdown-menu/dropdown-menu.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "command-menu",
+      "title": "CommandMenu",
+      "group": "navigation",
+      "summary": "The ⌘K palette: a search box over a list of actions, opened from anywhere.",
+      "doc": "The ⌘K palette: a search box over a list of actions, in a dialog that opens\nfrom anywhere.\n\n```tsx\n<CommandMenu\n  items={[\n    { key: 'new', label: 'New student', icon: <PlusIcon />, shortcut: '⌘N' },\n    {\n      label: 'Go to',\n      items: [{ key: 'courses', label: 'Courses', onSelect: goToCourses }],\n    },\n  ]}\n  onSelect={(item) => run(item.key)}\n/>\n```\n\nUncontrolled and bound to ⌘K by default, so the snippet above is a working\npalette. Pass `open` and `onOpenChange` to drive it from a button as well,\nand `inline` to drop the dialog and mount the list in the page.\n\nRows that need more than a label and an icon are better built from the parts\n— `Command`, `CommandInput`, `CommandItem` — which is what this composes.\n\nReach for `Select` when the result is a value in a form rather than an\naction, and `DropdownMenu` when the list is short enough not to need search.",
+      "exports": [
+        "Command",
+        "CommandDialog",
+        "CommandEmpty",
+        "CommandFooter",
+        "CommandGroup",
+        "CommandInput",
+        "CommandItem",
+        "CommandList",
+        "CommandMenu",
+        "CommandSeparator",
+        "CommandShortcut"
+      ],
+      "props": [
+        "items",
+        "open",
+        "defaultOpen",
+        "onOpenChange",
+        "shortcut",
+        "onSelect",
+        "placeholder",
+        "emptyText",
+        "search",
+        "onSearchChange",
+        "filterOption",
+        "loading",
+        "footer",
+        "inline",
+        "title",
+        "description",
+        "className"
+      ],
+      "file": "src/components/command-menu/command-menu.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "tabs",
+      "title": "Tabs",
+      "group": "navigation",
+      "summary": "Switch panels, in a default or underline variant.",
+      "doc": "Tabbed panels.\n\n```tsx\n<Tabs defaultValue=\"runs\">\n  <TabsList>\n    <TabsTrigger value=\"runs\">Runs</TabsTrigger>\n    <TabsTrigger value=\"logs\">Logs</TabsTrigger>\n  </TabsList>\n  <TabsContent value=\"runs\">…</TabsContent>\n  <TabsContent value=\"logs\">…</TabsContent>\n</Tabs>\n```",
+      "exports": [
+        "Tabs",
+        "TabsContent",
+        "TabsList",
+        "TabsTrigger",
+        "tabsListStyles"
+      ],
+      "props": [],
+      "file": "src/components/tabs/tabs.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "steps",
+      "title": "Steps",
+      "group": "navigation",
+      "summary": "Progress through a multi-step task, horizontally or vertically.",
+      "doc": "Progress through a multi-step task — a wizard, an import,\nan approval chain.\n\n```tsx\n<Steps\n  current={step}\n  onChange={setStep}\n  items={[\n    { title: 'Details', description: 'Name and contact' },\n    { title: 'Course' },\n    { title: 'Payment' },\n  ]}\n/>\n```\n\nEverything before `current` reads as finished, everything after as waiting.\nSet `status=\"error\"` to mark the current step as failed, or pin a single step\nwith its own `status` when the order isn't strictly linear.",
+      "exports": [
+        "Steps"
+      ],
+      "props": [
+        "items",
+        "current",
+        "status",
+        "direction",
+        "size",
+        "onChange",
+        "className"
+      ],
+      "file": "src/components/steps/steps.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "form",
+      "title": "Form",
+      "group": "dataEntry",
+      "summary": "Declarative forms: rules on the field, no schema, no resolver.",
+      "doc": "A labelled, validated field.\n\n`rules` is the whole validation story — no resolver, no separate schema:\n\n```tsx\n<Form.Item\n  name=\"email\"\n  label=\"Email\"\n  rules={[{ required: true }, { type: 'email' }]}\n>\n  <Input />\n</Form.Item>\n```\n\nThe child control is cloned with `value`/`onChange`/`onBlur` and the aria ids,\nso it does not need to know it is inside a form.",
+      "exports": [
+        "Form",
+        "FormControl",
+        "FormDescription",
+        "FormItem",
+        "FormLabel",
+        "FormMessage",
+        "hasRequiredRule",
+        "localiseRuleMessage",
+        "rulesToValidate",
+        "useFieldAria",
+        "useForm",
+        "useFormField"
+      ],
+      "props": [],
+      "file": "src/components/form/form.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "input",
+      "title": "Input",
+      "group": "dataEntry",
+      "summary": "A single-line field: every HTML type, error state, icons and buttons attached.",
+      "doc": "A single-line text field. Takes every `<input>` prop, so `type`,\n`placeholder`, `readOnly` and the rest behave exactly as they do natively.\n\n```tsx\n<Input type=\"email\" placeholder=\"you@example.com\" />\n```\n\nUse `InputNumber` for numbers — a native `type=\"number\"` accepts `e` and\n`-`, and hands back a string. `Textarea` for more than one line,\n`AutoComplete` when there are suggestions to offer.\n\nIt needs no adapter inside a `Form.Item`: the item injects `value`,\n`onChange`, `onBlur` and the aria props onto it.",
+      "exports": [
+        "Input"
+      ],
+      "props": [],
+      "file": "src/components/input/input.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "textarea",
+      "title": "Textarea",
+      "group": "dataEntry",
+      "summary": "A multi-line field that grows with its content and counts characters.",
+      "doc": "A multi-line text field.\n\n```tsx\n<Textarea placeholder=\"Notes\" autoSize={{ minRows: 2, maxRows: 6 }} />\n<Textarea maxLength={200} showCount />\n```",
+      "exports": [
+        "Textarea"
+      ],
+      "props": [
+        "autoSize",
+        "showCount",
+        "wrapperClassName"
+      ],
+      "file": "src/components/textarea/textarea.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "input-number",
+      "title": "InputNumber",
+      "group": "dataEntry",
+      "summary": "A number field with steppers, currency formatting and min/max bounds.",
+      "doc": "A number field with steppers, bounds and a unit.\n\n```tsx\n<InputNumber value={fee} onChange={setFee} min={0} step={50_000} addonAfter=\"₫\" />\n```\n\n`onChange` fires with the raw typed number, out of range included, so the\nfield never fights someone typing `5` on the way to `50`. Rounding to\n`precision` and clamping into `min`/`max` happen on blur and on Enter.\n\nIt takes `value`/`onChange`/`onBlur` and the aria props, which is exactly\nwhat `Form.Item` injects — so it drops into a form with no adapter.",
+      "exports": [
+        "InputNumber"
+      ],
+      "props": [
+        "value",
+        "defaultValue",
+        "onChange",
+        "min",
+        "max",
+        "step",
+        "precision",
+        "size",
+        "controls",
+        "keyboard",
+        "changeOnWheel",
+        "formatter",
+        "parser",
+        "prefix",
+        "suffix",
+        "addonBefore",
+        "addonAfter",
+        "onPressEnter",
+        "invalid",
+        "stepUpLabel",
+        "stepDownLabel",
+        "className",
+        "inputClassName"
+      ],
+      "file": "src/components/input-number/input-number.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "label",
+      "title": "Label",
+      "group": "dataEntry",
+      "summary": "A label bound to a control — clicking it focuses the control.",
+      "doc": "A caption bound to a form control. Clicking it moves focus to the control,\nand it dims itself when that control is disabled.\n\n```tsx\n<Label htmlFor=\"email\">Email</Label>\n<Input id=\"email\" type=\"email\" />\n```\n\n`Form.Item` renders its own label from the `label` prop, so inside a form\nyou rarely reach for this directly.\n\nThe dimming keys off a `peer-disabled` sibling or a `group-data-[disabled]`\nancestor — a control that is disabled without either marker leaves the label\nlooking active.",
+      "exports": [
+        "Label"
+      ],
+      "props": [],
+      "file": "src/components/label/label.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "select",
+      "title": "Select",
+      "group": "dataEntry",
+      "summary": "One component covering every variant: single, multiple, tags, search, groups.",
+      "doc": "One select covering every variant other kits split across separate\ncomponents: single, `mode=\"multiple\"`, `mode=\"tags\"`, with or without\n`showSearch`.\n\n```tsx\n<Select\n  mode=\"multiple\"\n  allowClear\n  placeholder={t('pickRoles')}\n  options={[\n    { label: 'Admin', value: 'admin' },\n    { label: 'Editor', value: 'editor', disabled: true },\n  ]}\n  value={roles}\n  onChange={setRoles}\n/>\n```\n\nIt takes `value`/`onChange`/`onBlur` and the aria props, which is exactly what\n`Form.Item` injects — so it drops into a form with no adapter.\n\nFiltering and the keyboard model come from cmdk; the list is a real listbox\nwith arrow keys, typeahead and Enter.",
+      "exports": [
+        "Select"
+      ],
+      "props": [
+        "options",
+        "value",
+        "defaultValue",
+        "onChange",
+        "onBlur",
+        "mode",
+        "showSearch",
+        "allowClear",
+        "placeholder",
+        "searchPlaceholder",
+        "notFoundContent",
+        "disabled",
+        "loading",
+        "maxTagCount",
+        "id",
+        "name",
+        "className",
+        "aria-invalid",
+        "aria-describedby"
+      ],
+      "file": "src/components/select/select.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "auto-complete",
+      "title": "AutoComplete",
+      "group": "dataEntry",
+      "summary": "A free-text field that suggests, but never forces, a value.",
+      "doc": "An autocomplete: a text field that suggests, but never forces,\na value.\n\n```tsx\n<AutoComplete\n  options={recentSearches}\n  value={query}\n  onChange={setQuery}\n  placeholder=\"Search students\"\n/>\n```\n\nThe difference from `Select`: what the user types *is* the value. `Select`\nwith `mode=\"tags\"` also accepts new entries, but it stores them as chips and\nthe field itself is not free text.\n\nWith a server-side list, set `filterOption={false}` and refetch on `onChange`\n— otherwise the results get filtered a second time on the client.",
+      "exports": [
+        "AutoComplete"
+      ],
+      "props": [
+        "options",
+        "value",
+        "onChange",
+        "onSelect",
+        "onBlur",
+        "filterOption",
+        "placeholder",
+        "notFoundContent",
+        "allowClear",
+        "disabled",
+        "loading",
+        "id",
+        "name",
+        "className",
+        "aria-invalid",
+        "aria-describedby"
+      ],
+      "file": "src/components/auto-complete/auto-complete.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "cascader",
+      "title": "Cascader",
+      "group": "dataEntry",
+      "summary": "Drill through a fixed-depth hierarchy one column at a time.",
+      "doc": "A cascader: drill through a fixed-depth hierarchy one column\nat a time — country / region / city, or any fixed set of levels.\n\n```tsx\n<Cascader\n  options={regions}\n  value={area}\n  onChange={setArea}\n  placeholder=\"Choose an area\"\n  allowClear\n/>\n```\n\nBy default only a leaf commits a value, so a half-finished path leaves the\nfield alone. `changeOnSelect` commits at every level instead, which is what\nyou want when a whole branch is a legitimate answer.\n\nIt takes `value`/`onChange`/`onBlur` and the aria props, so it drops straight\ninto a `Form.Item`. For an arbitrary-depth hierarchy, use `TreeSelect`.",
+      "exports": [
+        "Cascader"
+      ],
+      "props": [
+        "options",
+        "value",
+        "onChange",
+        "onBlur",
+        "changeOnSelect",
+        "expandTrigger",
+        "displayRender",
+        "placeholder",
+        "allowClear",
+        "disabled",
+        "id",
+        "name",
+        "className",
+        "aria-invalid",
+        "aria-describedby"
+      ],
+      "file": "src/components/cascader/cascader.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "tree-select",
+      "title": "TreeSelect",
+      "group": "dataEntry",
+      "summary": "A select whose list is a tree with checkable branches.",
+      "doc": "A tree select: `Tree` in a dropdown, for picking from a\nhierarchy — a category, a department, a permission node.\n\n```tsx\n<TreeSelect\n  treeCheckable\n  showSearch\n  allowClear\n  treeData={permissions}\n  value={granted}\n  onChange={setGranted}\n  placeholder=\"Choose permissions\"\n/>\n```\n\nIt takes `value`/`onChange`/`onBlur` and the aria props, so it drops straight\ninto a `Form.Item`.\n\nWhen the options are a flat list, use `Select`; when the hierarchy is a fixed\nnumber of levels the user drills through in order, `Cascader` reads better.",
+      "exports": [
+        "TreeSelect"
+      ],
+      "props": [
+        "treeData",
+        "value",
+        "onChange",
+        "onBlur",
+        "treeCheckable",
+        "multiple",
+        "showSearch",
+        "treeDefaultExpandAll",
+        "allowClear",
+        "placeholder",
+        "searchPlaceholder",
+        "notFoundContent",
+        "disabled",
+        "maxTagCount",
+        "id",
+        "name",
+        "className",
+        "aria-invalid",
+        "aria-describedby"
+      ],
+      "file": "src/components/tree-select/tree-select.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "transfer",
+      "title": "Transfer",
+      "group": "dataEntry",
+      "summary": "Two columns to move items between — permissions, tags, members.",
+      "doc": "A transfer: two panels and a pair of arrows, for splitting a\nset into \"not chosen\" and \"chosen\".\n\n```tsx\n<Transfer\n  showSearch\n  dataSource={allPermissions}\n  targetKeys={granted}\n  onChange={setGranted}\n  titles={['Available', 'Granted']}\n/>\n```\n\nWorth the space over a multi-`Select` when the user needs to *see* both sides\nat once — assigning permissions, picking which columns a report includes.\nFor a short list, a `CheckboxGroup` is lighter.\n\n`targetKeys`/`onChange` match the `value`/`onChange` contract, so a\n`Form.Item` can drive it with `valuePropName=\"targetKeys\"`.",
+      "exports": [
+        "Transfer"
+      ],
+      "props": [
+        "dataSource",
+        "targetKeys",
+        "onChange",
+        "onBlur",
+        "titles",
+        "showSearch",
+        "render",
+        "listHeight",
+        "disabled",
+        "id",
+        "className"
+      ],
+      "file": "src/components/transfer/transfer.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "checkbox",
+      "title": "Checkbox",
+      "group": "dataEntry",
+      "summary": "A three-state tick box, indeterminate included.",
+      "doc": "A tri-state checkbox. `checked` takes `true`, `false`, or `'indeterminate'`.\n\n```tsx\n<Checkbox\n  id=\"terms\"\n  checked={agreed}\n  onCheckedChange={(next) => setAgreed(next === true)}\n/>\n<Label htmlFor=\"terms\">I agree to the terms</Label>\n```\n\n`Switch` when the change commits immediately; a checkbox commits with the\nform around it. `CheckboxGroup` when there is a list of them to manage as\none value.\n\n`checked=\"indeterminate\"` is the \"some but not all\" state — a select-all box\nover a partly selected table. Unlike a native input, it is part of the props\nrather than something you set imperatively on the DOM node. Note the handler\nis `onCheckedChange`, and it can hand you that third value.",
+      "exports": [
+        "Checkbox"
+      ],
+      "props": [],
+      "file": "src/components/checkbox/checkbox.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "checkbox-group",
+      "title": "CheckboxGroup",
+      "group": "dataEntry",
+      "summary": "Several options sharing one array of values.",
+      "doc": "Several independent checkboxes sharing one array of values.\n\nRadix has no checkbox-group primitive — a checkbox group is not a roving\nfocus widget, each box is tabbable on its own — so this is a thin controlled\nwrapper over `Checkbox` rather than a primitive re-export.\n\n```tsx\n<CheckboxGroup defaultValue={['email']} onValueChange={setChannels}>\n  <CheckboxOption value=\"email\">Email</CheckboxOption>\n  <CheckboxOption value=\"sms\" description=\"Charged per message\">SMS</CheckboxOption>\n</CheckboxGroup>\n```",
+      "exports": [
+        "CheckboxGroup",
+        "CheckboxGroupItem",
+        "CheckboxOption",
+        "useCheckboxGroup"
+      ],
+      "props": [
+        "value",
+        "defaultValue",
+        "onValueChange",
+        "name",
+        "disabled",
+        "orientation"
+      ],
+      "file": "src/components/checkbox-group/checkbox-group.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "radio",
+      "title": "Radio",
+      "group": "dataEntry",
+      "summary": "Pick one of several, with an optional line of help under each label.",
+      "doc": "A set of mutually exclusive choices.\n\n```tsx\n<RadioGroup defaultValue=\"now\">\n  <Radio value=\"now\">Run now</Radio>\n  <Radio value=\"cron\" description=\"On the schedule you set\">Schedule</Radio>\n</RadioGroup>\n```\n\nPass `orientation=\"horizontal\"` for a row — that also switches the arrow keys\nRadix listens to, so it is not only a layout change.",
+      "exports": [
+        "Radio",
+        "RadioGroup",
+        "RadioGroupItem"
+      ],
+      "props": [
+        "description"
+      ],
+      "file": "src/components/radio/radio.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "switch",
+      "title": "Switch",
+      "group": "dataEntry",
+      "summary": "An instant on/off, with a loading state for when it calls an API.",
+      "doc": "An on/off toggle that commits immediately. Use `Checkbox` when the value is\nonly saved once the surrounding form is submitted.\n\n```tsx\n<Switch checked={active} onCheckedChange={setActive} />\n<Switch defaultChecked checkedChildren=\"On\" uncheckedChildren=\"Off\" />\n```",
+      "exports": [
+        "Switch"
+      ],
+      "props": [
+        "size",
+        "loading",
+        "checkedChildren",
+        "uncheckedChildren"
+      ],
+      "file": "src/components/switch/switch.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "segmented",
+      "title": "Segmented",
+      "group": "dataEntry",
+      "summary": "A row of buttons picking one value — tighter than Radio.",
+      "doc": "A one-of-N control that shows every choice at once. Pick this over `Select`\nwhen there are two to four options and over `Tabs` when it filters content\nrather than switching panels.\n\n```tsx\n<Segmented\n  options={['Day', 'Week', 'Month']}\n  value={range}\n  onChange={(value) => setRange(value as string)}\n/>\n```",
+      "exports": [
+        "Segmented"
+      ],
+      "props": [
+        "options",
+        "value",
+        "defaultValue",
+        "onChange",
+        "size",
+        "block",
+        "disabled"
+      ],
+      "file": "src/components/segmented/segmented.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "slider",
+      "title": "Slider",
+      "group": "dataEntry",
+      "summary": "One or two handles, with marks and a value tooltip.",
+      "doc": "Pick a number, or a range of them.\n\n```tsx\n<Slider value={volume} onChange={(v) => setVolume(v as number)} />\n<Slider range defaultValue={[20, 60]} marks={{ 0: '0%', 100: '100%' }} />\n```",
+      "exports": [
+        "Slider"
+      ],
+      "props": [
+        "value",
+        "defaultValue",
+        "onChange",
+        "onChangeComplete",
+        "range",
+        "vertical",
+        "marks",
+        "tooltip",
+        "formatTooltip"
+      ],
+      "file": "src/components/slider/slider.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "rate",
+      "title": "Rate",
+      "group": "dataEntry",
+      "summary": "Star rating, with half stars and a character of your choosing.",
+      "doc": "A star rating.\n\n```tsx\n<Rate value={score} onChange={setScore} allowHalf />\n<Rate value={4} readOnly size=\"sm\" />\n```\n\nIt takes `value`/`onChange`/`onBlur` and the aria props, so it drops straight\ninto a `Form.Item` with no adapter.\n\nThe whole control is one radiogroup with arrow-key support rather than N\nfocusable stars — tabbing through five stars to set one number is tedious.",
+      "exports": [
+        "Rate"
+      ],
+      "props": [
+        "count",
+        "value",
+        "defaultValue",
+        "onChange",
+        "onBlur",
+        "allowHalf",
+        "allowClear",
+        "disabled",
+        "readOnly",
+        "character",
+        "size",
+        "tooltips",
+        "id",
+        "name",
+        "className",
+        "aria-invalid",
+        "aria-describedby"
+      ],
+      "file": "src/components/rate/rate.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "date-picker",
+      "title": "DatePicker",
+      "group": "dataEntry",
+      "summary": "Type into dd/mm/yyyy segments or open the calendar; ranges included.",
+      "doc": "A date field with a calendar attached.\n\n```tsx\n<DatePicker value={date} onChange={setDate} min={new Date()} clearable />\n```\n\nBoth halves edit the same value: type into the segments, or open the\ncalendar and click. The popover anchors to the whole field rather than to\nthe button, so it lines up with the text under it.",
+      "exports": [
+        "Calendar",
+        "DateField",
+        "DateInputBox",
+        "DatePicker",
+        "DateRangePicker",
+        "DateSegments",
+        "addDays",
+        "addMonths",
+        "isSameDay",
+        "isWithin",
+        "startOfDay",
+        "startOfMonth",
+        "toISODate",
+        "useDateParts"
+      ],
+      "props": [
+        "open",
+        "defaultOpen",
+        "onOpenChange",
+        "closeOnSelect",
+        "calendarLabels",
+        "openLabel",
+        "align",
+        "side",
+        "prefix",
+        "className",
+        "calendarClassName"
+      ],
+      "file": "src/components/date-picker/date-picker.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "time-picker",
+      "title": "TimePicker",
+      "group": "dataEntry",
+      "summary": "Pick a time by column, 12h or 24h, ranges included.",
+      "doc": "A time field with a list of times attached.\n\n```tsx\n<TimePicker value={time} onChange={setTime} format=\"HH:mm\" minuteStep={15} />\n```\n\nBoth halves edit the same value: type into the segments, or open the panel\nand click down the columns. Each click commits and `OK` only closes the\npanel, so a picked time is never lost by clicking away.\n\nThe date half of the value is preserved, which is what lets this sit beside\na `DatePicker` over one `Date` without either of them fighting the other.",
+      "exports": [
+        "TimeField",
+        "TimePanel",
+        "TimePicker",
+        "TimeRangePicker",
+        "TimeSegments",
+        "compareTimes",
+        "isTimeAfter",
+        "isTimeBefore",
+        "isTimeWithin",
+        "parseISOTime",
+        "resolveTimeFormat",
+        "toISOTime",
+        "toTimeString",
+        "useTimeParts",
+        "withTime"
+      ],
+      "props": [
+        "onChange",
+        "open",
+        "defaultOpen",
+        "onOpenChange",
+        "showNow",
+        "nowText",
+        "okText",
+        "openLabel",
+        "align",
+        "side",
+        "prefix",
+        "className",
+        "panelClassName"
+      ],
+      "file": "src/components/time-picker/time-picker.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "dropzone",
+      "title": "Dropzone",
+      "group": "dataEntry",
+      "summary": "A drop area for files, with type, size and count limits.",
+      "doc": "A drop area that takes files from a drag or from the file dialog.\n\n```tsx\n<Dropzone\n  accept=\"image/*\"\n  maxSize={5 * 1024 * 1024}\n  src={files}\n  onDrop={(accepted) => setFiles(accepted)}\n  onRemove={(_, index) => setFiles(files.filter((__, i) => i !== index))}\n  onError={(error) => toast.error(error.message)}\n>\n  <DropzoneEmptyState />\n  <DropzoneContent />\n</Dropzone>\n```\n\nValidation happens here — type, size, count — and both sides of the outcome\ncome back through `onDrop`, so a rejected file can be reported rather than\nsilently dropped. The component holds no files of its own: whatever `src`\nsays is what it shows.",
+      "exports": [
+        "Dropzone",
+        "DropzoneContent",
+        "DropzoneEmptyState",
+        "DropzoneFile",
+        "formatBytes",
+        "useDropzone"
+      ],
+      "props": [
+        "src",
+        "onDrop",
+        "onError",
+        "onRemove",
+        "accept",
+        "maxFiles",
+        "maxSize",
+        "minSize",
+        "multiple",
+        "disabled",
+        "name",
+        "form",
+        "required",
+        "labels"
+      ],
+      "file": "src/components/dropzone/dropzone.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "rich-text-editor",
+      "title": "RichTextEditor",
+      "group": "dataEntry",
+      "summary": "A formatting editor with images and tables — load it lazily.",
+      "doc": "Rich text editor built on Tiptap, with the toolbar wired up.\n\n```tsx\nconst [body, setBody] = useState('<p>Hello</p>');\n\n<RichTextEditor\n  value={body}\n  onChange={setBody}\n  placeholder=\"Write the email…\"\n  maxLength={2000}\n  showCount\n  onUploadImage={(file) => api.upload(file).then((res) => res.url)}\n  onError={(error) => message.error(error.message)}\n/>\n```\n\n`value` is HTML and works controlled or uncontrolled. Controlled updates only\nreach the document when they differ from what is already there, so typing\ndoesn't fight the round-trip through the parent's state.\n\nOut of the box: headings, alignment, the usual marks, text colour and\nhighlight, bullet/numbered/task lists, quotes, code blocks, links, images\n(pick, paste or drop), tables, and a character count.\n\nThree ways to change what it does, smallest first:\n\n- `toolbar` picks and orders the buttons, and takes buttons of your own —\n  see {@link RichTextEditorCustomTool}. `COMPACT_TOOLBAR` is a short preset.\n- `starterKit` reaches the built-in extensions: `{ codeBlock: false }`.\n- `extensions` adds your own, and `onReady` hands you the instance to drive\n  them from outside.",
+      "exports": [
+        "COMPACT_TOOLBAR",
+        "DEFAULT_TOOLBAR",
+        "RichTextEditor",
+        "isCustomTool"
+      ],
+      "props": [
+        "value",
+        "defaultValue",
+        "onChange",
+        "onBlur",
+        "placeholder",
+        "disabled",
+        "readOnly",
+        "autoFocus",
+        "toolbar",
+        "maxLength",
+        "showCount",
+        "onUploadImage",
+        "maxImageSize",
+        "imageAccept",
+        "onError",
+        "extensions",
+        "starterKit",
+        "onReady",
+        "minHeight",
+        "maxHeight",
+        "id",
+        "className",
+        "contentClassName",
+        "aria-invalid",
+        "aria-describedby"
+      ],
+      "file": "src/components/rich-text-editor/rich-text-editor.tsx",
+      "import": "@antkit/react/rich-text-editor"
+    },
+    {
+      "slug": "table",
+      "title": "Table",
+      "group": "dataDisplay",
+      "summary": "The data grid: sorting, row selection, fixed and resizable columns, expandable rows, pagination.",
+      "doc": "Data grid with the pieces an admin table actually needs: a sticky header over\na scrolling body, columns pinned left/right, resizing, sorting, row selection,\nexpandable detail rows and a pinned actions column.\n\n```tsx\n<Table\n  rowKey=\"id\"\n  dataSource={rows}\n  maxHeight=\"calc(100dvh - 14rem)\"\n  rowSelection={{ selectedRowKeys: selected, onChange: setSelected }}\n  rowActions={(row) => <RowMenu row={row} />}\n  columns={[\n    { title: 'Name', dataIndex: 'name', width: 400, icon: <FileTextIcon />, resizable: true, sorter: true },\n    { title: 'Date', dataIndex: 'date', width: 150, fixed: 'left' },\n  ]}\n/>\n```\n\nLayout is `table-fixed`: columns have stable pixel widths, while the table\ncan still grow to fill a wide container and scroll naturally on narrow ones.",
+      "exports": [
+        "Table",
+        "TableBody",
+        "TableCaption",
+        "TableCell",
+        "TableFooter",
+        "TableHead",
+        "TableHeader",
+        "TableRoot",
+        "TableRow",
+        "useColumnWidths"
+      ],
+      "props": [
+        "columns",
+        "dataSource",
+        "rowKey",
+        "loading",
+        "loadingRows",
+        "empty",
+        "onRowClick",
+        "rowClassName",
+        "rowSelection",
+        "expandable",
+        "rowActions",
+        "actionsWidth",
+        "maxHeight",
+        "scroll",
+        "headerHeight",
+        "classNames",
+        "styles",
+        "stickyHeader",
+        "sort",
+        "defaultSort",
+        "onSortChange",
+        "columnWidths",
+        "defaultColumnWidths",
+        "onColumnWidthsChange",
+        "minColumnWidth",
+        "pagination",
+        "className"
+      ],
+      "file": "src/components/table/table.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "pagination",
+      "title": "Pagination",
+      "group": "dataDisplay",
+      "summary": "Page numbers, with a size changer, a jump-to box and a simple mode.",
+      "doc": "Page numbers, with an optional size changer and jump-to box. Controlled:\nit holds no page of its own, so `page` is whatever you last stored.\n\n```tsx\n<Pagination\n  page={page}\n  pageSize={size}\n  total={total}\n  showSizeChanger\n  showTotal={(count, [from, to]) => `${from}-${to} of ${count}`}\n  onChange={(nextPage, nextSize) => {\n    setPage(nextPage);\n    setSize(nextSize);\n  }}\n/>\n```\n\n`Table` renders one for you when you pass it a `pagination` prop — reach for\nthis directly when the paged thing is not a table: a card grid, a feed, a\nlist of search results.\n\n`onChange` carries both values because changing the page size also changes\nthe page: picking a new size sends you back to page 1 rather than guessing\nwhich page your old rows moved to. Store both from the same call, or you\nwill render page 8 of a list that now has three pages.",
+      "exports": [
+        "Pagination"
+      ],
+      "props": [
+        "page",
+        "pageSize",
+        "total",
+        "onChange",
+        "pageSizeOptions",
+        "showSizeChanger",
+        "showQuickJumper",
+        "showLessItems",
+        "boundaries",
+        "siblings",
+        "simple",
+        "size",
+        "variant",
+        "disabled",
+        "hideOnSinglePage",
+        "onShowSizeChange",
+        "showTotal",
+        "className"
+      ],
+      "file": "src/components/pagination/pagination.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "descriptions",
+      "title": "Descriptions",
+      "group": "dataDisplay",
+      "summary": "Label–value pairs for a detail page.",
+      "doc": "A read-only detail panel — the \"view\" half of a form.\n\n```tsx\n<Descriptions\n  title=\"Student\"\n  bordered\n  column={2}\n  items={[\n    { label: 'Full name', children: 'Nguyen Thi Anh Nguyet' },\n    { label: 'Course', children: 'IELTS 6.5+' },\n    { label: 'Notes', children: 'Prefers evening calls', span: 2 },\n  ]}\n/>\n```",
+      "exports": [
+        "Descriptions"
+      ],
+      "props": [
+        "items",
+        "title",
+        "extra",
+        "column",
+        "bordered",
+        "layout",
+        "size"
+      ],
+      "file": "src/components/descriptions/descriptions.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "statistic",
+      "title": "Statistic",
+      "group": "dataDisplay",
+      "summary": "A headline number with a prefix, suffix and trend.",
+      "doc": "One number, presented. Drop a few into a `Card` grid for a dashboard.\n\n```tsx\n<Statistic title=\"Revenue this month\" value={125_400} prefix=\"$\" trend=\"up\" delta=\"+12.4%\" />\n```",
+      "exports": [
+        "Statistic"
+      ],
+      "props": [
+        "title",
+        "value",
+        "precision",
+        "locale",
+        "formatter",
+        "prefix",
+        "suffix",
+        "trend",
+        "delta",
+        "loading",
+        "valueClassName"
+      ],
+      "file": "src/components/statistic/statistic.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "tag",
+      "title": "Tag",
+      "group": "dataDisplay",
+      "summary": "A coloured chip — closable, or toggled like a checkbox.",
+      "doc": "A tag: a small label for a record's state, a filter chip, or\na keyword.\n\n```tsx\n<Tag color=\"success\">Active</Tag>\n<Tag color=\"#7c3aed\" icon={<StarIcon />}>VIP</Tag>\n<Tag closable onClose={() => removeFilter('ielts')}>IELTS 6.5+</Tag>\n```\n\n`Badge` covers the same visual ground with fixed shadcn variants; reach for\n`Tag` when you need `closable`, a colour from the database, or an icon.\n\nClosing is handled internally — the tag removes itself and calls back. To\ndrive it yourself, leave `closable` off and unmount the tag.",
+      "exports": [
+        "CheckableTag",
+        "Tag"
+      ],
+      "props": [
+        "children",
+        "color",
+        "icon",
+        "closable",
+        "closeIcon",
+        "onClose",
+        "bordered",
+        "onClick",
+        "className",
+        "style"
+      ],
+      "file": "src/components/tag/tag.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "badge",
+      "title": "Badge",
+      "group": "dataDisplay",
+      "summary": "A small status label in eight prebuilt tones.",
+      "doc": "A small status pill. `variant` is `'default' | 'secondary' | 'destructive' |\n'outline' | 'success' | 'warning' | 'info' | 'muted'`.\n\n```tsx\n<Badge variant=\"success\">Paid</Badge>\n<Badge variant=\"outline\" asChild>\n  <a href=\"/tags/react\">react</a>\n</Badge>\n```\n\n`Tag` when the user can remove it, `CountBadge` for a number pinned to the\ncorner of something else, `Status` for a dot-and-label state.",
+      "exports": [
+        "Badge",
+        "badgeStyles"
+      ],
+      "props": [
+        "asChild"
+      ],
+      "file": "src/components/badge/badge.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "count-badge",
+      "title": "CountBadge",
+      "group": "dataDisplay",
+      "summary": "A dot or count pinned to the corner of something else.",
+      "doc": "The small count or dot that rides on the corner of something else.\n\n```tsx\n<CountBadge count={unread}>\n  <Button variant=\"ghost\" size=\"icon\"><BellIcon /></Button>\n</CountBadge>\n\n<CountBadge dot color=\"#22c55e\">\n  <Avatar>…</Avatar>\n</CountBadge>\n\n// Standalone, with nothing to ride on, it just sits inline:\n<CountBadge count={12} />\n```\n\nNot to be confused with this kit's `Badge`, which is a text chip — see `Tag`\nfor the removable version of that.",
+      "exports": [
+        "CountBadge"
+      ],
+      "props": [
+        "children",
+        "count",
+        "overflowCount",
+        "dot",
+        "showZero",
+        "color",
+        "offset",
+        "size",
+        "title",
+        "className",
+        "style"
+      ],
+      "file": "src/components/count-badge/count-badge.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "status",
+      "title": "Status",
+      "group": "dataDisplay",
+      "summary": "A status dot with a label and an optional pulse.",
+      "doc": "A dot plus a label, for service or record state.\n\n```tsx\n<Status tone=\"online\" pulse>Running</Status>\n<Status color=\"#17a2b8\">In progress</Status>\n```\n\nCompose `StatusIndicator` / `StatusLabel` directly when the dot and the text\nneed to sit in different places.",
+      "exports": [
+        "Status",
+        "StatusIndicator",
+        "StatusLabel"
+      ],
+      "props": [
+        "tone",
+        "color",
+        "pulse"
+      ],
+      "file": "src/components/status/status.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "avatar",
+      "title": "Avatar",
+      "group": "dataDisplay",
+      "summary": "A profile image with initials to fall back on.",
+      "doc": "Someone's picture, falling back to initials while the image loads or when\nthere is none. `size` is `'sm' | 'default' | 'lg'`, read off the root by\nevery part, so setting it once also sizes the badge and the group count.\n\n```tsx\n<Avatar size=\"lg\">\n  <AvatarImage src={user.avatarUrl} alt=\"\" />\n  <AvatarFallback>{initials(user.name)}</AvatarFallback>\n  <AvatarBadge />\n</Avatar>\n```\n\n`AvatarGroup` overlaps several of them and takes an `AvatarGroupCount` for\nthe \"+3\" at the end. Use `Image` for pictures that are content rather than\nidentity.\n\n`AvatarFallback` covers a missing image, not a missing `alt`. Give\n`AvatarImage` an empty `alt` when the name is already beside it, or a screen\nreader announces the name twice.",
+      "exports": [
+        "Avatar",
+        "AvatarBadge",
+        "AvatarFallback",
+        "AvatarGroup",
+        "AvatarGroupCount",
+        "AvatarImage"
+      ],
+      "props": [],
+      "file": "src/components/avatar/avatar.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "image",
+      "title": "Image",
+      "group": "dataDisplay",
+      "summary": "An image with a placeholder, an error fallback and a zoom viewer.",
+      "doc": "An image that knows how to be loading, broken, and zoomable.\n\n```tsx\n<Image src={avatar} alt=\"Student photo\" width={160} className=\"rounded-lg\" />\n<Image src={proof} alt=\"Payment receipt\" placeholder preview={false} />\n```",
+      "exports": [
+        "Image"
+      ],
+      "props": [
+        "preview",
+        "fallback",
+        "placeholder",
+        "wrapperClassName",
+        "previewTitle",
+        "previewLabels"
+      ],
+      "file": "src/components/image/image.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "image-zoom",
+      "title": "ImageZoom",
+      "group": "dataDisplay",
+      "summary": "Zoom an image in place on click.",
+      "doc": "Click to lift an image out of the page and back again.\n\n```tsx\n<ImageZoom>\n  <img src={proof} alt=\"Payment receipt\" className=\"rounded-md\" />\n</ImageZoom>\n```\n\nThe zoomed copy animates from wherever the thumbnail sits, so the eye keeps\ntrack of which image grew — that is the whole point of the effect. It scales\nup to the image's natural size at most, never past it into a blur.\n\n`Image` with `preview` is the other option: a full viewer with zoom and\nrotate controls. Reach for this one when the image just needs to be bigger.",
+      "exports": [
+        "ImageZoom"
+      ],
+      "props": [
+        "children",
+        "zoomMargin",
+        "backdropClassName",
+        "zoomed",
+        "onZoomChange",
+        "disabled",
+        "zoomLabel",
+        "unzoomLabel"
+      ],
+      "file": "src/components/image-zoom/image-zoom.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "comparison",
+      "title": "Comparison",
+      "group": "dataDisplay",
+      "summary": "Drag a handle to compare a before and after image.",
+      "doc": "Two layers stacked on top of each other, split by a divider the reader moves.\n\n```tsx\n<Comparison className=\"aspect-video rounded-lg border\">\n  <ComparisonItem position=\"left\">\n    <img src={before} alt=\"Before\" />\n  </ComparisonItem>\n  <ComparisonItem position=\"right\">\n    <img src={after} alt=\"Sau\" />\n  </ComparisonItem>\n  <ComparisonHandle />\n</Comparison>\n```\n\n`position=\"left\"` is the layer shown on the left of the divider — the split\nis a single number, so the two items just clip it from opposite sides.\n\nPointer events cover mouse, touch and pen in one path, and the container is a\nreal `slider`: focus it and the arrow keys, Home and End move the divider.",
+      "exports": [
+        "Comparison",
+        "ComparisonHandle",
+        "ComparisonItem"
+      ],
+      "props": [
+        "mode",
+        "defaultPosition",
+        "position",
+        "onPositionChange",
+        "step",
+        "onDragStart",
+        "onDragEnd"
+      ],
+      "file": "src/components/comparison/comparison.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "calendar",
+      "title": "Calendar",
+      "group": "dataDisplay",
+      "summary": "A calendar mounted straight into the page, for a date or a range.",
+      "doc": "A month grid with single or range selection.\n\n```tsx\n<Calendar selected={date} onSelect={setDate} min={new Date()} />\n\n<Calendar mode=\"range\" numberOfMonths={2} selected={range} onSelect={setRange} />\n```\n\nArrow keys walk the grid, PageUp/PageDown change month (add Shift for a\nyear), and focus follows the selection across month boundaries — only the\nfocused day is tabbable, so tabbing past the calendar takes one press.\n\n`DatePicker` and `DateRangePicker` wrap this with a text field; use the\ncalendar on its own when it should stay open on the page.",
+      "exports": [
+        "Calendar"
+      ],
+      "props": [],
+      "file": "src/components/date-picker/calendar.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "timeline",
+      "title": "Timeline",
+      "group": "dataDisplay",
+      "summary": "A timeline where each item’s status colours its dot and rail.",
+      "doc": "A vertical rail of events — run history, an audit trail, the steps of a\nworkflow. For date-positioned bars across a horizontal axis, use `Gantt`.\n\n```tsx\n<Timeline>\n  <TimelineItem status=\"complete\">\n    <TimelineIndicator />\n    <TimelineContent>\n      <TimelineHeader>\n        <TimelineTitle>Email sent</TimelineTitle>\n        <TimelineTime dateTime=\"2026-08-27T09:00:00Z\">09:00</TimelineTime>\n      </TimelineHeader>\n      <TimelineDescription>12 recipients</TimelineDescription>\n    </TimelineContent>\n  </TimelineItem>\n</Timeline>\n```",
+      "exports": [
+        "Timeline",
+        "TimelineConnector",
+        "TimelineContent",
+        "TimelineDescription",
+        "TimelineHeader",
+        "TimelineIndicator",
+        "TimelineItem",
+        "TimelineTime",
+        "TimelineTitle"
+      ],
+      "props": [],
+      "file": "src/components/timeline/timeline.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "tree",
+      "title": "Tree",
+      "group": "dataDisplay",
+      "summary": "A hierarchy with branch-wide checking, connector lines and icons.",
+      "doc": "Hierarchical list with expand/collapse, selection and optional checkboxes.\n\n```tsx\n<Tree\n  checkable\n  data={[\n    { key: 'academy', label: 'Academic', children: [\n      { key: 'course', label: 'Courses' },\n      { key: 'exam', label: 'Exams' },\n    ]},\n  ]}\n  checkedKeys={checked}\n  onCheck={setChecked}\n/>\n```\n\nExpansion, selection and checking each work controlled or uncontrolled — pass\nthe `*Keys` prop to drive it yourself, leave it off to let the tree remember.\n\nChecking a parent checks its whole subtree, and a parent shows the\nindeterminate state while only some of its descendants are checked.\n\nWith `checkable` on, clicking a node's label ticks it — see `selectable` for\nthe rule and how to get a highlight and a tick at the same time.\n\n`showLines` and `showIcons` turn it into a file-explorer view:\n\n```tsx\n<Tree showLines showIcons data={files} defaultExpandedKeys={['src']} />\n```",
+      "exports": [
+        "Tree"
+      ],
+      "props": [
+        "data",
+        "defaultExpandedKeys",
+        "expandedKeys",
+        "onExpand",
+        "selectedKeys",
+        "onSelect",
+        "multiple",
+        "selectable",
+        "checkable",
+        "checkedKeys",
+        "onCheck",
+        "showLines",
+        "showIcons",
+        "indent",
+        "className"
+      ],
+      "file": "src/components/tree/tree.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "collapsible",
+      "title": "Collapsible",
+      "group": "dataDisplay",
+      "summary": "Open and close a block of content.",
+      "doc": "A section that opens and closes in place. Uncontrolled by default; pass\n`open` and `onOpenChange` to drive it yourself.\n\n```tsx\n<Collapsible>\n  <CollapsibleTrigger>Advanced settings</CollapsibleTrigger>\n  <CollapsibleContent>Whatever is worth hiding by default.</CollapsibleContent>\n</Collapsible>\n```\n\nUse `Tabs` for several panels where one is always showing, and `Sheet` or\n`Modal` when the content should sit above the page rather than push it down.\n\nThe trigger renders a `<button>`; give it `asChild` to supply your own.",
+      "exports": [
+        "Collapsible",
+        "CollapsibleContent",
+        "CollapsibleTrigger"
+      ],
+      "props": [],
+      "file": "src/components/collapsible/collapsible.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "kanban",
+      "title": "Kanban",
+      "group": "dataDisplay",
+      "summary": "Columns of cards, dragged within and between columns.",
+      "doc": "Kanban board with cards that drag within and between columns.\n\n```tsx\n<KanbanProvider columns={columns} data={items} onDataChange={setItems}>\n  {(column) => (\n    <KanbanBoard key={column.id} id={column.id}>\n      <KanbanHeader>{column.name}</KanbanHeader>\n      <KanbanCards id={column.id}>\n        {(item) => <KanbanCard key={item.id} {...item} />}\n      </KanbanCards>\n    </KanbanBoard>\n  )}\n</KanbanProvider>\n```",
+      "exports": [
+        "KanbanBoard",
+        "KanbanCard",
+        "KanbanCards",
+        "KanbanHeader",
+        "KanbanProvider"
+      ],
+      "props": [],
+      "file": "src/components/kanban/kanban.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "list",
+      "title": "List",
+      "group": "dataDisplay",
+      "summary": "Grouped rows, dragged vertically between groups.",
+      "doc": "A grouped list whose items drag between groups — the \"board as rows\" view\nthat sits next to a Kanban.\n\n```tsx\n<ListProvider onDragEnd={handleDragEnd}>\n  {groups.map((group) => (\n    <ListGroup key={group.id} id={group.id}>\n      <ListHeader name={group.name} color={group.color} />\n      <ListItems>\n        {items.filter((i) => i.group === group.id).map((item, index) => (\n          <ListItem key={item.id} id={item.id} name={item.name} index={index} parent={group.id} />\n        ))}\n      </ListItems>\n    </ListGroup>\n  ))}\n</ListProvider>\n```\n\n`onDragEnd` gives you `active.data.current.parent` and `over.id`, which is\neverything needed to move an item — the component never owns the data.",
+      "exports": [
+        "ListGroup",
+        "ListHeader",
+        "ListItem",
+        "ListItems",
+        "ListProvider"
+      ],
+      "props": [],
+      "file": "src/components/list/list.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "gantt",
+      "title": "Gantt",
+      "group": "dataDisplay",
+      "summary": "A schedule by day, week or month, with markers and zoom.",
+      "doc": "Timeline chart: one lane per row, bars positioned by date.\n\n```tsx\n<Gantt\n  unit=\"day\"\n  rows={rows}\n  markers={[{ id: 'ship', date: releaseDate, label: 'Handover' }]}\n  onItemClick={(item) => open(item.id)}\n/>\n```\n\nLayout runs off one number — pixels per day — so bars, ruler, grid lines,\nweekend shading and markers all derive from it and can never drift apart.\n`unit` picks the natural day width and how the two ruler tiers are labelled;\n`zoom` scales it.\n\nThe chart renders and reads a timeline. It does not drag bars to reschedule.",
+      "exports": [
+        "Gantt"
+      ],
+      "props": [
+        "rows",
+        "markers",
+        "from",
+        "to",
+        "unit",
+        "zoom",
+        "labelWidth",
+        "rowHeight",
+        "maxHeight",
+        "sidebarTitle",
+        "onItemClick",
+        "onRowClick",
+        "scrollToToday",
+        "locale",
+        "className"
+      ],
+      "file": "src/components/gantt/gantt.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "carousel",
+      "title": "Carousel",
+      "group": "dataDisplay",
+      "summary": "Slides that snap, with dots, arrows, autoplay and a fade effect.",
+      "doc": "A row of slides that snaps, with dots, arrows and autoplay.\n\n```tsx\n<Carousel autoplay slidesToShow={3} gap={16} aria-label=\"Featured courses\">\n  {courses.map((course) => (\n    <CourseCard key={course.id} course={course} />\n  ))}\n</Carousel>\n```\n\nReach for `Marquee` when the row should scroll on its own forever and\nnobody needs to land on a particular item, and for `Tabs` when the panels\nare destinations rather than a sequence.\n\nScrolling is CSS scroll-snap on a real scroll container, so touch and\ntrackpad gestures are the browser's, not ours. That is also why `infinite`\njumps back to the first slide at the end rather than looping seamlessly —\na seamless loop needs cloned slides, and cloned slides break the scrollbar\nand the reading order.",
+      "exports": [
+        "Carousel",
+        "carousel",
+        "carouselArrow",
+        "carouselDot",
+        "carouselDots"
+      ],
+      "props": [
+        "children",
+        "current",
+        "defaultCurrent",
+        "onChange",
+        "autoplay",
+        "autoplaySpeed",
+        "dots",
+        "dotPosition",
+        "arrows",
+        "effect",
+        "infinite",
+        "slidesToShow",
+        "gap",
+        "ref"
+      ],
+      "file": "src/components/carousel/carousel.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "marquee",
+      "title": "Marquee",
+      "group": "dataDisplay",
+      "summary": "A looping strip of content that pauses on hover.",
+      "doc": "A row of items scrolling past, for logos, testimonials, a ticker of recent\nruns.\n\n```tsx\n<Marquee>\n  <MarqueeFade side=\"left\" />\n  <MarqueeFade side=\"right\" />\n  <MarqueeContent speed={40}>\n    {logos.map((logo) => (\n      <MarqueeItem key={logo.id} className=\"h-10\">\n        <img src={logo.src} alt={logo.name} className=\"h-full\" />\n      </MarqueeItem>\n    ))}\n  </MarqueeContent>\n</Marquee>\n```\n\nA vertical marquee needs a height on this element — there is nothing else to\nbound it.",
+      "exports": [
+        "Marquee",
+        "MarqueeContent",
+        "MarqueeFade",
+        "MarqueeItem",
+        "MarqueeStyles"
+      ],
+      "props": [],
+      "file": "src/components/marquee/marquee.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "empty",
+      "title": "Empty",
+      "group": "dataDisplay",
+      "summary": "The empty state for tables, lists and searches.",
+      "doc": "The blank state for a list, a table or a search that came back with nothing.\n\n```tsx\n<Empty description=\"No students yet\">\n  <Button>Add a student</Button>\n</Empty>\n```\n\n`Table`, `Select`, `TreeSelect`, `AutoComplete`, `Transfer` and `CommandMenu`\nall fall back to this when they have nothing to show, so a product only has\nto decide what a blank state looks like once. Each of them still takes its\nown override — `empty`, `notFoundContent` — for the cases that deserve\ndifferent words or a different call to action.\n\nUse `Result` when the whole page is the outcome — a 404, a finished flow.",
+      "exports": [
+        "Empty"
+      ],
+      "props": [
+        "image",
+        "title",
+        "description",
+        "size",
+        "children"
+      ],
+      "file": "src/components/empty/empty.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "tooltip",
+      "title": "Tooltip",
+      "group": "dataDisplay",
+      "summary": "A short hint on hover, in twelve placements.",
+      "doc": "A tooltip: one wrapper, a `title`, and a `placement`.\n\n```tsx\n<Tooltip title=\"Delete record\" placement=\"topRight\">\n  <Button variant=\"ghost\" size=\"icon\"><Trash2Icon /></Button>\n</Tooltip>\n```\n\nThe child has to forward a ref and its props — every control in this kit\ndoes. Needs a `TooltipProvider` above it, which `Sidebar` and `Gantt` already\nmount for their own subtrees; add one near the app root otherwise.",
+      "exports": [
+        "PLACEMENT",
+        "Tooltip",
+        "TooltipContent",
+        "TooltipProvider",
+        "TooltipRoot",
+        "TooltipTrigger"
+      ],
+      "props": [
+        "title",
+        "placement",
+        "children",
+        "open",
+        "defaultOpen",
+        "onOpenChange",
+        "mouseEnterDelay",
+        "className"
+      ],
+      "file": "src/components/tooltip/tooltip.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "popover",
+      "title": "Popover",
+      "group": "dataDisplay",
+      "summary": "A card anchored to an element, controls included.",
+      "doc": "A floating panel anchored to a trigger. `PopoverContent` renders through a\nportal, so `overflow: hidden` on an ancestor cannot clip it.\n\n```tsx\n<Popover>\n  <PopoverTrigger asChild>\n    <Button variant=\"outline\">Filters</Button>\n  </PopoverTrigger>\n  <PopoverContent className=\"p-4\">{filters}</PopoverContent>\n</Popover>\n```\n\n`Tooltip` for a label on hover, `DropdownMenu` for a list of actions,\n`Popconfirm` for a yes/no on a destructive click.\n\nThe content has no padding: `Select` and `DatePicker` build on it and need\nthe edges bare. Add your own when you use it directly.",
+      "exports": [
+        "Popover",
+        "PopoverAnchor",
+        "PopoverContent",
+        "PopoverTrigger"
+      ],
+      "props": [],
+      "file": "src/components/popover/popover.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "alert",
+      "title": "Alert",
+      "group": "feedback",
+      "summary": "An inline notice in four states — closable, with room for actions.",
+      "doc": "An inline alert.\n\n```tsx\n<Alert\n  type=\"warning\"\n  showIcon\n  closable\n  message=\"Contracts expiring soon\"\n  description=\"Three contracts expire this week.\"\n  action={<Button size=\"sm\" variant=\"ghost\">Xem</Button>}\n/>\n```\n\nClosing is handled internally — the alert removes itself and calls back. Drive\nit yourself by leaving `closable` off and unmounting the component.",
+      "exports": [
+        "Alert"
+      ],
+      "props": [
+        "message",
+        "description",
+        "type",
+        "showIcon",
+        "icon",
+        "closable",
+        "onClose",
+        "afterClose",
+        "banner",
+        "action"
+      ],
+      "file": "src/components/alert/alert.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "message",
+      "title": "Message",
+      "group": "feedback",
+      "summary": "A slim notice at the top of the screen, called imperatively.",
+      "doc": "A fixed status palette, in light and dark values.\n\nDeliberately not the app's own tokens: `info` is its own blue rather than\n`--primary`, so a run of pills reads as one system whatever the brand colour\nhappens to be. Restyle by overriding these on `MessageProvider`:\n\n```tsx\n<MessageProvider className=\"[--message-info:var(--primary)]\" />\n```",
+      "exports": [
+        "MessageProvider",
+        "message"
+      ],
+      "props": [],
+      "file": "src/components/message/message.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "notification",
+      "title": "Notification",
+      "group": "feedback",
+      "summary": "A card in the corner of the screen with a title, body and actions.",
+      "doc": "A fixed status palette rather than the app's own tokens, so a\n`notification` and a `message` read as the same family. Override on the\nprovider:\n\n```tsx\n<NotificationProvider className=\"[--notification-info:var(--primary)]\" />\n```",
+      "exports": [
+        "NotificationProvider",
+        "notification"
+      ],
+      "props": [],
+      "file": "src/components/notification/notification.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "toast",
+      "title": "Toast",
+      "group": "feedback",
+      "summary": "Sonner’s toast, already wired to the kit’s tokens and theme.",
+      "doc": "Sonner's toast host, wired to the kit's tokens and icon set. Render it once,\nnear the root of the app; `toast()` comes from `sonner` itself.\n\n```tsx\nimport { toast } from 'sonner';\n\n<Toaster position=\"bottom-right\" />;\n\ntoast('Invoice deleted', {\n  action: { label: 'Undo', onClick: () => restore(invoice) },\n});\n```\n\nUse `message.success()` for a plain \"it worked\" pill — it needs no host in\nthe tree and no action. `Alert` when the notice belongs in the page rather\nthan over it, `Notification` for something the user has to dismiss.\n\nA toast renders outside the React tree that called it, so it cannot read\ncontext. Translate the text before you pass it in.",
+      "exports": [
+        "Toaster"
+      ],
+      "props": [],
+      "file": "src/components/sonner/sonner.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "modal",
+      "title": "Modal",
+      "group": "feedback",
+      "summary": "A dialog declared in JSX or called imperatively, turning into a sheet on narrow screens.",
+      "doc": "A dialog controlled by `open`, with `onOk` / `onCancel` and a\nfooter built for you.\n\n```tsx\n<Modal\n  open={open}\n  title=\"Delete task\"\n  okVariant=\"destructive\"\n  confirmLoading={remove.isPending}\n  onOk={() => remove.mutate(id)}\n  onCancel={() => setOpen(false)}\n>\n  This cannot be undone.\n</Modal>\n```\n\n`variant=\"alert\"` is the forced choice — `role=\"alertdialog\"`, no close\nbutton, no dismissing by Escape or by the mask, and focus landing on cancel:\n\n```tsx\n<Modal\n  variant=\"alert\"\n  open={open}\n  title=\"Delete this project?\"\n  okText=\"Delete\"\n  okVariant=\"destructive\"\n  onOk={() => remove(id)}\n  onCancel={() => setOpen(false)}\n>\n  Every board and every task inside it goes with it.\n</Modal>\n```\n\n`Modal.useModal().confirm` when the confirmation is imperative — awaiting a\nboolean inside a handler rather than rendering an `open`. `Popconfirm` when\nthe question is small enough to answer next to the button that asked it.\n\nUnder 768px it opens from the bottom edge as a sheet — same dialog, same\nprops, reshaped for a thumb. Turn that off per dialog with\n`mobileSheet={false}`; `variant=\"alert\"` turns it off for you, because a\nsheet invites the swipe-down that would dismiss it.\n\nFor a dialog that doesn't fit this shape, compose `Dialog*` directly —\n`DialogContent` takes `asSheet` for the same layout, and `useIsMobile()` is\nwhat decides when to pass it.",
+      "exports": [
+        "Dialog",
+        "DialogClose",
+        "DialogContent",
+        "DialogDescription",
+        "DialogOverlay",
+        "DialogPortal",
+        "DialogTitle",
+        "DialogTrigger",
+        "Modal",
+        "useModal"
+      ],
+      "props": [
+        "open",
+        "variant",
+        "title",
+        "description",
+        "children",
+        "onOk",
+        "onCancel",
+        "okText",
+        "cancelText",
+        "okVariant",
+        "confirmLoading",
+        "hideCancel",
+        "footer",
+        "width",
+        "centered",
+        "mobileSheet",
+        "maskClosable",
+        "className"
+      ],
+      "file": "src/components/modal/modal.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "sheet",
+      "title": "Sheet",
+      "group": "feedback",
+      "summary": "A panel sliding in from an edge of the screen.",
+      "doc": "A panel that slides in from an edge of the screen. `side` on `SheetContent`\nis `'top' | 'right' | 'bottom' | 'left'` and defaults to `'right'`.\n\n```tsx\n<Sheet>\n  <SheetTrigger asChild>\n    <Button variant=\"outline\">Edit profile</Button>\n  </SheetTrigger>\n  <SheetContent side=\"right\">\n    <SheetHeader>\n      <SheetTitle>Edit profile</SheetTitle>\n      <SheetDescription>Changes save when you submit.</SheetDescription>\n    </SheetHeader>\n    {form}\n  </SheetContent>\n</Sheet>\n```\n\n`Modal` for a centred dialog and for the imperative `Modal.confirm`,\n`Popover` for something small anchored to its trigger, `Drawer`-style\nnavigation belongs in `Sidebar`.\n\n`SheetTitle` is required — Radix warns without one. Hide it with\n`className=\"sr-only\"` rather than dropping it. The close button in the\ncorner is `showCloseButton`, on by default, and its label is English:\ntranslate it by passing your own close control instead.",
+      "exports": [
+        "Sheet",
+        "SheetClose",
+        "SheetContent",
+        "SheetDescription",
+        "SheetFooter",
+        "SheetHeader",
+        "SheetTitle",
+        "SheetTrigger"
+      ],
+      "props": [],
+      "file": "src/components/sheet/sheet.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "popconfirm",
+      "title": "Popconfirm",
+      "group": "feedback",
+      "summary": "A confirmation asked right next to the button just pressed.",
+      "doc": "A confirmation bubble: the light-touch alternative to a\nmodal, anchored to the control that triggered it.\n\n```tsx\n<Popconfirm\n  title=\"Delete this student?\"\n  description=\"This cannot be undone.\"\n  okVariant=\"destructive\"\n  onConfirm={() => remove.mutateAsync(id)}\n>\n  <Button variant=\"ghost\" size=\"icon\"><Trash2Icon /></Button>\n</Popconfirm>\n```\n\nUse it for a single reversible-ish row action. When the consequence needs\nreal explanation, or the user must read something before agreeing, use\n`Modal.confirm` from `useModal` instead.\n\nAn async `onConfirm` keeps the bubble open and the buttons busy until it\nresolves, so a failed request can leave the bubble up rather than closing\nover an error the user never sees.",
+      "exports": [
+        "Popconfirm"
+      ],
+      "props": [
+        "title",
+        "description",
+        "children",
+        "onConfirm",
+        "onCancel",
+        "okText",
+        "cancelText",
+        "okVariant",
+        "icon",
+        "placement",
+        "disabled",
+        "open",
+        "onOpenChange",
+        "className"
+      ],
+      "file": "src/components/popconfirm/popconfirm.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "progress",
+      "title": "Progress",
+      "group": "feedback",
+      "summary": "A bar or ring, with success and error states.",
+      "doc": "How far along something is.\n\n```tsx\n<Progress percent={64} />\n<Progress type=\"circle\" percent={100} status=\"success\" />\n```",
+      "exports": [
+        "Progress"
+      ],
+      "props": [
+        "type",
+        "size",
+        "diameter",
+        "strokeWidth"
+      ],
+      "file": "src/components/progress/progress.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "spinner",
+      "title": "Spinner",
+      "group": "feedback",
+      "summary": "A spinner for buttons and for covering a block while it loads.",
+      "doc": "A spinning indicator. Sized and coloured with `className`, like any icon.\n\n```tsx\n<Spinner className=\"size-6 text-muted-foreground\" />\n```\n\n`Button` has its own `loading` prop — never put a `Spinner` inside one.\nPrefer `Skeleton` when the shape of the incoming content is already known.\n\nIt carries `role=\"status\"` and an English `aria-label`; pass your own\n`aria-label` to translate it.",
+      "exports": [
+        "Spinner"
+      ],
+      "props": [],
+      "file": "src/components/spinner/spinner.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "skeleton",
+      "title": "Skeleton",
+      "group": "feedback",
+      "summary": "Pulsing grey blocks holding the layout while data loads.",
+      "doc": "A pulsing placeholder in the shape of the content that is loading. It has no\nsize of its own — `className` gives it one.\n\n```tsx\n<div className=\"space-y-2\">\n  <Skeleton className=\"h-4 w-48\" />\n  <Skeleton className=\"h-4 w-32\" />\n</div>\n```\n\nUse `Spinner` when the shape of what is coming is not known yet, and\n`Progress` when you can say how far along it is.",
+      "exports": [
+        "Skeleton"
+      ],
+      "props": [],
+      "file": "src/components/skeleton/skeleton.tsx",
+      "import": "@antkit/react"
+    },
+    {
+      "slug": "result",
+      "title": "Result",
+      "group": "feedback",
+      "summary": "A result page for success and for 403 / 404 / 500.",
+      "doc": "A whole-page outcome: submitted, denied, not found, blew up. `Empty` is for a\ncontainer with nothing in it; `Alert` is for a message beside other content.\n\n```tsx\n<Result\n  status=\"success\"\n  title=\"Campaign created\"\n  subTitle=\"Email goes out at 09:00 tomorrow.\"\n  extra={<Button>Back to the list</Button>}\n/>\n```",
+      "exports": [
+        "Result"
+      ],
+      "props": [
+        "status",
+        "title",
+        "subTitle",
+        "icon",
+        "extra",
+        "children"
+      ],
+      "file": "src/components/result/result.tsx",
+      "import": "@antkit/react"
+    }
+  ]
+}

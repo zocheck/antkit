@@ -4,7 +4,7 @@ import type { ComponentProps, ElementType, ReactNode } from 'react';
 import { cn } from '../../utils';
 import { CheckIcon, CopyIcon } from 'lucide-react';
 
-import { useUiConfig } from '../../lib/ui-config';
+import { useLocale } from '../../lib/config';
 
 export type TypographyType =
   | 'secondary'
@@ -22,7 +22,7 @@ export type CopyableConfig = {
 export type EllipsisConfig = {
   /** Clamp to this many lines. `1` uses a real single-line truncate. */
   rows?: number;
-  /** Adds a "xem thêm / thu gọn" toggle under the text. */
+  /** Adds a "show more / show less" toggle under the text. */
   expandable?: boolean;
 };
 
@@ -39,7 +39,7 @@ type BaseProps = {
   strong?: boolean;
   italic?: boolean;
   underline?: boolean;
-  /** Strikethrough. Named after Ant Design's prop, not the HTML element. */
+  /** Strikethrough. Named for the effect, not for the `<del>` element. */
   deleted?: boolean;
   code?: boolean;
   mark?: boolean;
@@ -68,7 +68,7 @@ const useTypography = ({
   ellipsis,
   copyable,
 }: BaseProps) => {
-  const { translate } = useUiConfig();
+  const locale = useLocale();
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
@@ -127,7 +127,9 @@ const useTypography = ({
           'outline-hidden focus-visible:ring-2 focus-visible:ring-ring',
         )}
       >
-        {translate(expanded ? 'collapse' : 'expand')}
+        {expanded
+          ? (locale.common?.collapse ?? 'Show less')
+          : (locale.common?.expand ?? 'Show more')}
       </button>
     ) : null;
 
@@ -135,7 +137,11 @@ const useTypography = ({
     <button
       type="button"
       onClick={onCopy}
-      aria-label={translate(copied ? 'copied' : 'copy')}
+      aria-label={
+        copied
+          ? (locale.common?.copied ?? 'Copied')
+          : (locale.common?.copy ?? 'Copy')
+      }
       className={cn(
         'ml-1 inline-flex cursor-pointer align-middle text-muted-foreground transition-colors hover:text-foreground',
         'outline-hidden focus-visible:ring-2 focus-visible:ring-ring',
@@ -156,10 +162,10 @@ export type TextProps = BaseProps &
   Omit<ComponentProps<'span'>, keyof BaseProps | 'color'>;
 
 /**
- * Inline text with Ant Design's modifiers.
+ * Inline text with modifiers.
  *
  * ```tsx
- * <Text type="secondary">Cập nhật 5 phút trước</Text>
+ * <Text type="secondary">Updated 5 minutes ago</Text>
  * <Text copyable>HV-2026-0042</Text>
  * <Text ellipsis>{row.note}</Text>
  * ```
@@ -284,7 +290,7 @@ export type TitleProps = BaseProps &
  * A heading.
  *
  * ```tsx
- * <Title level={3}>Danh sách học viên</Title>
+ * <Title level={3}>Students</Title>
  * ```
  *
  * The level sets the element, so choose it by where the heading sits in the
@@ -344,7 +350,7 @@ export const Title = ({
 };
 
 /**
- * Namespaced access, matching Ant Design. `Text` and `Title` are common enough
+ * Namespaced access. `Text` and `Title` are common enough
  * words that importing them bare can collide in an app file — reach for
  * `Typography.Text` there.
  */

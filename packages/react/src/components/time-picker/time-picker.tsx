@@ -4,7 +4,7 @@ import type { ComponentProps, ReactNode } from 'react';
 import { cn } from '../../utils';
 import { ClockIcon } from 'lucide-react';
 
-import { useUiConfig } from '../../lib/ui-config';
+import { useLocale } from '../../lib/config';
 import { useFieldDisclosure } from '../../lib/use-field-disclosure';
 import { Button } from '../button';
 import {
@@ -49,8 +49,8 @@ export type TimePickerProps = Omit<
  * ```
  *
  * Both halves edit the same value: type into the segments, or open the panel
- * and click down the columns. Each click commits — unlike antd, `OK` only
- * closes the panel, so a picked time is never lost by clicking away.
+ * and click down the columns. Each click commits and `OK` only closes the
+ * panel, so a picked time is never lost by clicking away.
  *
  * The date half of the value is preserved, which is what lets this sit beside
  * a `DatePicker` over one `Date` without either of them fighting the other.
@@ -66,7 +66,7 @@ export const TimePicker = ({
   showNow = true,
   nowText,
   okText,
-  openLabel = 'Open time panel',
+  openLabel,
   align = 'start',
   side,
   prefix,
@@ -85,7 +85,7 @@ export const TimePicker = ({
   dayPeriodLabels,
   ...fieldProps
 }: TimePickerProps) => {
-  const { translate } = useUiConfig();
+  const locale = useLocale();
   const resolved = resolveTimeFormat(format);
 
   const [internalValue, setInternalValue] = useState<Date | null>(
@@ -159,7 +159,11 @@ export const TimePicker = ({
                     type="button"
                     variant="ghost"
                     size="icon-sm"
-                    aria-label={openLabel}
+                    aria-label={
+                      openLabel ??
+                      locale.timePicker?.openPanel ??
+                      'Open time panel'
+                    }
                     disabled={disabled}
                     className="text-muted-foreground"
                     {...disclosure.toggleProps}
@@ -194,7 +198,7 @@ export const TimePicker = ({
                     className="px-0"
                     onClick={() => commit(new Date())}
                   >
-                    {nowText ?? translate('now')}
+                    {nowText ?? locale.timePicker?.now ?? 'Now'}
                   </Button>
                 ) : (
                   <span />
@@ -206,7 +210,7 @@ export const TimePicker = ({
                     size="sm"
                     onClick={() => setOpen(false)}
                   >
-                    {okText ?? translate('ok')}
+                    {okText ?? locale.common?.ok ?? 'OK'}
                   </Button>
                 )}
               </div>

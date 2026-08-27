@@ -4,7 +4,8 @@ import type { ReactNode } from 'react';
 import { cn } from '../../utils';
 import { Loader2Icon, XIcon } from 'lucide-react';
 
-import { useUiConfig } from '../../lib/ui-config';
+import { useConfig } from '../../lib/config';
+import { Empty } from '../empty';
 import { Input } from '../input';
 import { Popover, PopoverAnchor, PopoverContent } from '../popover';
 
@@ -48,7 +49,7 @@ const defaultFilter = (input: string, option: AutoCompleteOption) =>
   option.value.toLowerCase().includes(input.toLowerCase());
 
 /**
- * Ant Design-shaped autocomplete: a text field that suggests, but never forces,
+ * An autocomplete: a text field that suggests, but never forces,
  * a value.
  *
  * ```tsx
@@ -56,7 +57,7 @@ const defaultFilter = (input: string, option: AutoCompleteOption) =>
  *   options={recentSearches}
  *   value={query}
  *   onChange={setQuery}
- *   placeholder="Tìm học viên"
+ *   placeholder="Search students"
  * />
  * ```
  *
@@ -85,7 +86,7 @@ export const AutoComplete = ({
   'aria-invalid': ariaInvalid,
   'aria-describedby': ariaDescribedBy,
 }: AutoCompleteProps) => {
-  const { translate } = useUiConfig();
+  const { locale, renderEmpty } = useConfig();
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -113,8 +114,16 @@ export const AutoComplete = ({
     setActive(-1);
   };
 
+  /*
+   * Open on matches, and on a query that found none — that second case is the
+   * whole point of `notFoundContent`, and gating the popover on
+   * `matches.length` alone made it unreachable. A field nobody has typed into
+   * yet stays quiet: there is no question on screen for "no results" to answer.
+   */
+  const hasSomethingToShow = matches.length > 0 || current.length > 0;
+
   return (
-    <Popover open={open && matches.length > 0} onOpenChange={setOpen}>
+    <Popover open={open && hasSomethingToShow} onOpenChange={setOpen}>
       <PopoverAnchor asChild>
         <div className={cn('relative w-full min-w-0', className)}>
           <Input
@@ -182,7 +191,7 @@ export const AutoComplete = ({
           {allowClear && !!current && !loading && (
             <button
               type="button"
-              aria-label={translate('clear')}
+              aria-label={locale.common?.clear ?? 'Clear'}
               onClick={() => {
                 onChange?.('');
                 inputRef.current?.focus();
@@ -207,9 +216,13 @@ export const AutoComplete = ({
         className="max-h-64 w-(--radix-popover-trigger-width) min-w-48 overflow-y-auto p-1"
       >
         {matches.length === 0 ? (
-          <p className="px-2 py-3 text-center text-sm text-muted-foreground">
-            {notFoundContent ?? translate('noData')}
-          </p>
+          notFoundContent ? (
+            <p className="px-2 py-3 text-center text-sm text-muted-foreground">
+              {notFoundContent}
+            </p>
+          ) : (
+            (renderEmpty?.('auto-complete') ?? <Empty size="sm" />)
+          )
         ) : (
           matches.map((option, index) => (
             <div

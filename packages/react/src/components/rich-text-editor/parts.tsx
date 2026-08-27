@@ -2,6 +2,8 @@ import { cloneElement, createContext, useContext, useState } from 'react';
 import type { ReactElement, ReactNode } from 'react';
 
 import { cn } from '../../utils';
+import { useLocale } from '../../lib/config';
+import type { Locale } from '../../lib/config';
 import type { Editor } from '@tiptap/react';
 import {
   AlignCenterIcon,
@@ -117,11 +119,14 @@ export type BlockOption = {
   level: 1 | 2 | 3 | null;
 };
 
-const BLOCKS: BlockOption[] = [
-  { label: 'Văn bản', level: null },
-  { label: 'Tiêu đề 1', level: 1 },
-  { label: 'Tiêu đề 2', level: 2 },
-  { label: 'Tiêu đề 3', level: 3 },
+const heading = (locale: Locale, level: number) =>
+  locale.editor?.heading?.(level) ?? `Heading ${level}`;
+
+const blocks = (locale: Locale): BlockOption[] => [
+  { label: locale.editor?.bodyText ?? 'Body text', level: null },
+  { label: heading(locale, 1), level: 1 },
+  { label: heading(locale, 2), level: 2 },
+  { label: heading(locale, 3), level: 3 },
 ];
 
 export type BlockPickerProps = {
@@ -137,8 +142,10 @@ export const BlockPicker = ({
   activeLevel,
   disabled = false,
 }: BlockPickerProps) => {
+  const locale = useLocale();
   const active =
-    BLOCKS.find((block) => block.level === activeLevel) ?? BLOCKS[0];
+    blocks(locale).find((block) => block.level === activeLevel) ??
+    blocks(locale)[0];
 
   return (
     <DropdownMenu>
@@ -156,7 +163,7 @@ export const BlockPicker = ({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-36">
-        {BLOCKS.map((block) => (
+        {blocks(locale).map((block) => (
           <DropdownMenuItem
             key={block.label}
             className={cn(block.level === activeLevel && 'bg-accent')}
@@ -176,11 +183,29 @@ export const BlockPicker = ({
 
 export type TextAlign = 'left' | 'center' | 'right' | 'justify';
 
-const ALIGNMENTS: { value: TextAlign; label: string; icon: ReactNode }[] = [
-  { value: 'left', label: 'Căn trái', icon: <AlignLeftIcon /> },
-  { value: 'center', label: 'Căn giữa', icon: <AlignCenterIcon /> },
-  { value: 'right', label: 'Căn phải', icon: <AlignRightIcon /> },
-  { value: 'justify', label: 'Căn đều', icon: <AlignJustifyIcon /> },
+const alignments = (
+  locale: Locale,
+): { value: TextAlign; label: string; icon: ReactNode }[] => [
+  {
+    value: 'left',
+    label: locale.editor?.alignLeft ?? 'Align left',
+    icon: <AlignLeftIcon />,
+  },
+  {
+    value: 'center',
+    label: locale.editor?.alignCenter ?? 'Align centre',
+    icon: <AlignCenterIcon />,
+  },
+  {
+    value: 'right',
+    label: locale.editor?.alignRight ?? 'Align right',
+    icon: <AlignRightIcon />,
+  },
+  {
+    value: 'justify',
+    label: locale.editor?.alignJustify ?? 'Justify',
+    icon: <AlignJustifyIcon />,
+  },
 ];
 
 export type AlignPickerProps = {
@@ -195,17 +220,18 @@ export const AlignPicker = ({
   active,
   disabled = false,
 }: AlignPickerProps) => {
-  const current = ALIGNMENTS.find((entry) => entry.value === active);
+  const locale = useLocale();
+  const current = alignments(locale).find((entry) => entry.value === active);
 
   return (
     <DropdownMenu>
-      <ToolbarTooltip title="Căn lề">
+      <ToolbarTooltip title={locale.editor?.alignment ?? 'Alignment'}>
         <DropdownMenuTrigger asChild>
           <Button
             type="button"
             variant="ghost"
             size="sm"
-            aria-label="Căn lề"
+            aria-label={locale.editor?.alignment ?? 'Alignment'}
             disabled={disabled}
             className="gap-1 px-2"
             onMouseDown={(event) => event.preventDefault()}
@@ -216,7 +242,7 @@ export const AlignPicker = ({
         </DropdownMenuTrigger>
       </ToolbarTooltip>
       <DropdownMenuContent align="start">
-        {ALIGNMENTS.map((entry) => (
+        {alignments(locale).map((entry) => (
           <DropdownMenuItem
             key={entry.value}
             className={cn(entry.value === active && 'bg-accent')}
@@ -248,6 +274,7 @@ export const LinkButton = ({
   active,
   disabled = false,
 }: LinkButtonProps) => {
+  const locale = useLocale();
   const [open, setOpen] = useState(false);
   const [href, setHref] = useState('');
 
@@ -275,13 +302,13 @@ export const LinkButton = ({
         setOpen(next);
       }}
     >
-      <ToolbarTooltip title="Chèn liên kết">
+      <ToolbarTooltip title={locale.editor?.insertLink ?? 'Insert link'}>
         <PopoverTrigger asChild>
           <Button
             type="button"
             variant="ghost"
             size="icon-sm"
-            aria-label="Chèn liên kết"
+            aria-label={locale.editor?.insertLink ?? 'Insert link'}
             aria-pressed={active}
             disabled={disabled}
             className={cn(active && 'bg-accent text-accent-foreground')}
@@ -311,14 +338,14 @@ export const LinkButton = ({
             type="button"
             variant="ghost"
             size="icon-sm"
-            aria-label="Bỏ liên kết"
+            aria-label={locale.editor?.removeLink ?? 'Remove link'}
             onClick={remove}
           >
             <Trash2Icon />
           </Button>
         )}
         <Button type="button" size="sm" onClick={apply}>
-          Lưu
+          {locale.editor?.save ?? 'Save'}
         </Button>
       </PopoverContent>
     </Popover>

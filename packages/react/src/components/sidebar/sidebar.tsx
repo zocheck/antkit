@@ -1,3 +1,49 @@
+/**
+ * The navigation rail. Twenty-three parts, so here is the whole surface and
+ * the shape they go in — the doc block on `Sidebar` itself is further down.
+ *
+ * `SidebarProvider` `Sidebar` `SidebarTrigger` `SidebarRail` `SidebarInset`
+ * `SidebarInput` `SidebarHeader` `SidebarFooter` `SidebarContent`
+ * `SidebarGroup` `SidebarGroupLabel` `SidebarGroupAction`
+ * `SidebarGroupContent` `SidebarMenu` `SidebarMenuItem` `SidebarMenuButton`
+ * `SidebarMenuAction` `SidebarMenuBadge` `SidebarMenuSkeleton`
+ * `SidebarMenuSub` `SidebarMenuSubItem` `SidebarMenuSubButton`
+ * `SidebarSeparator` `useSidebar` `sidebarMenuButton`
+ *
+ * ```tsx
+ * <SidebarProvider>
+ *   <Sidebar collapsible="icon">
+ *     <SidebarHeader>{brand}</SidebarHeader>
+ *     <SidebarContent>
+ *       <SidebarGroup>
+ *         <SidebarGroupLabel>Workspace</SidebarGroupLabel>
+ *         <SidebarGroupContent>
+ *           <SidebarMenu>
+ *             <SidebarMenuItem>
+ *               <SidebarMenuButton isActive tooltip="Inbox" asChild>
+ *                 <a href="/inbox">
+ *                   <InboxIcon />
+ *                   <span>Inbox</span>
+ *                 </a>
+ *               </SidebarMenuButton>
+ *               <SidebarMenuBadge>12</SidebarMenuBadge>
+ *             </SidebarMenuItem>
+ *           </SidebarMenu>
+ *         </SidebarGroupContent>
+ *       </SidebarGroup>
+ *     </SidebarContent>
+ *     <SidebarFooter>{account}</SidebarFooter>
+ *   </Sidebar>
+ *   <SidebarInset>
+ *     <SidebarTrigger />
+ *     {page}
+ *   </SidebarInset>
+ * </SidebarProvider>
+ * ```
+ *
+ * `Layout` is the simpler frame — header, sider, content, footer — when the
+ * navigation is a plain list and none of this is needed.
+ */
 import * as React from 'react';
 import { PanelLeftIcon } from 'lucide-react';
 import { Slot } from 'radix-ui';
@@ -152,6 +198,30 @@ const SidebarProvider = ({
   );
 };
 
+/**
+ * The rail itself. `side` is `'left' | 'right'`, `variant` is
+ * `'sidebar' | 'floating' | 'inset'`, and `collapsible` is
+ * `'offcanvas' | 'icon' | 'none'` — `'icon'` is the one that keeps the icons
+ * visible when collapsed.
+ *
+ * ```tsx
+ * <SidebarProvider defaultOpen={false}>
+ *   <Sidebar variant="inset" collapsible="icon">
+ *     {navigation}
+ *   </Sidebar>
+ *   <SidebarInset>{page}</SidebarInset>
+ * </SidebarProvider>
+ * ```
+ *
+ * Use `Layout` with its `LayoutSider` when the navigation is a flat list and
+ * the collapsed-to-icons mode is not worth the parts.
+ *
+ * It has to sit inside a `SidebarProvider` — `useSidebar` throws otherwise —
+ * and the page beside it belongs in `SidebarInset`, or the two overlap once
+ * the rail collapses. On mobile the rail becomes a `Sheet` regardless of
+ * `collapsible`. State persists in a `sidebar_state` cookie, and ⌘/Ctrl+B
+ * toggles it.
+ */
 const Sidebar = ({
   side = 'left',
   variant = 'sidebar',

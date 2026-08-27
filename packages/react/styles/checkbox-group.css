@@ -1,0 +1,5 @@
+/* checkbox-group, and the components it renders: checkbox, label */
+@import './base.css';
+@source '../src/components/checkbox';
+@source '../src/components/checkbox-group';
+@source '../src/components/label';

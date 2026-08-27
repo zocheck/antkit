@@ -1,6 +1,6 @@
 # @antkit/react
 
-Ant Design-shaped React components on Radix and Tailwind v4.
+Declarative React components on Radix and Tailwind v4.
 
 ```bash
 pnpm add @antkit/react @antkit/styles

@@ -89,9 +89,9 @@ const pathTo = (
  * <Tree
  *   checkable
  *   data={[
- *     { key: 'academy', label: 'Học vụ', children: [
- *       { key: 'course', label: 'Khoá học' },
- *       { key: 'exam', label: 'Đề thi' },
+ *     { key: 'academy', label: 'Academic', children: [
+ *       { key: 'course', label: 'Courses' },
+ *       { key: 'exam', label: 'Exams' },
  *     ]},
  *   ]}
  *   checkedKeys={checked}

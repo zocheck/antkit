@@ -2,12 +2,12 @@ import { useState } from 'react';
 import type { ComponentProps, ReactNode } from 'react';
 
 import { cn } from '../../utils';
-import { ClockIcon, XIcon } from 'lucide-react';
+import { ClockIcon } from 'lucide-react';
 
-import { useUiConfig } from '../../lib/ui-config';
+import { useLocale } from '../../lib/config';
 import { useFieldDisclosure } from '../../lib/use-field-disclosure';
 import { Button } from '../button';
-import { DateInputBox } from '../date-picker/parts';
+import { DateInputBox, FieldClear, FieldSuffix } from '../date-picker/parts';
 import {
   Popover,
   PopoverAnchor,
@@ -102,8 +102,8 @@ export const TimeRangePicker = ({
   disabled,
   readOnly,
   clearable = false,
-  clearLabel = 'Clear range',
-  openLabel = 'Open time panel',
+  clearLabel,
+  openLabel,
   okText,
   separator = '–',
   fromName,
@@ -125,7 +125,7 @@ export const TimeRangePicker = ({
   max,
   isTimeDisabled,
 }: TimeRangePickerProps) => {
-  const { translate } = useUiConfig();
+  const locale = useLocale();
   const resolved = resolveTimeFormat(format);
 
   const [internalValue, setInternalValue] = useState<TimeRange>(
@@ -225,25 +225,30 @@ export const TimeRangePicker = ({
             disabled={disabled}
             invalid={invalid || reversed || outOfBounds}
             suffix={
-              <>
-                {showClear && (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon-sm"
-                    aria-label={clearLabel}
-                    className="text-muted-foreground"
-                    onClick={clear}
-                  >
-                    <XIcon />
-                  </Button>
-                )}
+              <FieldSuffix
+                clear={
+                  showClear && (
+                    <FieldClear
+                      label={
+                        clearLabel ??
+                        locale.timePicker?.clearRange ??
+                        'Clear range'
+                      }
+                      onClear={clear}
+                    />
+                  )
+                }
+              >
                 <PopoverTrigger asChild>
                   <Button
                     type="button"
                     variant="ghost"
                     size="icon-sm"
-                    aria-label={openLabel}
+                    aria-label={
+                      openLabel ??
+                      locale.timePicker?.openPanel ??
+                      'Open time panel'
+                    }
                     {...disclosure.toggleProps}
                     disabled={disabled}
                     className="text-muted-foreground"
@@ -251,7 +256,7 @@ export const TimeRangePicker = ({
                     <ClockIcon />
                   </Button>
                 </PopoverTrigger>
-              </>
+              </FieldSuffix>
             }
           >
             <TimeSegments
@@ -307,7 +312,9 @@ export const TimeRangePicker = ({
           {(['from', 'to'] as const).map((end) => (
             <div key={end} className="flex flex-col">
               <span className="border-b border-border px-3 py-1.5 text-xs font-medium text-muted-foreground">
-                {translate(end === 'from' ? 'startTime' : 'endTime')}
+                {end === 'from'
+                  ? (locale.timePicker?.startTime ?? 'Start')
+                  : (locale.timePicker?.endTime ?? 'End')}
               </span>
 
               <TimePanel
@@ -322,7 +329,7 @@ export const TimeRangePicker = ({
         {okText !== false && (
           <div className="flex justify-end border-t border-border px-2 py-1.5">
             <Button type="button" size="sm" onClick={() => setOpen(false)}>
-              {okText ?? translate('ok')}
+              {okText ?? locale.common?.ok ?? 'OK'}
             </Button>
           </div>
         )}

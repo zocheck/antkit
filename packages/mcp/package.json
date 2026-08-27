@@ -1,0 +1,49 @@
+{
+  "name": "@antkit/mcp",
+  "version": "0.1.0",
+  "description": "MCP server for @antkit/react — the component catalogue as tools an agent can call.",
+  "keywords": [
+    "antkit",
+    "components",
+    "mcp",
+    "model-context-protocol",
+    "react"
+  ],
+  "homepage": "https://github.com/zocheck/antkit",
+  "bugs": {
+    "url": "https://github.com/zocheck/antkit/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zocheck/antkit.git",
+    "directory": "packages/mcp"
+  },
+  "bin": {
+    "antkit-mcp": "./bin/antkit-mcp.mjs"
+  },
+  "files": [
+    "bin",
+    "src"
+  ],
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "typecheck": "for f in bin/*.mjs src/*.mjs; do node --check \"$f\" || exit 1; done"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "zod": "^3.25.76"
+  },
+  "peerDependencies": {
+    "@antkit/react": "workspace:^"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

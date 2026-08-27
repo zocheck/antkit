@@ -10,8 +10,10 @@ Rules:
    `border-input`, `bg-accent`. Never `bg-blue-500` — it breaks dark mode.
 4. Styling variants use `tailwind-variants` (`tv`), not `cva` and not string
    concatenation. Pass `className` into `tv`, not around it.
-5. No hard-coded user-facing text inside a component — take it as a prop.
-6. Forms use antd-shaped `rules`, not a schema:
+5. No hard-coded user-facing text inside a component — take it as a prop, or
+   read it off `useLocale()`. Strings the kit renders itself are English by
+   default and change with `<ConfigProvider locale={viVN}>`.
+6. Forms take declarative `rules` on the field, not a schema:
    `<Form.Item name="email" rules={[{ required: true, type: 'email' }]}>`.
    `Select`, `DatePicker`, `InputNumber` and `Switch` drop into `Form.Item`
    with no adapter.
@@ -23,5 +25,7 @@ Rules:
    - `Select` for a flat list; `TreeSelect` for a hierarchy; `Cascader` to walk
      level by level; `Transfer` to move between two sets.
 8. `RichTextEditor` is heavy (~430 KB). Always load it through `lazy()`.
-9. The consuming app must have `@source '../node_modules/@antkit/react/src'`
-   in its CSS, or nothing is styled.
+9. The consuming app's CSS must be `@import 'tailwindcss';` followed by
+   `@import '@antkit/react/styles.css';`, or nothing is styled. Never write a
+   hand-rolled `@source '../node_modules/@antkit/react/src'` — the package
+   ships that line itself, resolved from its own location.

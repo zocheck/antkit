@@ -2,11 +2,15 @@ import type { ReactNode } from 'react';
 
 /**
  * A ~40-line TSX highlighter instead of Shiki or Prism: the snippets here are
- * short, and pulling a grammar engine into a docs bundle to colour six token
+ * short, and pulling a grammar engine into a docs bundle to colour five token
  * kinds is not a trade worth making.
  *
  * Order is the grammar — comments and strings have to win before anything
  * inside them is mistaken for code.
+ *
+ * Deliberately no rule for capitalised words or bare numbers: without a parser
+ * they also match Vietnamese prose inside JSX text, and a demo that reads like
+ * a ransom note is worse than one with fewer colours.
  */
 const RULES: [string, RegExp][] = [
   ['tok-comment', /\/\/[^\n]*|\/\*[\s\S]*?\*\//y],
@@ -16,9 +20,7 @@ const RULES: [string, RegExp][] = [
     'tok-keyword',
     /\b(?:const|let|var|export|import|from|return|function|if|else|new|await|async|type|interface|as|of|in|true|false|null|undefined)\b/y,
   ],
-  ['tok-type', /\b[A-Z][A-Za-z\d]*\b/y],
   ['tok-attr', /\b[a-zA-Z][\w-]*(?==)/y],
-  ['tok-number', /\b\d[\d_]*(?:\.\d+)?\b/y],
   ['tok-punct', /[{}]/y],
 ];
 

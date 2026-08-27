@@ -34,8 +34,8 @@ export type StatusProps = Omit<ComponentProps<typeof Badge>, 'variant'> & {
  * A dot plus a label, for service or record state.
  *
  * ```tsx
- * <Status tone="online" pulse>Đang chạy</Status>
- * <Status color="#17a2b8">Đang thực hiện</Status>
+ * <Status tone="online" pulse>Running</Status>
+ * <Status color="#17a2b8">In progress</Status>
  * ```
  *
  * Compose `StatusIndicator` / `StatusLabel` directly when the dot and the text

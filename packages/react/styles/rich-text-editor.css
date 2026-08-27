@@ -1,0 +1,10 @@
+/* rich-text-editor, and the components it renders: button, dropdown-menu, input, popover, separator, spinner, tooltip */
+@import './base.css';
+@source '../src/components/button';
+@source '../src/components/dropdown-menu';
+@source '../src/components/input';
+@source '../src/components/popover';
+@source '../src/components/rich-text-editor';
+@source '../src/components/separator';
+@source '../src/components/spinner';
+@source '../src/components/tooltip';

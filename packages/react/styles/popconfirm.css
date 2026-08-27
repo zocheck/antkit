@@ -1,0 +1,6 @@
+/* popconfirm, and the components it renders: button, popover, tooltip */
+@import './base.css';
+@source '../src/components/button';
+@source '../src/components/popconfirm';
+@source '../src/components/popover';
+@source '../src/components/tooltip';

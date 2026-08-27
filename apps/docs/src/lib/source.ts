@@ -24,7 +24,13 @@ const dedent = (code: string) => {
  */
 const unwrap = (code: string) => {
   const body = code.match(/^const \w+ = \(\) => \(\n([\s\S]*)\n\);$/);
-  return body ? dedent(body[1]) : code;
+  if (!body) return code;
+
+  const inner = dedent(body[1]);
+  // A demo returning several siblings needs a fragment to compile; nobody
+  // pasting the snippet into their own JSX needs to carry it along.
+  const fragment = inner.match(/^<>\n([\s\S]*)\n<\/>$/);
+  return fragment ? dedent(fragment[1]) : inner;
 };
 
 /** Reads the JSDoc block sitting directly above `start`, if there is one. */

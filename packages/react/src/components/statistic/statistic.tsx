@@ -30,7 +30,7 @@ export type StatisticProps = Omit<ComponentProps<'div'>, 'title' | 'prefix'> & {
  * One number, presented. Drop a few into a `Card` grid for a dashboard.
  *
  * ```tsx
- * <Statistic title="Doanh thu tháng" value={125_400_000} suffix="₫" trend="up" delta="+12,4%" />
+ * <Statistic title="Revenue this month" value={125_400} prefix="$" trend="up" delta="+12.4%" />
  * ```
  */
 export const Statistic = ({

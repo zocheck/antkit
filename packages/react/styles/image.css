@@ -1,0 +1,4 @@
+/* image, and the components it renders: skeleton */
+@import './base.css';
+@source '../src/components/image';
+@source '../src/components/skeleton';

@@ -2,19 +2,21 @@ import { useState } from 'react';
 import type { ReactNode } from 'react';
 
 import { cn } from '../../utils';
-import { XIcon } from 'lucide-react';
 
-import { Button } from '../button';
 import {
   DateInputBox,
   DateSegments,
   EMPTY_PARTS,
+  FieldClear,
+  FieldSuffix,
   hasAnyPart,
   isOutOfBounds,
-  useDateParts,
   type DateSegmentLabels,
+  useDateParts,
 } from './parts';
 import { fromParts, toISODate } from './utils';
+
+import { useLocale } from '../../lib/config';
 
 export type DateFieldProps = {
   /** Controlled value. Pair with `onChange`. */
@@ -68,7 +70,7 @@ export const DateField = ({
   disabled,
   readOnly,
   clearable = false,
-  clearLabel = 'Clear date',
+  clearLabel,
   name,
   form,
   required,
@@ -80,6 +82,7 @@ export const DateField = ({
   className,
   ...props
 }: DateFieldProps) => {
+  const strings = useLocale();
   const [internal, setInternal] = useState<Date | null>(defaultValue ?? null);
   const isControlled = value !== undefined;
   const current = isControlled ? value : internal;
@@ -104,23 +107,20 @@ export const DateField = ({
       className={className}
       aria-describedby={props['aria-describedby']}
       suffix={
-        (showClear || suffix) && (
-          <>
-            {showClear && (
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon-sm"
-                aria-label={clearLabel}
-                className="text-muted-foreground"
-                onClick={() => update(EMPTY_PARTS)}
-              >
-                <XIcon />
-              </Button>
-            )}
-            {suffix}
-          </>
-        )
+        <FieldSuffix
+          clear={
+            showClear && (
+              <FieldClear
+                label={
+                  clearLabel ?? strings.datePicker?.clearDate ?? 'Clear date'
+                }
+                onClear={() => update(EMPTY_PARTS)}
+              />
+            )
+          }
+        >
+          {suffix}
+        </FieldSuffix>
       }
     >
       <DateSegments

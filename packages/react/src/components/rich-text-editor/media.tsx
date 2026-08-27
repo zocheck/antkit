@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import type { ChangeEvent, ReactNode } from 'react';
 
 import { cn } from '../../utils';
+import { useLocale } from '../../lib/config';
 import type { Editor } from '@tiptap/react';
 import {
   BanIcon,
@@ -148,11 +149,12 @@ export const ColorButton = ({
   active,
   disabled = false,
 }: ColorButtonProps) => {
+  const locale = useLocale();
   const [open, setOpen] = useState(false);
 
   return (
     <PopoverButton
-      title="Màu chữ"
+      title={locale.editor?.textColour ?? 'Text colour'}
       icon={
         <span className="relative flex flex-col items-center">
           <BaselineIcon className="size-3.5" />
@@ -169,7 +171,7 @@ export const ColorButton = ({
     >
       <SwatchGrid
         active={active}
-        clearLabel="Bỏ màu chữ"
+        clearLabel={locale.editor?.clearTextColour ?? 'Clear text colour'}
         onPick={(color) => {
           editor.chain().focus().setColor(color).run();
           setOpen(false);
@@ -194,11 +196,12 @@ export const HighlightButton = ({
   active,
   disabled = false,
 }: HighlightButtonProps) => {
+  const locale = useLocale();
   const [open, setOpen] = useState(false);
 
   return (
     <PopoverButton
-      title="Tô nền"
+      title={locale.editor?.highlight ?? 'Highlight'}
       icon={<HighlighterIcon />}
       active={!!active}
       disabled={disabled}
@@ -207,7 +210,7 @@ export const HighlightButton = ({
     >
       <SwatchGrid
         active={active}
-        clearLabel="Bỏ nền"
+        clearLabel={locale.editor?.clearHighlight ?? 'Clear highlight'}
         onPick={(color) => {
           editor.chain().focus().setHighlight({ color }).run();
           setOpen(false);
@@ -236,6 +239,7 @@ export const ImageButton = ({
   accept,
   onPickFiles,
 }: ImageButtonProps) => {
+  const locale = useLocale();
   const [open, setOpen] = useState(false);
   const [src, setSrc] = useState('');
   const [busy, setBusy] = useState(false);
@@ -267,7 +271,7 @@ export const ImageButton = ({
 
   return (
     <PopoverButton
-      title="Chèn ảnh"
+      title={locale.editor?.insertImage ?? 'Insert image'}
       icon={<ImageIcon />}
       disabled={disabled}
       open={open}
@@ -285,7 +289,9 @@ export const ImageButton = ({
           onMouseDown={(event) => event.preventDefault()}
           onClick={() => fileInput.current?.click()}
         >
-          {busy ? 'Đang tải lên…' : 'Chọn ảnh từ máy'}
+          {busy
+            ? (locale.editor?.uploading ?? 'Uploading…')
+            : (locale.editor?.chooseImage ?? 'Choose an image')}
         </Button>
         <input
           ref={fileInput}
@@ -310,7 +316,7 @@ export const ImageButton = ({
             }}
           />
           <Button type="button" size="sm" onClick={insertUrl}>
-            Chèn
+            {locale.editor?.insert ?? 'Insert'}
           </Button>
         </div>
       </div>
@@ -331,18 +337,19 @@ export const TableButton = ({
   inTable,
   disabled = false,
 }: TableButtonProps) => {
+  const locale = useLocale();
   const run = (action: (chain: ReturnType<Editor['chain']>) => void) => () =>
     action(editor.chain().focus());
 
   return (
     <DropdownMenu>
-      <ToolbarTooltip title="Bảng">
+      <ToolbarTooltip title={locale.editor?.table ?? 'Table'}>
         <DropdownMenuTrigger asChild>
           <Button
             type="button"
             variant="ghost"
             size="icon-sm"
-            aria-label="Bảng"
+            aria-label={locale.editor?.table ?? 'Table'}
             aria-pressed={inTable}
             disabled={disabled}
             className={cn(inTable && 'bg-accent text-accent-foreground')}
@@ -359,7 +366,7 @@ export const TableButton = ({
             chain.insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(),
           )}
         >
-          Chèn bảng 3 × 3
+          {locale.editor?.insertTable ?? 'Insert a 3 × 3 table'}
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
@@ -368,19 +375,19 @@ export const TableButton = ({
           disabled={!inTable}
           onSelect={run((chain) => chain.addColumnBefore().run())}
         >
-          Thêm cột bên trái
+          {locale.editor?.columnBefore ?? 'Add a column before'}
         </DropdownMenuItem>
         <DropdownMenuItem
           disabled={!inTable}
           onSelect={run((chain) => chain.addColumnAfter().run())}
         >
-          Thêm cột bên phải
+          {locale.editor?.columnAfter ?? 'Add a column after'}
         </DropdownMenuItem>
         <DropdownMenuItem
           disabled={!inTable}
           onSelect={run((chain) => chain.deleteColumn().run())}
         >
-          Xoá cột
+          {locale.editor?.deleteColumn ?? 'Delete column'}
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
@@ -389,19 +396,19 @@ export const TableButton = ({
           disabled={!inTable}
           onSelect={run((chain) => chain.addRowBefore().run())}
         >
-          Thêm hàng phía trên
+          {locale.editor?.rowAbove ?? 'Add a row above'}
         </DropdownMenuItem>
         <DropdownMenuItem
           disabled={!inTable}
           onSelect={run((chain) => chain.addRowAfter().run())}
         >
-          Thêm hàng phía dưới
+          {locale.editor?.rowBelow ?? 'Add a row below'}
         </DropdownMenuItem>
         <DropdownMenuItem
           disabled={!inTable}
           onSelect={run((chain) => chain.deleteRow().run())}
         >
-          Xoá hàng
+          {locale.editor?.deleteRow ?? 'Delete row'}
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
@@ -410,20 +417,20 @@ export const TableButton = ({
           disabled={!inTable}
           onSelect={run((chain) => chain.mergeOrSplit().run())}
         >
-          Gộp / tách ô
+          {locale.editor?.mergeCells ?? 'Merge or split cells'}
         </DropdownMenuItem>
         <DropdownMenuItem
           disabled={!inTable}
           onSelect={run((chain) => chain.toggleHeaderRow().run())}
         >
-          Bật/tắt hàng tiêu đề
+          {locale.editor?.toggleHeaderRow ?? 'Toggle the header row'}
         </DropdownMenuItem>
         <DropdownMenuItem
           variant="destructive"
           disabled={!inTable}
           onSelect={run((chain) => chain.deleteTable().run())}
         >
-          Xoá bảng
+          {locale.editor?.deleteTable ?? 'Delete table'}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

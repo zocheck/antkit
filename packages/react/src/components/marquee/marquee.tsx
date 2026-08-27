@@ -49,6 +49,12 @@ export const Marquee = ({ className, ...props }: MarqueeProps) => (
   />
 );
 
+/**
+ * A short list in a wide viewport still only needs a handful of copies; the
+ * cap is what stops a pathological measurement from filling the DOM.
+ */
+const MAX_REPEAT = 50;
+
 export type MarqueeContentProps = Omit<ComponentProps<'div'>, 'dir'> & {
   /** Pixels per second, so long and short lists move at the same pace. */
   speed?: number;
@@ -72,42 +78,47 @@ export const MarqueeContent = ({
 }: MarqueeContentProps) => {
   const vertical = direction === 'up' || direction === 'down';
   const viewportRef = useRef<HTMLDivElement>(null);
-  const groupRef = useRef<HTMLDivElement>(null);
+  const copyRef = useRef<HTMLDivElement>(null);
 
   const [unit, setUnit] = useState(0);
   const [viewport, setViewport] = useState(0);
   const [paused, setPaused] = useState(false);
 
   const repeat =
-    autoFill && unit > 0 ? Math.max(1, Math.ceil(viewport / unit)) : 1;
+    autoFill && unit > 0
+      ? Math.min(MAX_REPEAT, Math.max(1, Math.ceil(viewport / unit)))
+      : 1;
 
-  // Measure one copy, not the whole group: the repeat count is derived from it,
-  // so measuring the group would chase its own tail.
+  /*
+   * Measure one copy, never the group. The group holds `repeat` copies, so
+   * dividing its size by `repeat` mixes a live DOM reading with a state value
+   * from an older render — during the frame where they disagree the quotient
+   * is wrong, which moves `repeat`, which re-measures, and the two chase each
+   * other until the tab dies. One copy is the same number with nothing to
+   * disagree about.
+   */
   useLayoutEffect(() => {
-    const group = groupRef.current;
+    const copy = copyRef.current;
     const box = viewportRef.current;
 
-    if (!group || !box) return;
+    if (!copy || !box) return;
 
     const measure = () => {
-      const groupSize = vertical ? group.scrollHeight : group.scrollWidth;
-      const boxSize = vertical ? box.clientHeight : box.clientWidth;
-
-      setUnit(groupSize / repeat);
-      setViewport(boxSize);
+      setUnit(vertical ? copy.scrollHeight : copy.scrollWidth);
+      setViewport(vertical ? box.clientHeight : box.clientWidth);
     };
 
     measure();
 
     const observer = new ResizeObserver(measure);
 
-    observer.observe(group);
+    observer.observe(copy);
     observer.observe(box);
 
-    // Changing children changes the group's size, which the observer already
+    // Changing children changes the copy's size, which the observer already
     // reports — no need to depend on them here.
     return () => observer.disconnect();
-  }, [repeat, vertical]);
+  }, [vertical]);
 
   const distance = unit * repeat;
   const duration = distance > 0 && speed > 0 ? distance / speed : 0;
@@ -117,7 +128,6 @@ export const MarqueeContent = ({
   const renderGroup = (groupIndex: number) => (
     <div
       key={groupIndex}
-      ref={groupIndex === 0 ? groupRef : undefined}
       // The trailing copy is the same content again; reading it out twice
       // would just be noise.
       aria-hidden={groupIndex > 0 || undefined}
@@ -126,6 +136,7 @@ export const MarqueeContent = ({
       {copies.map((copy) => (
         <div
           key={copy}
+          ref={groupIndex === 0 && copy === 0 ? copyRef : undefined}
           aria-hidden={copy > 0 || undefined}
           className={cn('flex shrink-0', vertical ? 'flex-col' : 'flex-row')}
         >

@@ -28,7 +28,7 @@ export type SliderProps = Omit<
    */
   range?: boolean;
   vertical?: boolean;
-  /** Either `[{ value, label }]` or antd's `{ 0: 'Thấp', 100: 'Cao' }` shape. */
+  /** Either `[{ value, label }]` or the object shape `{ 0: 'Low', 100: 'High' }`. */
   marks?: SliderMark[] | Record<number, ReactNode>;
   /** `true` shows the value on hover/focus, `'always'` keeps it visible. */
   tooltip?: boolean | 'always';

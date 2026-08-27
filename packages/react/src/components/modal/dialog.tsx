@@ -3,6 +3,8 @@ import type { ComponentProps, PointerEvent } from 'react';
 
 import { cn } from '../../utils';
 import { XIcon } from 'lucide-react';
+
+import { useLocale } from '../../lib/config';
 import { Dialog as DialogPrimitive } from 'radix-ui';
 
 /**
@@ -65,12 +67,13 @@ export const DialogContent = ({
   children,
   centered = false,
   showCloseButton = true,
-  closeLabel = 'Close',
+  closeLabel,
   asSheet = false,
-  grabLabel = 'Drag down to close',
+  grabLabel,
   style,
   ...props
 }: DialogContentProps) => {
+  const locale = useLocale();
   // How far the sheet is currently pulled down, and whether a finger is still
   // on it — released, the same offset animates rather than tracking.
   const [pull, setPull] = useState({ y: 0, held: false });
@@ -131,8 +134,8 @@ export const DialogContent = ({
               ]
             : [
                 'left-1/2 w-full max-w-[calc(100vw-2rem)] -translate-x-1/2 rounded-xl p-6',
-                // Vertically centred, or pinned near the top the way antd
-                // defaults — top alignment keeps a tall dialog from jumping as
+                // Vertically centred, or pinned near the top — the default,
+                // because top alignment keeps a tall dialog from jumping as
                 // its content grows.
                 centered
                   ? 'top-1/2 -translate-y-1/2'
@@ -147,7 +150,9 @@ export const DialogContent = ({
         {asSheet && (
           <>
             <div
-              aria-label={grabLabel}
+              aria-label={
+                grabLabel ?? locale.modal?.grabToClose ?? 'Drag down to close'
+              }
               // `touch-none` so the gesture is ours, not the page's scroll.
               className="-mt-1 -mb-2 flex touch-none cursor-grab justify-center py-2 active:cursor-grabbing"
               onPointerDown={grab}
@@ -176,7 +181,7 @@ export const DialogContent = ({
         {showCloseButton && !asSheet && (
           <DialogPrimitive.Close
             data-slot="dialog-close"
-            aria-label={closeLabel}
+            aria-label={closeLabel ?? locale.common?.close ?? 'Close'}
             className={cn(
               'absolute right-4 top-4 flex size-7 cursor-pointer items-center justify-center rounded-md',
               'text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground',

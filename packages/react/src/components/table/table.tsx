@@ -9,11 +9,12 @@ import {
   ChevronsUpDownIcon,
 } from 'lucide-react';
 
-import { useUiConfig } from '../../lib/ui-config';
+import { useConfig } from '../../lib/config';
 import { Checkbox } from '../checkbox';
+import { Empty } from '../empty';
 import { Skeleton } from '../skeleton';
-import { Pagination } from './pagination';
-import type { PaginationProps } from './pagination';
+import { Pagination } from '../pagination';
+import type { PaginationProps } from '../pagination';
 import { useColumnWidths } from './use-column-widths';
 import type { ColumnWidths } from './use-column-widths';
 
@@ -179,8 +180,8 @@ const CELL =
  *   rowSelection={{ selectedRowKeys: selected, onChange: setSelected }}
  *   rowActions={(row) => <RowMenu row={row} />}
  *   columns={[
- *     { title: 'Tên', dataIndex: 'name', width: 400, icon: <FileTextIcon />, resizable: true, sorter: true },
- *     { title: 'Ngày', dataIndex: 'date', width: 150, fixed: 'left' },
+ *     { title: 'Name', dataIndex: 'name', width: 400, icon: <FileTextIcon />, resizable: true, sorter: true },
+ *     { title: 'Date', dataIndex: 'date', width: 150, fixed: 'left' },
  *   ]}
  * />
  * ```
@@ -217,7 +218,7 @@ export const Table = <TRecord,>({
   pagination,
   className,
 }: TableProps<TRecord>) => {
-  const { translate } = useUiConfig();
+  const { locale, renderEmpty } = useConfig();
   const getRowKey = (record: TRecord) =>
     typeof rowKey === 'function' ? rowKey(record) : String(record[rowKey]);
   const hasExpandableRows = Boolean(expandable?.expandedRowRender);
@@ -493,7 +494,7 @@ export const Table = <TRecord,>({
                       }
                       disabled={selectableRows.length === 0}
                       onCheckedChange={toggleAll}
-                      aria-label={translate('selectAll')}
+                      aria-label={locale.table?.selectAll ?? 'Select all'}
                     />
                   </div>
                 </th>
@@ -589,7 +590,9 @@ export const Table = <TRecord,>({
                         <span
                           role="separator"
                           aria-orientation="vertical"
-                          aria-label={translate('resizeColumn')}
+                          aria-label={
+                            locale.table?.resizeColumn ?? 'Resize column'
+                          }
                           onPointerDown={(event) =>
                             startResize(key, event, width)
                           }
@@ -646,12 +649,14 @@ export const Table = <TRecord,>({
                 <td
                   colSpan={columnCount}
                   className={cn(
-                    'border-b border-border px-3 py-10 text-center text-muted-foreground',
+                    'border-b border-border text-center text-muted-foreground',
+                    // `Empty` brings its own padding; a caller's node does not.
+                    empty ? 'px-3 py-10' : 'p-0',
                     classNames?.cell,
                   )}
                   style={styles?.cell}
                 >
-                  {empty ?? translate('noData')}
+                  {empty ?? renderEmpty?.('table') ?? <Empty />}
                 </td>
               </tr>
             )}
@@ -709,7 +714,9 @@ export const Table = <TRecord,>({
                               checked={selected}
                               disabled={checkboxProps?.disabled}
                               onCheckedChange={() => toggleRow(record)}
-                              aria-label={translate('selectRow')}
+                              aria-label={
+                                locale.table?.selectRow ?? 'Select row'
+                              }
                             />
                           </div>
                         </td>
@@ -739,8 +746,9 @@ export const Table = <TRecord,>({
                                 type="button"
                                 aria-label={
                                   expanded
-                                    ? translate('collapseRow')
-                                    : translate('expandRow')
+                                    ? (locale.table?.collapseRow ??
+                                      'Collapse row')
+                                    : (locale.table?.expandRow ?? 'Expand row')
                                 }
                                 aria-expanded={expanded}
                                 onClick={() => toggleExpand(record)}

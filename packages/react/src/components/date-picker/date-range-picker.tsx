@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { ComponentProps, ReactNode } from 'react';
 
 import { cn } from '../../utils';
-import { CalendarIcon, XIcon } from 'lucide-react';
+import { CalendarIcon } from 'lucide-react';
 
 import { useFieldDisclosure } from '../../lib/use-field-disclosure';
 import { Button } from '../button';
@@ -21,12 +21,16 @@ import {
   DateInputBox,
   DateSegments,
   EMPTY_PARTS,
+  FieldClear,
+  FieldSuffix,
   hasAnyPart,
   isOutOfBounds,
-  useDateParts,
   type DateSegmentLabels,
+  useDateParts,
 } from './parts';
 import { isAfterDay, toISODate, type DateRange } from './utils';
+
+import { useLocale } from '../../lib/config';
 
 export type DateRangePreset = {
   label: ReactNode;
@@ -90,7 +94,7 @@ const EMPTY_RANGE: DateRange = { from: null, to: null };
  * <DateRangePicker
  *   value={range}
  *   onChange={setRange}
- *   presets={[{ label: '7 ngày qua', value: last7Days }]}
+ *   presets={[{ label: 'Last 7 days', value: last7Days }]}
  * />
  * ```
  *
@@ -109,8 +113,8 @@ export const DateRangePicker = ({
   disabled,
   readOnly,
   clearable = false,
-  clearLabel = 'Clear range',
-  openLabel = 'Open calendar',
+  clearLabel,
+  openLabel,
   presets,
   separator = '–',
   fromName,
@@ -138,6 +142,7 @@ export const DateRangePicker = ({
   max,
   locale,
 }: DateRangePickerProps) => {
+  const strings = useLocale();
   const [internalValue, setInternalValue] = useState<DateRange>(
     defaultValue ?? EMPTY_RANGE,
   );
@@ -206,25 +211,30 @@ export const DateRangePicker = ({
             disabled={disabled}
             invalid={invalid || reversed || outOfBounds}
             suffix={
-              <>
-                {showClear && (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon-sm"
-                    aria-label={clearLabel}
-                    className="text-muted-foreground"
-                    onClick={clear}
-                  >
-                    <XIcon />
-                  </Button>
-                )}
+              <FieldSuffix
+                clear={
+                  showClear && (
+                    <FieldClear
+                      label={
+                        clearLabel ??
+                        strings.datePicker?.clearRange ??
+                        'Clear range'
+                      }
+                      onClear={clear}
+                    />
+                  )
+                }
+              >
                 <PopoverTrigger asChild>
                   <Button
                     type="button"
                     variant="ghost"
                     size="icon-sm"
-                    aria-label={openLabel}
+                    aria-label={
+                      openLabel ??
+                      strings.datePicker?.openCalendar ??
+                      'Open calendar'
+                    }
                     {...disclosure.toggleProps}
                     disabled={disabled}
                     className="text-muted-foreground"
@@ -232,7 +242,7 @@ export const DateRangePicker = ({
                     <CalendarIcon />
                   </Button>
                 </PopoverTrigger>
-              </>
+              </FieldSuffix>
             }
           >
             <DateSegments

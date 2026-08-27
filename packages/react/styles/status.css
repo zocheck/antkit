@@ -1,0 +1,4 @@
+/* status, and the components it renders: badge */
+@import './base.css';
+@source '../src/components/badge';
+@source '../src/components/status';

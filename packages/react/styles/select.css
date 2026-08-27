@@ -1,0 +1,9 @@
+/* select, and the components it renders: button, command-menu, empty, modal, popover, spinner */
+@import './base.css';
+@source '../src/components/button';
+@source '../src/components/command-menu';
+@source '../src/components/empty';
+@source '../src/components/modal';
+@source '../src/components/popover';
+@source '../src/components/select';
+@source '../src/components/spinner';

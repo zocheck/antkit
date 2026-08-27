@@ -12,8 +12,8 @@ import { Tabs as TabsPrimitive } from 'radix-ui';
  * ```tsx
  * <Tabs defaultValue="runs">
  *   <TabsList>
- *     <TabsTrigger value="runs">Lượt chạy</TabsTrigger>
- *     <TabsTrigger value="logs">Nhật ký</TabsTrigger>
+ *     <TabsTrigger value="runs">Runs</TabsTrigger>
+ *     <TabsTrigger value="logs">Logs</TabsTrigger>
  *   </TabsList>
  *   <TabsContent value="runs">…</TabsContent>
  *   <TabsContent value="logs">…</TabsContent>

@@ -27,8 +27,8 @@ export type MessageConfig = {
 type MessageItem = MessageConfig & { id: string; type: MessageType };
 
 /**
- * The glyph Ant Design picks per type: a circle for all four, so the row of
- * icons keeps one silhouette. Note that a warning is the `!` and an error is
+ * One glyph per type, a circle for all four, so the row of icons keeps a
+ * single silhouette. Note that a warning is the `!` and an error is
  * the `✕` — swapping them is the usual mistake.
  */
 const TYPE_ICON = {
@@ -40,12 +40,11 @@ const TYPE_ICON = {
 } as const;
 
 /**
- * Ant Design's status palette — `colorSuccess`, `colorInfo`, `colorWarning`,
- * `colorError` — in its light and dark values.
+ * A fixed status palette, in light and dark values.
  *
- * They are deliberately not the app's own tokens: `info` is antd's blue rather
- * than `--primary`, so the pills read the way antd's do. Restyle by overriding
- * these on `MessageProvider`:
+ * Deliberately not the app's own tokens: `info` is its own blue rather than
+ * `--primary`, so a run of pills reads as one system whatever the brand colour
+ * happens to be. Restyle by overriding these on `MessageProvider`:
  *
  * ```tsx
  * <MessageProvider className="[--message-info:var(--primary)]" />
@@ -122,19 +121,19 @@ const shortcut =
     open({ content, type, duration, onClose });
 
 /**
- * Ant Design-shaped transient feedback: a compact pill at the top of the
+ * Transient feedback: a compact pill at the top of the
  * screen. Mount `<MessageProvider />` once near the app root, then call it from
  * anywhere.
  *
  * ```tsx
- * message.success('Đã lưu');
- * message.error('Không kết nối được máy chủ', 5);
+ * message.success('Saved');
+ * message.error('Could not reach the server', 5);
  *
- * const hide = message.loading('Đang tải…', 0);   // 0 = stays until hidden
+ * const hide = message.loading('Loading…', 0);   // 0 = stays until hidden
  * await save();
  * hide();
  *
- * message.open({ key: 'sync', type: 'loading', content: 'Đang đồng bộ…', duration: 0 });
+ * message.open({ key: 'sync', type: 'loading', content: 'Syncing…', duration: 0 });
  * message.open({ key: 'sync', type: 'success', content: 'Xong' });  // replaces it
  * ```
  *
@@ -193,12 +192,11 @@ const MessageCard = ({ item }: { item: MessageItem }) => {
         animation: 'luma-message-in 200ms cubic-bezier(0.2, 0, 0.2, 1) both',
       }}
       className={cn(
-        // antd's own metrics: `borderRadiusLG` is 8px, which is `--radius-md`
-        // here; padding 9px/12px; a 16px icon 8px from 14px text.
+        // 8px radius (`--radius-md`), padding 9px/12px, a 16px icon 8px from
+        // 14px text.
         'pointer-events-auto flex items-center gap-2 rounded-md bg-popover px-3 py-[9px] text-sm text-popover-foreground',
-        // `boxShadowSecondary`, spelled out. antd draws no border on a message
-        // — the three-layer shadow is what lifts it off the page, and adding a
-        // border on top is what made this read as a flat card instead.
+        // No border on purpose: the three-layer shadow is what lifts the pill
+        // off the page, and a border on top of it read as a flat card.
         'shadow-[0_6px_16px_0_rgb(0_0_0/0.08),0_3px_6px_-4px_rgb(0_0_0/0.12),0_9px_28px_8px_rgb(0_0_0/0.05)]',
         // On a dark canvas a black shadow disappears, so the elevated surface
         // needs a hairline to keep its edge.
@@ -242,7 +240,7 @@ export const MessageProvider = ({ className }: MessageProviderProps) => {
     <div
       data-slot="message-provider"
       className={cn(
-        // antd sits the stack 8px from the top, not 16.
+        // The stack sits 8px from the top, not 16 — closer reads as chrome.
         'pointer-events-none fixed inset-x-0 top-2 z-100 flex flex-col items-center gap-2',
         MESSAGE_PALETTE,
         className,

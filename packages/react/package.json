@@ -1,9 +1,8 @@
 {
   "name": "@antkit/react",
   "version": "0.1.0",
-  "description": "Ant Design-shaped React components on Radix and Tailwind.",
+  "description": "Familiar, declarative React components on Radix and Tailwind.",
   "keywords": [
-    "ant-design",
     "components",
     "radix",
     "react",
@@ -20,8 +19,15 @@
     "url": "git+https://github.com/zocheck/antkit.git",
     "directory": "packages/react"
   },
+  "bin": {
+    "antkit-skills": "./bin/antkit-skills.mjs"
+  },
   "files": [
-    "src"
+    "bin",
+    "skills",
+    "src",
+    "styles",
+    "styles.css"
   ],
   "type": "module",
   "sideEffects": false,
@@ -29,7 +35,11 @@
     ".": "./src/index.ts",
     "./rich-text-editor": "./src/components/rich-text-editor/index.ts",
     "./rich-text-editor/tools": "./src/components/rich-text-editor/tools.ts",
-    "./package.json": "./package.json"
+    "./locale/vi-VN": "./src/lib/locale/vi-VN.ts",
+    "./styles.css": "./styles.css",
+    "./skills/*": "./skills/*",
+    "./package.json": "./package.json",
+    "./styles/*": "./styles/*"
   },
   "publishConfig": {
     "access": "public"
@@ -38,6 +48,7 @@
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
+    "@antkit/styles": "workspace:^",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/modifiers": "^9.0.0",
     "@dnd-kit/sortable": "^10.0.0",

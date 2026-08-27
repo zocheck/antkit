@@ -1,0 +1,8 @@
+/* table, and the components it renders: button, checkbox, empty, pagination, skeleton */
+@import './base.css';
+@source '../src/components/button';
+@source '../src/components/checkbox';
+@source '../src/components/empty';
+@source '../src/components/pagination';
+@source '../src/components/skeleton';
+@source '../src/components/table';

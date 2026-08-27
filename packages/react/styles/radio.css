@@ -1,0 +1,4 @@
+/* radio, and the components it renders: label */
+@import './base.css';
+@source '../src/components/label';
+@source '../src/components/radio';

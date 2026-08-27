@@ -2,10 +2,10 @@ import { useState } from 'react';
 import type { ReactNode } from 'react';
 
 import { cn } from '../../utils';
-import { XIcon } from 'lucide-react';
 
-import { Button } from '../button';
-import { DateInputBox } from '../date-picker/parts';
+import { useLocale } from '../../lib/config';
+
+import { DateInputBox, FieldClear, FieldSuffix } from '../date-picker/parts';
 import {
   EMPTY_TIME_PARTS,
   TimeSegments,
@@ -28,7 +28,7 @@ export type TimeFieldProps = {
   /** Fires with `null` while the typed time is still incomplete. */
   onChange?: (time: Date | null) => void;
   /**
-   * Which segments to show, antd-style: `HH:mm:ss`, `HH:mm`, `hh:mm A`.
+   * Which segments to show: `HH:mm:ss`, `HH:mm`, `hh:mm A`.
    * A lowercase `h` or an `A` switches the field to 12-hour.
    */
   format?: string;
@@ -88,7 +88,7 @@ export const TimeField = ({
   disabled,
   readOnly,
   clearable = false,
-  clearLabel = 'Clear time',
+  clearLabel,
   name,
   form,
   required,
@@ -101,6 +101,7 @@ export const TimeField = ({
   className,
   ...props
 }: TimeFieldProps) => {
+  const locale = useLocale();
   const resolved = resolveTimeFormat(format);
 
   const [internal, setInternal] = useState<Date | null>(defaultValue ?? null);
@@ -136,23 +137,20 @@ export const TimeField = ({
       className={className}
       aria-describedby={props['aria-describedby']}
       suffix={
-        (showClear || suffix) && (
-          <>
-            {showClear && (
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon-sm"
-                aria-label={clearLabel}
-                className="text-muted-foreground"
-                onClick={() => update(EMPTY_TIME_PARTS)}
-              >
-                <XIcon />
-              </Button>
-            )}
-            {suffix}
-          </>
-        )
+        <FieldSuffix
+          clear={
+            showClear && (
+              <FieldClear
+                label={
+                  clearLabel ?? locale.timePicker?.clearTime ?? 'Clear time'
+                }
+                onClear={() => update(EMPTY_TIME_PARTS)}
+              />
+            )
+          }
+        >
+          {suffix}
+        </FieldSuffix>
       }
     >
       <TimeSegments

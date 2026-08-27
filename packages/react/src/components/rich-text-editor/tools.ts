@@ -42,7 +42,7 @@ export type RichTextEditorBuiltinTool =
  *     'divider',
  *     {
  *       key: 'mention',
- *       title: 'Nhắc tên',
+ *       title: 'Mention',
  *       icon: <AtSignIcon />,
  *       onClick: (editor) => editor.chain().focus().insertContent('@').run(),
  *     },

@@ -49,7 +49,7 @@ export type ComparisonProps = Omit<
  * ```tsx
  * <Comparison className="aspect-video rounded-lg border">
  *   <ComparisonItem position="left">
- *     <img src={before} alt="Trước" />
+ *     <img src={before} alt="Before" />
  *   </ComparisonItem>
  *   <ComparisonItem position="right">
  *     <img src={after} alt="Sau" />
@@ -147,7 +147,7 @@ export const Comparison = ({
         data-slot="comparison"
         role="slider"
         tabIndex={0}
-        aria-label="Thanh so sánh"
+        aria-label="Comparison handle"
         aria-orientation="horizontal"
         aria-valuemin={0}
         aria-valuemax={100}

@@ -4,7 +4,7 @@ import type { ReactElement, ReactNode } from 'react';
 import { cn } from '../../utils';
 import { TriangleAlertIcon } from 'lucide-react';
 
-import { useUiConfig } from '../../lib/ui-config';
+import { useLocale } from '../../lib/config';
 import { Button } from '../button';
 import { Popover, PopoverContent, PopoverTrigger } from '../popover';
 import { PLACEMENT } from '../tooltip';
@@ -43,13 +43,13 @@ export type PopconfirmProps = {
 };
 
 /**
- * Ant Design-shaped confirmation bubble: the light-touch alternative to a
+ * A confirmation bubble: the light-touch alternative to a
  * modal, anchored to the control that triggered it.
  *
  * ```tsx
  * <Popconfirm
- *   title="Xoá học viên này?"
- *   description="Hành động không thể hoàn tác."
+ *   title="Delete this student?"
+ *   description="This cannot be undone."
  *   okVariant="destructive"
  *   onConfirm={() => remove.mutateAsync(id)}
  * >
@@ -81,7 +81,7 @@ export const Popconfirm = ({
   onOpenChange,
   className,
 }: PopconfirmProps) => {
-  const { translate } = useUiConfig();
+  const locale = useLocale();
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
   const [pending, setPending] = useState(false);
 
@@ -158,7 +158,7 @@ export const Popconfirm = ({
               setOpen(false);
             }}
           >
-            {cancelText ?? translate('cancel')}
+            {cancelText ?? locale.common?.cancel ?? 'Cancel'}
           </Button>
           <Button
             size="sm"
@@ -166,7 +166,7 @@ export const Popconfirm = ({
             loading={pending}
             onClick={confirm}
           >
-            {okText ?? translate('ok')}
+            {okText ?? locale.common?.ok ?? 'OK'}
           </Button>
         </div>
       </PopoverContent>

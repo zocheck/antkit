@@ -1,0 +1,4 @@
+/* tree, and the components it renders: checkbox */
+@import './base.css';
+@source '../src/components/checkbox';
+@source '../src/components/tree';

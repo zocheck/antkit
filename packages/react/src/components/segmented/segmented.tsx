@@ -47,7 +47,7 @@ const normalize = (
  *
  * ```tsx
  * <Segmented
- *   options={['Ngày', 'Tuần', 'Tháng']}
+ *   options={['Day', 'Week', 'Month']}
  *   value={range}
  *   onChange={(value) => setRange(value as string)}
  * />

@@ -2,6 +2,21 @@ import * as React from 'react';
 
 import { cn } from '../../utils';
 
+/**
+ * A single-line text field. Takes every `<input>` prop, so `type`,
+ * `placeholder`, `readOnly` and the rest behave exactly as they do natively.
+ *
+ * ```tsx
+ * <Input type="email" placeholder="you@example.com" />
+ * ```
+ *
+ * Use `InputNumber` for numbers — a native `type="number"` accepts `e` and
+ * `-`, and hands back a string. `Textarea` for more than one line,
+ * `AutoComplete` when there are suggestions to offer.
+ *
+ * It needs no adapter inside a `Form.Item`: the item injects `value`,
+ * `onChange`, `onBlur` and the aria props onto it.
+ */
 const Input = ({
   className,
   type,

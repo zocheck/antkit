@@ -54,6 +54,7 @@ import type { TextAlign as Alignment } from './parts';
 // a component turns every edit here into a full page reload under Fast Refresh.
 import { DEFAULT_TOOLBAR, isCustomTool } from './tools';
 import type { RichTextEditorTool } from './tools';
+import { useLocale } from '../../lib/config';
 
 const ALIGNMENTS: Alignment[] = ['left', 'center', 'right', 'justify'];
 const MEGABYTE = 1024 * 1024;
@@ -115,12 +116,12 @@ const size = (value: number | string | undefined) =>
 const imagesIn = (list: FileList | null | undefined) =>
   [...(list ?? [])].filter((file) => file.type.startsWith('image/'));
 
-const readAsDataUrl = (file: File) =>
+const readAsDataUrl = (file: File, unreadable: string) =>
   new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
     reader.addEventListener('load', () => resolve(String(reader.result)));
     reader.addEventListener('error', () =>
-      reject(reader.error ?? new Error('Không đọc được tệp')),
+      reject(reader.error ?? new Error(unreadable)),
     );
     reader.readAsDataURL(file);
   });
@@ -129,12 +130,12 @@ const readAsDataUrl = (file: File) =>
  * Rich text editor built on Tiptap, with the toolbar wired up.
  *
  * ```tsx
- * const [body, setBody] = useState('<p>Xin chào</p>');
+ * const [body, setBody] = useState('<p>Hello</p>');
  *
  * <RichTextEditor
  *   value={body}
  *   onChange={setBody}
- *   placeholder="Soạn nội dung email…"
+ *   placeholder="Write the email…"
  *   maxLength={2000}
  *   showCount
  *   onUploadImage={(file) => api.upload(file).then((res) => res.url)}
@@ -185,6 +186,7 @@ export const RichTextEditor = ({
   'aria-invalid': ariaInvalid,
   'aria-describedby': ariaDescribedby,
 }: RichTextEditorProps) => {
+  const locale = useLocale();
   const editable = !disabled && !readOnly;
   // Tiptap normalises whatever HTML it parses — a list item comes back wrapped
   // in a `<p>`, a trailing paragraph is appended — and reports that as an update
@@ -260,7 +262,11 @@ export const RichTextEditor = ({
       if (file.size > maxImageSize) {
         onError?.(
           new Error(
-            `${file.name} nặng hơn ${Math.round(maxImageSize / MEGABYTE)} MB`,
+            locale.editor?.imageTooLarge?.(
+              file.name,
+              Math.round(maxImageSize / MEGABYTE),
+            ) ??
+              `${file.name} is over ${Math.round(maxImageSize / MEGABYTE)} MB`,
           ),
         );
         continue;
@@ -272,7 +278,10 @@ export const RichTextEditor = ({
             // eslint-disable-next-line no-await-in-loop
             await onUploadImage(file)
           : // eslint-disable-next-line no-await-in-loop
-            await readAsDataUrl(file);
+            await readAsDataUrl(
+              file,
+              locale.editor?.unreadableFile ?? 'Could not read the file',
+            );
 
         editor.chain().focus().setImage({ src, alt: file.name }).run();
       } catch (error) {
@@ -292,7 +301,7 @@ export const RichTextEditor = ({
   // gives a new `onReady` every time, and depending on it would re-announce the
   // same instance on every pass.
   useEffect(() => {
-    if (editor) announce.current?.(editor);
+    if (editor && !editor.isDestroyed) announce.current?.(editor);
   }, [editor]);
 
   // Tiptap parks the caret at the end of the document. Put it at the start
@@ -300,8 +309,14 @@ export const RichTextEditor = ({
   // for whatever its last block happens to be. After mount, not in `onCreate`:
   // the editor is built during render and a transaction that early lands in
   // React as a state update on a component that isn't mounted.
+  // `isDestroyed` guards every one of these: StrictMode mounts, tears down and
+  // remounts, and the effect scheduled by the first pass runs a second time
+  // holding the instance Tiptap destroyed in between. Reading `commands` off
+  // that instance throws.
   useEffect(() => {
-    if (editor && !autoFocus) editor.commands.setTextSelection(0);
+    if (editor && !editor.isDestroyed && !autoFocus) {
+      editor.commands.setTextSelection(0);
+    }
   }, [editor, autoFocus]);
 
   // `editable` is set at creation, so keep it in step without rebuilding the
@@ -309,11 +324,11 @@ export const RichTextEditor = ({
   // Silently: left to emit, it would fire `onChange` with content nobody
   // edited, and a parent that echoes that straight back resets the document.
   useEffect(() => {
-    editor?.setEditable(editable, false);
+    if (editor?.isDestroyed === false) editor.setEditable(editable, false);
   }, [editor, editable]);
 
   useEffect(() => {
-    if (!editor || value === undefined) return;
+    if (!editor || editor.isDestroyed || value === undefined) return;
     if (value === lastHtml.current || value === seeded.current) return;
 
     lastHtml.current = value;
@@ -325,7 +340,10 @@ export const RichTextEditor = ({
   const state = useEditorState({
     editor,
     selector: ({ editor: instance }) => {
-      if (!instance) return null;
+      // Also `isDestroyed`: StrictMode's remount runs this selector once more
+      // against the instance Tiptap has already torn down, and a destroyed
+      // editor has no view and no extension storage left to read.
+      if (!instance || instance.isDestroyed) return null;
 
       const heading = [1, 2, 3].find((level) =>
         instance.isActive('heading', { level }),
@@ -356,7 +374,7 @@ export const RichTextEditor = ({
         inTable: instance.isActive('table'),
         canUndo: instance.can().undo(),
         canRedo: instance.can().redo(),
-        characters: instance.storage.characterCount.characters(),
+        characters: instance.storage.characterCount?.characters() ?? 0,
         custom: Object.fromEntries(
           customTools.map((tool) => [
             tool.key,
@@ -376,96 +394,96 @@ export const RichTextEditor = ({
 
   const buttons: Record<string, Parameters<typeof ToolbarButton>[0]> = {
     undo: {
-      title: 'Hoàn tác',
+      title: locale.editor?.undo ?? 'Undo',
       icon: <UndoIcon />,
       disabled: !state.canUndo,
       onClick: () => chain().undo().run(),
     },
     redo: {
-      title: 'Làm lại',
+      title: locale.editor?.redo ?? 'Redo',
       icon: <RedoIcon />,
       disabled: !state.canRedo,
       onClick: () => chain().redo().run(),
     },
     bold: {
-      title: 'Đậm',
+      title: locale.editor?.bold ?? 'Bold',
       icon: <BoldIcon />,
       active: state.bold,
       onClick: () => chain().toggleBold().run(),
     },
     italic: {
-      title: 'Nghiêng',
+      title: locale.editor?.italic ?? 'Italic',
       icon: <ItalicIcon />,
       active: state.italic,
       onClick: () => chain().toggleItalic().run(),
     },
     underline: {
-      title: 'Gạch chân',
+      title: locale.editor?.underline ?? 'Underline',
       icon: <UnderlineIcon />,
       active: state.underline,
       onClick: () => chain().toggleUnderline().run(),
     },
     strike: {
-      title: 'Gạch ngang',
+      title: locale.editor?.strike ?? 'Strikethrough',
       icon: <StrikethroughIcon />,
       active: state.strike,
       onClick: () => chain().toggleStrike().run(),
     },
     code: {
-      title: 'Mã inline',
+      title: locale.editor?.inlineCode ?? 'Inline code',
       icon: <CodeIcon />,
       active: state.code,
       onClick: () => chain().toggleCode().run(),
     },
     subscript: {
-      title: 'Chỉ số dưới',
+      title: locale.editor?.subscript ?? 'Subscript',
       icon: <SubscriptIcon />,
       active: state.subscript,
       onClick: () => chain().toggleSubscript().run(),
     },
     superscript: {
-      title: 'Chỉ số trên',
+      title: locale.editor?.superscript ?? 'Superscript',
       icon: <SuperscriptIcon />,
       active: state.superscript,
       onClick: () => chain().toggleSuperscript().run(),
     },
     bulletList: {
-      title: 'Danh sách dấu chấm',
+      title: locale.editor?.bulletList ?? 'Bullet list',
       icon: <ListIcon />,
       active: state.bulletList,
       onClick: () => chain().toggleBulletList().run(),
     },
     orderedList: {
-      title: 'Danh sách đánh số',
+      title: locale.editor?.orderedList ?? 'Numbered list',
       icon: <ListOrderedIcon />,
       active: state.orderedList,
       onClick: () => chain().toggleOrderedList().run(),
     },
     taskList: {
-      title: 'Danh sách công việc',
+      title: locale.editor?.taskList ?? 'Task list',
       icon: <ListTodoIcon />,
       active: state.taskList,
       onClick: () => chain().toggleTaskList().run(),
     },
     blockquote: {
-      title: 'Trích dẫn',
+      title: locale.editor?.blockquote ?? 'Blockquote',
       icon: <QuoteIcon />,
       active: state.blockquote,
       onClick: () => chain().toggleBlockquote().run(),
     },
     codeBlock: {
-      title: 'Khối mã',
+      title: locale.editor?.codeBlock ?? 'Code block',
       icon: <SquareCodeIcon />,
       active: state.codeBlock,
       onClick: () => chain().toggleCodeBlock().run(),
     },
     horizontalRule: {
-      title: 'Đường kẻ ngang',
+      title: locale.editor?.horizontalRule ?? 'Horizontal rule',
       icon: <MinusIcon />,
       onClick: () => chain().setHorizontalRule().run(),
     },
     clear: {
-      title: 'Xoá định dạng',
+      title: locale.editor?.clearFormatting ?? 'Clear formatting',
       icon: <RemoveFormattingIcon />,
       onClick: () => chain().unsetAllMarks().clearNodes().run(),
     },
