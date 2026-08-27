@@ -291,7 +291,7 @@ export const DateInputBox = ({
     data-disabled={disabled || undefined}
     aria-invalid={invalid || undefined}
     className={cn(
-      'group/date-input flex h-9 w-full min-w-0 items-center gap-1 rounded-md border border-input bg-transparent py-1 pr-1 pl-3 shadow-xs transition-[color,box-shadow] dark:bg-input/30',
+      'group/date-input flex h-10 w-full min-w-0 items-center gap-1 rounded-md border border-input bg-transparent py-1 pr-1 pl-3 shadow-xs transition-[color,box-shadow] dark:bg-input/30',
       'focus-within:border-ring focus-within:ring-2 focus-within:ring-ring/20',
       'data-disabled:cursor-not-allowed data-disabled:opacity-50',
       'aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40',

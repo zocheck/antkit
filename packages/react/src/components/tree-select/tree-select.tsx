@@ -178,7 +178,7 @@ export const TreeSelect = ({
           aria-describedby={ariaDescribedBy}
           disabled={disabled}
           className={cn(
-            'flex min-h-9 w-full cursor-pointer items-center gap-2 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors',
+            'flex min-h-10 w-full cursor-pointer items-center gap-2 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors',
             'focus-visible:outline-hidden focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20',
             'disabled:cursor-not-allowed disabled:opacity-50',
             'aria-invalid:border-destructive aria-invalid:ring-destructive/20',
