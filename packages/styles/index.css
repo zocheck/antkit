@@ -1,0 +1,297 @@
+/*
+ * antkit design tokens.
+ *
+ * Import once, after Tailwind, and point Tailwind at the component source so
+ * it can see the class names inside the package:
+ *
+ *   @import 'tailwindcss';
+ *   @import '@antkit/styles';
+ *   @source '../node_modules/@antkit/react/src';
+ */
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Brand design tokens — the CSS-first replacement for the old
+ * `tailwind.config.mjs` `theme.extend` block.
+ */
+@theme {
+  /* Inter is compact and neutral for dashboards, with a Vietnamese subset. */
+  --font-sans:
+    'Inter Variable', Inter, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, sans-serif;
+
+  --color-primary: #0071f9;
+
+  --color-blue-50: #ebf5ff;
+  --color-blue-100: #e1effe;
+  --color-blue-200: #c3ddfd;
+  --color-blue-300: #a4cafe;
+  --color-blue-400: #509fff;
+  --color-blue-500: #0071f9;
+  --color-blue-600: #1a56db;
+  --color-blue-700: #023ec3;
+  --color-blue-800: #1e429f;
+  --color-blue-900: #233876;
+
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #23242d;
+  --color-gray-900: #05060f;
+
+  --color-green-50: #f0fdf4;
+  --color-green-100: #e2faea;
+  --color-green-200: #d5f4de;
+  --color-green-300: #b2e8c2;
+  --color-green-400: #33c35d;
+  --color-green-500: #00b135;
+  --color-green-600: #16a34a;
+  --color-green-700: #15803d;
+  --color-green-800: #166534;
+  --color-green-900: #14532d;
+
+  --color-yellow-100: #fff7e5;
+  --color-yellow-500: #f49000;
+
+  --color-red-50: #fef3f4;
+  --color-red-100: #fce6e9;
+  --color-red-200: #f6b6bf;
+  --color-red-300: #f6b6bf;
+  --color-red-400: #e83e56;
+  --color-red-500: #e20d2c;
+  --color-red-600: #cb001e;
+  --color-red-700: #aa011a;
+  --color-red-800: #9b1c1c;
+  --color-red-900: #771d1d;
+
+  --color-orange-50: #fffbeb;
+  --color-orange-100: #fff7e5;
+  --color-orange-200: #ffe9ca;
+  --color-orange-300: #ffd9a4;
+  --color-orange-400: #ffae3e;
+  --color-orange-500: #f49000;
+  --color-orange-600: #df8407;
+  --color-orange-700: #9e5c00;
+  --color-orange-800: #633e0b;
+  --color-orange-900: #321f06;
+
+  --color-neutral-0: #fff;
+  --color-neutral-100: #f5f6fa;
+  --color-neutral-200: #ebedf4;
+
+  /* Roomy line-height keeps stacked Vietnamese tone marks clear at UI sizes. */
+  --text-xs: 12px;
+  --text-xs--line-height: 18px;
+  --text-sm: 14px;
+  --text-sm--line-height: 22px;
+  --text-base--line-height: 26px;
+  --text-md: 16px;
+  --text-md--line-height: 26px;
+  --text-lg: 20px;
+  --text-lg--line-height: 30px;
+  --text-xl: 24px;
+  --text-xl--line-height: 34px;
+  --text-2xl: 30px;
+  --text-2xl--line-height: 40px;
+  --text-3xl: 36px;
+  --text-3xl--line-height: 46px;
+  --text-4xl: 40px;
+  --text-4xl--line-height: 50px;
+  --text-5xl: 48px;
+  --text-5xl--line-height: 60px;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-3xl: 24px;
+
+  --tracking-xs: 0.06px;
+  --tracking-sm: 0.07px;
+  --tracking-md: 0.08px;
+  --tracking-lg: 0.1px;
+  --tracking-xl: 0.12px;
+  --tracking-2xl: 0.15px;
+  --tracking-3xl: 0.18px;
+  --tracking-4xl: 0.2px;
+  --tracking-5xl: 0.24px;
+}
+
+/*
+ * shadcn/ui semantic tokens, mapped onto the brand palette above so the
+ * generated components in `src/components/ui` inherit the product's look.
+ * Change a value here and every shadcn component follows.
+ */
+:root {
+  color-scheme: light;
+
+  --radius: 12px;
+
+  --background: #ffffff;
+  --foreground: #1f1f1f;
+
+  --card: #ffffff;
+  --card-foreground: #1f1f1f;
+  --popover: #ffffff;
+  --popover-foreground: #1f1f1f;
+
+  --primary: #0b56fe;
+  --primary-foreground: #ffffff;
+  --secondary: #f5f6fa;
+  --secondary-foreground: #23242d;
+  --muted: #f5f6fa;
+  --muted-foreground: #6b7280;
+  --accent: #ebf5ff;
+  --accent-foreground: #0071f9;
+  --destructive: #e20d2c;
+  --destructive-foreground: #ffffff;
+
+  --border: #f0f0f0;
+  --input: #e5e7eb;
+  --ring: #0b56fe;
+
+  --sidebar: #ffffff;
+  --sidebar-foreground: #1f1f1f;
+  --sidebar-primary: #0071f9;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e1effe;
+  --sidebar-accent-foreground: #0071f9;
+  --sidebar-border: #f0f0f0;
+  --sidebar-ring: #0b56fe;
+}
+
+.dark {
+  color-scheme: dark;
+
+  /*
+   * Not pure black: a slightly blue-tinted charcoal reduces the halation that
+   * makes light-on-dark text feel like it's vibrating. Accents are lightened
+   * versions of the light-theme values so they keep enough contrast.
+   */
+  --background: #0b0d12;
+  --foreground: #e6e8ee;
+
+  --card: #12151c;
+  --card-foreground: #e6e8ee;
+  --popover: #161a22;
+  --popover-foreground: #e6e8ee;
+
+  --primary: #4d8dff;
+  --primary-foreground: #06080d;
+  --secondary: #1b1f29;
+  --secondary-foreground: #e6e8ee;
+  --muted: #1b1f29;
+  --muted-foreground: #9aa3b2;
+  --accent: #16243d;
+  --accent-foreground: #7db1ff;
+  --destructive: #f2556b;
+  --destructive-foreground: #0b0d12;
+
+  --border: #232936;
+  --input: #2b3240;
+  --ring: #4d8dff;
+
+  --sidebar: #0e1117;
+  --sidebar-foreground: #e6e8ee;
+  --sidebar-primary: #4d8dff;
+  --sidebar-primary-foreground: #06080d;
+  --sidebar-accent: #16243d;
+  --sidebar-accent-foreground: #7db1ff;
+  --sidebar-border: #1c222d;
+  --sidebar-ring: #4d8dff;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+/*
+ * Replaces the generated `safelist` from the old JS config: keep every
+ * bg-/text-/ring- colour utility available for class names built at runtime.
+ */
+@source inline("{bg,text,ring}-{white,primary}");
+@source inline(
+  "{bg,text,ring}-{blue,gray,green,yellow,red,orange,neutral}-{0,50,{1,2,3,4,5,6,7,8,9}00}"
+);
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+
+    margin: 0;
+    padding: 0;
+  }
+
+  /*
+   * Proportional digits are prettier in prose but make columns of numbers jitter.
+   * Tables in an admin UI want the monospaced-width set instead.
+   */
+  table {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* The old JS config overrode the typography plugin's default 65ch measure. */
+.prose {
+  max-width: 100ch;
+}
+
+:root {
+  font-family: var(--font-sans);
+
+  /* The variable font contains the weights we use; don't let the browser
+   * synthesize a heavier face when a glyph or style is unavailable. */
+  font-synthesis: none;
+
+  font-optical-sizing: auto;
+
+  /*
+   * `auto`, not `optimizeLegibility`. The latter forces kerning and ligatures
+   * and has a long history of mangling stacked diacritics.
+   */
+  text-rendering: auto;
+
+  /* Grayscale antialiasing keeps Inter's regular weight crisp without adding
+   * the extra perceived weight of subpixel rendering. */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  -webkit-text-size-adjust: 100%;
+}

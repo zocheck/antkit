@@ -1,0 +1,27 @@
+{
+  "name": "antkit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Ant Design-shaped React components on Radix and Tailwind.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter @antkit/docs dev",
+    "build": "pnpm --filter @antkit/docs build",
+    "preview": "pnpm --filter @antkit/docs preview",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check"
+  },
+  "devDependencies": {
+    "oxfmt": "^0.65.0",
+    "oxlint": "^1.80.0",
+    "typescript": "^7.0.2"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@11.21.0"
+}

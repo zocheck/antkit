@@ -1,0 +1,13 @@
+@import 'tailwindcss';
+@import '@antkit/styles';
+
+/*
+ * Tailwind skips node_modules, so the class names inside @antkit/react would
+ * never reach the stylesheet. Point it at the package source explicitly —
+ * pnpm symlinks it and Tailwind follows the link.
+ */
+@source '../../../packages/react/src';
+
+body {
+  font-family: var(--font-sans);
+}

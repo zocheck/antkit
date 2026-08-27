@@ -1,0 +1,22 @@
+{
+  "name": "@antkit/styles",
+  "version": "0.1.0",
+  "description": "Design tokens and theme for antkit.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zocheck/antkit.git",
+    "directory": "packages/styles"
+  },
+  "files": [
+    "index.css"
+  ],
+  "main": "index.css",
+  "exports": {
+    ".": "./index.css",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
