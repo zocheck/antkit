@@ -27,6 +27,8 @@
   "sideEffects": false,
   "exports": {
     ".": "./src/index.ts",
+    "./rich-text-editor": "./src/components/rich-text-editor/index.ts",
+    "./rich-text-editor/tools": "./src/components/rich-text-editor/tools.ts",
     "./package.json": "./package.json"
   },
   "publishConfig": {
@@ -40,18 +42,6 @@
     "@dnd-kit/modifiers": "^9.0.0",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
-    "@tiptap/extension-highlight": "^3.30.3",
-    "@tiptap/extension-image": "^3.30.3",
-    "@tiptap/extension-list": "^3.30.3",
-    "@tiptap/extension-subscript": "^3.30.3",
-    "@tiptap/extension-superscript": "^3.30.3",
-    "@tiptap/extension-table": "^3.30.3",
-    "@tiptap/extension-text-align": "^3.30.3",
-    "@tiptap/extension-text-style": "^3.30.3",
-    "@tiptap/extensions": "^3.30.3",
-    "@tiptap/pm": "^3.30.3",
-    "@tiptap/react": "^3.30.3",
-    "@tiptap/starter-kit": "^3.30.3",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "lucide-react": "^1.34.0",
@@ -67,7 +57,57 @@
     "typescript": "^7.0.2"
   },
   "peerDependencies": {
+    "@tiptap/extension-highlight": "^3.30.3",
+    "@tiptap/extension-image": "^3.30.3",
+    "@tiptap/extension-list": "^3.30.3",
+    "@tiptap/extension-subscript": "^3.30.3",
+    "@tiptap/extension-superscript": "^3.30.3",
+    "@tiptap/extension-table": "^3.30.3",
+    "@tiptap/extension-text-align": "^3.30.3",
+    "@tiptap/extension-text-style": "^3.30.3",
+    "@tiptap/extensions": "^3.30.3",
+    "@tiptap/pm": "^3.30.3",
+    "@tiptap/react": "^3.30.3",
+    "@tiptap/starter-kit": "^3.30.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@tiptap/extension-highlight": {
+      "optional": true
+    },
+    "@tiptap/extension-image": {
+      "optional": true
+    },
+    "@tiptap/extension-list": {
+      "optional": true
+    },
+    "@tiptap/extension-subscript": {
+      "optional": true
+    },
+    "@tiptap/extension-superscript": {
+      "optional": true
+    },
+    "@tiptap/extension-table": {
+      "optional": true
+    },
+    "@tiptap/extension-text-align": {
+      "optional": true
+    },
+    "@tiptap/extension-text-style": {
+      "optional": true
+    },
+    "@tiptap/extensions": {
+      "optional": true
+    },
+    "@tiptap/pm": {
+      "optional": true
+    },
+    "@tiptap/react": {
+      "optional": true
+    },
+    "@tiptap/starter-kit": {
+      "optional": true
+    }
   }
 }

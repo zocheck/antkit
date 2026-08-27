@@ -8,6 +8,75 @@
  */
 @source '../../../packages/react/src';
 
+/*
+ * Docs-only surfaces. Code blocks need their own background: `--muted` is the
+ * same colour as half the component previews, and a snippet has to read as a
+ * separate object from the demo sitting above it.
+ */
+:root {
+  --code: #f7f8fb;
+  --code-foreground: #2b3040;
+
+  --tok-comment: #8a93a5;
+  --tok-string: #0a7c4a;
+  --tok-tag: #1a56db;
+  --tok-keyword: #9333ea;
+  --tok-type: #b45309;
+  --tok-attr: #0e7490;
+  --tok-number: #cb001e;
+  --tok-punct: #6b7280;
+}
+
+.dark {
+  --code: #12151c;
+  --code-foreground: #ccd2de;
+
+  --tok-comment: #6b7382;
+  --tok-string: #6ee7a8;
+  --tok-tag: #7db1ff;
+  --tok-keyword: #c99bff;
+  --tok-type: #f4b860;
+  --tok-attr: #67d9e8;
+  --tok-number: #ff9aa8;
+  --tok-punct: #9aa3b2;
+}
+
+@theme inline {
+  --color-code: var(--code);
+  --color-code-foreground: var(--code-foreground);
+}
+
+.tok-comment {
+  color: var(--tok-comment);
+  font-style: italic;
+}
+.tok-string {
+  color: var(--tok-string);
+}
+.tok-tag {
+  color: var(--tok-tag);
+}
+.tok-keyword {
+  color: var(--tok-keyword);
+}
+.tok-type {
+  color: var(--tok-type);
+}
+.tok-attr {
+  color: var(--tok-attr);
+}
+.tok-number {
+  color: var(--tok-number);
+}
+.tok-punct {
+  color: var(--tok-punct);
+}
+
 body {
   font-family: var(--font-sans);
+}
+
+/* The docs shell owns its own scroll containers; kill the double scrollbar. */
+html {
+  scroll-behavior: smooth;
 }

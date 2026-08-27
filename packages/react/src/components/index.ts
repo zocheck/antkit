@@ -36,7 +36,6 @@ export * from './progress';
 export * from './radio';
 export * from './rate';
 export * from './result';
-export * from './rich-text-editor';
 export * from './segmented';
 export * from './select';
 export * from './separator';

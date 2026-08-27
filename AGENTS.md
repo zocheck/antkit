@@ -126,8 +126,13 @@ The library is source-shipped, so anything imported from `components/index.ts`
 is reachable from every consumer's entry chunk unless tree-shaking removes it.
 
 - Keep components free of side effects at module scope.
-- `RichTextEditor` pulls ~430 KB of TipTap/ProseMirror. It stays in the barrel
-  for discoverability, but never import it from a shared file — the moment an
-  app shell touches it, every page pays. Document `lazy()` at the call site.
+- `RichTextEditor` is **out of the root barrel** on purpose: 211 KB gzip, 12x
+  the next heaviest component. It is reachable only at
+  `@antkit/react/rich-text-editor`, and TipTap is an optional peer so a plain
+  install does not download 13 MB of editor. Keep it that way.
+- Anything that would add more than ~20 KB gzip to the barrel deserves the same
+  treatment: a subpath export plus optional peers.
+- The shared floor is 10.3 KB gzip (`tailwind-merge`). `tailwind-variants` adds
+  ~3.7 KB more, but only for the components that use it.
 - Before adding a dependency, check whether an existing one already does the
   job. `radix-ui`, `lucide-react` and `tailwind-variants` cover most of it.

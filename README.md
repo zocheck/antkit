@@ -34,6 +34,24 @@ import { Button, Form, Input, message } from '@antkit/react';
 </Form>;
 ```
 
+## Weight
+
+Measured, gzipped, on top of React:
+
+| you import                                                       | gzip     |
+| ---------------------------------------------------------------- | -------- |
+| nothing — just `cn`                                              | 10.3 KB  |
+| Button, Card, Badge, Skeleton                                    | 26.5 KB  |
+| Button, Input, Form, Checkbox, Alert, message                    | 47.7 KB  |
+| a full CRUD page (+ Select, Table, Modal, Tooltip, DropdownMenu) | 88.6 KB  |
+| all 62 components                                                | 180.9 KB |
+
+Source is shipped unbuilt and the barrel tree-shakes, so you pay for what you
+import and nothing else. `RichTextEditor` is the one component heavy enough
+(211 KB gzip of TipTap) to be kept out of the barrel entirely — it sits behind
+`@antkit/react/rich-text-editor` with TipTap as an optional peer, so a plain
+install never downloads it.
+
 ## Repo
 
 ```

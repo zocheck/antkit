@@ -1,12 +1,6 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": [
-    "react",
-    "typescript",
-    "import",
-    "unicorn",
-    "oxc"
-  ],
+  "plugins": ["react", "typescript", "import", "unicorn", "oxc"],
   "env": {
     "browser": true,
     "es2024": true,
@@ -36,35 +30,24 @@
     "import/no-duplicates": "error",
     "import/no-unassigned-import": "off",
     "oxc/no-async-endpoint-handlers": "off",
-    "eqeqeq": [
-      "error",
-      "smart"
-    ],
+    "eqeqeq": ["error", "smart"],
     "no-console": [
       "warn",
       {
-        "allow": [
-          "warn",
-          "error"
-        ]
+        "allow": ["warn", "error"]
       }
     ],
     "unicorn/prefer-node-protocol": "error"
   },
   "overrides": [
     {
-      "files": [
-        "vite.config.ts",
-        "*.config.{js,cjs,mjs,ts}"
-      ],
+      "files": ["vite.config.ts", "*.config.{js,cjs,mjs,ts}"],
       "rules": {
         "no-console": "off"
       }
     },
     {
-      "files": [
-        "packages/react/src/**"
-      ],
+      "files": ["packages/react/src/**"],
       "rules": {
         "react/purity": "off",
         "react/set-state-in-effect": "off",
@@ -73,10 +56,5 @@
       }
     }
   ],
-  "ignorePatterns": [
-    "**/dist",
-    "**/dist-ssr",
-    "**/node_modules",
-    "**/public"
-  ]
+  "ignorePatterns": ["**/dist", "**/dist-ssr", "**/node_modules", "**/public"]
 }

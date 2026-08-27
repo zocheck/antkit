@@ -192,14 +192,49 @@ with no adapter — that includes `Select`, `DatePicker`, `InputNumber` and
 Match the surrounding code: named exports, arrow components, `ComponentProps<'x'>`
 for the DOM half of a props type, `data-slot` on every meaningful element.
 
+## What it costs
+
+Measured, gzipped, on top of React:
+
+| you import                                                       | gzip     |
+| ---------------------------------------------------------------- | -------- |
+| nothing — just `cn`                                              | 10.3 KB  |
+| Button, Card, Badge, Skeleton                                    | 26.5 KB  |
+| Button, Input, Form, Checkbox, Alert, message                    | 47.7 KB  |
+| a full CRUD page (+ Select, Table, Modal, Tooltip, DropdownMenu) | 88.6 KB  |
+| every component in the barrel                                    | 180.9 KB |
+| `RichTextEditor`, on its own chunk                               | +211 KB  |
+
+The 10.3 KB floor is `tailwind-merge`, paid once per app, and it is what makes
+a caller's `className` beat the component's own classes.
+
+Heaviest single components: `sidebar` 47 KB, `date-picker` 46 KB,
+`time-picker` 46 KB, `popconfirm` 40 KB, `dropdown-menu` 34 KB — the cost is
+Radix's floating/dismissable-layer stack, shared between them, so importing
+two of them costs far less than the sum.
+
 ## Things that will bite you
 
 - **`@source` is required.** Tailwind will not scan `node_modules`, so without
   it the app renders unstyled components and you will chase the wrong bug.
 - **`Message` renders outside the React tree** that called it, so it cannot
   read context. Translate before calling `message.*`.
-- **`RichTextEditor` drags in ~430 KB** of TipTap/ProseMirror. Always reach it
-  through `lazy()`; never import it into an app shell.
+- **`RichTextEditor` is not in the root barrel.** It costs 211 KB gzip of
+  TipTap/ProseMirror — 12x the next heaviest component — so it lives behind a
+  subpath and an optional peer dependency:
+
+  ```tsx
+  const RichTextEditor = lazy(() =>
+    import('@antkit/react/rich-text-editor').then((m) => ({
+      default: m.RichTextEditor,
+    })),
+  );
+  ```
+
+  Install the peers first: `pnpm add @tiptap/react @tiptap/starter-kit @tiptap/pm`.
+  Toolbar presets are plain data and safe to import eagerly from
+  `@antkit/react/rich-text-editor/tools`.
+
 - **`onChange` on `InputNumber` fires with out-of-range values while typing.**
   Clamping happens on blur, on purpose — so typing `5` toward `50` is not
   fought. Validate on submit, not per keystroke.

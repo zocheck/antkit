@@ -1,5 +1,21 @@
-import { useMemo, useState } from 'react';
+import { lazy, Suspense, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
+
+// 211 KB gzip of TipTap. It lives behind a subpath rather than the root
+// barrel so it can only arrive on purpose, and behind lazy() so it lands
+// in its own chunk.
+const RichTextEditor = lazy(() =>
+  import('@antkit/react/rich-text-editor').then((m) => ({
+    default: m.RichTextEditor,
+  })),
+);
+
+// The toolbar presets are plain data — a separate subpath so reading them
+// does not pull the editor back into the entry chunk.
+import {
+  COMPACT_TOOLBAR,
+  DEFAULT_TOOLBAR,
+} from '@antkit/react/rich-text-editor/tools';
 
 import {
   addDays,
@@ -80,9 +96,6 @@ import {
   Rate,
   RadioGroup,
   Result,
-  RichTextEditor,
-  COMPACT_TOOLBAR,
-  DEFAULT_TOOLBAR,
   Segmented,
   Select,
   Separator,
@@ -2343,55 +2356,57 @@ export const Showcase = () => {
         title="RichTextEditor"
         hint="Tiptap + thanh công cụ. Ảnh chọn/dán/kéo thả, bảng, task list, màu chữ, căn lề. value là HTML, chạy được cả controlled lẫn uncontrolled."
       >
-        <div className="grid w-full gap-4 lg:grid-cols-2">
-          <RichTextEditor
-            value={body}
-            onChange={setBody}
-            placeholder="Soạn nội dung email…"
-            maxLength={2000}
-            showCount
-            minHeight={220}
-            onUploadImage={uploadImage}
-            onError={(error) => message.error(error.message)}
-            toolbar={[
-              ...DEFAULT_TOOLBAR,
-              'divider',
-              {
-                key: 'today',
-                title: 'Chèn ngày hôm nay',
-                icon: <CalendarIcon />,
-                onClick: (editor) =>
-                  editor
-                    .chain()
-                    .focus()
-                    .insertContent(new Date().toLocaleDateString('vi-VN'))
-                    .run(),
-              },
-            ]}
-          />
-
-          <div className="flex flex-col gap-2">
+        <Suspense fallback={<Skeleton className="h-40 w-full" />}>
+          <div className="grid w-full gap-4 lg:grid-cols-2">
             <RichTextEditor
-              toolbar={COMPACT_TOOLBAR}
-              placeholder="COMPACT_TOOLBAR — dùng cho ô ghi chú ngắn…"
-              minHeight={96}
-            />
-            <RichTextEditor
-              starterKit={{ codeBlock: false, blockquote: false }}
+              value={body}
+              onChange={setBody}
+              placeholder="Soạn nội dung email…"
+              maxLength={2000}
+              showCount
+              minHeight={220}
+              onUploadImage={uploadImage}
+              onError={(error) => message.error(error.message)}
               toolbar={[
-                'block',
+                ...DEFAULT_TOOLBAR,
                 'divider',
-                'bold',
-                'italic',
-                'divider',
-                'link',
+                {
+                  key: 'today',
+                  title: 'Chèn ngày hôm nay',
+                  icon: <CalendarIcon />,
+                  onClick: (editor) =>
+                    editor
+                      .chain()
+                      .focus()
+                      .insertContent(new Date().toLocaleDateString('vi-VN'))
+                      .run(),
+                },
               ]}
-              placeholder="starterKit={{ codeBlock: false, blockquote: false }}"
-              minHeight={72}
             />
-            <RichTextEditor readOnly value={body} minHeight={72} />
+
+            <div className="flex flex-col gap-2">
+              <RichTextEditor
+                toolbar={COMPACT_TOOLBAR}
+                placeholder="COMPACT_TOOLBAR — dùng cho ô ghi chú ngắn…"
+                minHeight={96}
+              />
+              <RichTextEditor
+                starterKit={{ codeBlock: false, blockquote: false }}
+                toolbar={[
+                  'block',
+                  'divider',
+                  'bold',
+                  'italic',
+                  'divider',
+                  'link',
+                ]}
+                placeholder="starterKit={{ codeBlock: false, blockquote: false }}"
+                minHeight={72}
+              />
+              <RichTextEditor readOnly value={body} minHeight={72} />
+            </div>
           </div>
-        </div>
+        </Suspense>
       </Section>
 
       <Section
