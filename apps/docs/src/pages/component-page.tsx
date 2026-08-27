@@ -12,6 +12,7 @@ import { useT } from '../lib/i18n';
 import { parseExamples, slugify } from '../lib/source';
 import type { ParsedExample } from '../lib/source';
 import type { DemoMeta, RegistryEntry } from '../lib/types';
+import { link } from '../lib/router';
 
 /**
  * Lazy on purpose. An eager glob would put every demo — TipTap included — in
@@ -126,7 +127,9 @@ export const ComponentPage = ({
               <Example
                 key={example.name}
                 id={slugify(example.name)}
-                href={`/components/${entry.slug}/${slugify(example.name)}`}
+                href={link(
+                  `/components/${entry.slug}/${slugify(example.name)}`,
+                )}
                 title={example.title}
                 description={example.description}
                 code={example.code}

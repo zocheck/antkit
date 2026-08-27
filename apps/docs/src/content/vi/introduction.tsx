@@ -3,6 +3,7 @@ import { A, C, P, Section, Table } from '../../components/guide';
 import { useT } from '../../lib/i18n';
 import type { GuideMeta } from '../../lib/types';
 import { GROUPS, REGISTRY } from '../../registry';
+import { link } from '../../lib/router';
 
 export const meta: GuideMeta = {
   title: 'Giới thiệu',
@@ -161,7 +162,10 @@ export const Content = () => {
           Chuỗi hiển thị cho người dùng cũng không được hard-code. Component
           nhận chữ qua props, hoặc qua <C>ConfigProvider</C> với vài nhãn dựng
           sẵn — xem{' '}
-          <A href="/installation/labels">Nhãn dựng sẵn trong component</A>.
+          <A href={link('/installation/labels')}>
+            Nhãn dựng sẵn trong component
+          </A>
+          .
         </P>
       </Section>
 
@@ -178,7 +182,7 @@ export const Content = () => {
           <C>@source</C>), và bundler nào bỏ qua TypeScript trong{' '}
           <C>node_modules</C> thì phải bảo nó đừng bỏ qua —{' '}
           <C>transpilePackages</C> với Next.js, còn Vite thì không cần gì.{' '}
-          <A href="/installation">Trang Cài đặt</A> nói kỹ cả hai.
+          <A href={link('/installation')}>Trang Cài đặt</A> nói kỹ cả hai.
         </P>
       </Section>
 
@@ -231,7 +235,7 @@ export const Content = () => {
                   {entries.map((entry) => (
                     <a
                       key={entry.slug}
-                      href={`/components/${entry.slug}`}
+                      href={link(`/components/${entry.slug}`)}
                       className="rounded-xl border border-border p-3 transition-colors hover:border-primary hover:bg-accent/40"
                     >
                       <p className="font-medium">{entry.title}</p>
@@ -288,7 +292,8 @@ export const Content = () => {
           <C>list_components</C>, <C>get_component</C>, <C>search_components</C>
           , <C>get_guide</C>. Nó trả lời theo đúng version đang cài trong dự án,
           nên cái tên nó đưa ra là cái tên có thật.{' '}
-          <A href="/installation/mcp">Trang Cài đặt</A> có phần thiết lập.
+          <A href={link('/installation/mcp')}>Trang Cài đặt</A> có phần thiết
+          lập.
         </P>
       </Section>
 
@@ -324,8 +329,8 @@ export const Content = () => {
           <A href="https://github.com/zocheck/antkit">
             github.com/zocheck/antkit
           </A>
-          . Cài luôn chứ? <A href="/installation">Trang Cài đặt</A> chỉ có hai
-          lệnh và một tệp CSS.
+          . Cài luôn chứ? <A href={link('/installation')}>Trang Cài đặt</A> chỉ
+          có hai lệnh và một tệp CSS.
         </P>
       </Section>
     </>

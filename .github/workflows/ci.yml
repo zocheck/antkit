@@ -5,6 +5,11 @@ on:
     branches: [main]
   pull_request:
 
+# Cancel a run that a newer push has already made irrelevant.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -22,3 +27,50 @@ jobs:
       - run: pnpm check:docs
       - run: pnpm check:styles
       - run: pnpm build
+
+  # Only the default branch publishes, and only once the checks above pass, so
+  # a broken build never reaches the live docs.
+  deploy:
+    needs: check
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.pages.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      # Hands back where this repo is actually served from — `/antkit/` for a
+      # project page, `/` once a custom domain is set — so neither the build
+      # nor the generated markdown has to hard-code it.
+      - id: pages
+        uses: actions/configure-pages@v5
+
+      - run: pnpm install --frozen-lockfile
+
+      # `llms.txt` and the per-component markdown carry absolute URLs, so they
+      # are regenerated against the real host rather than the committed guess.
+      - run: pnpm gen:docs
+        env:
+          ANTKIT_DOCS_URL: ${{ steps.pages.outputs.base_url }}
+
+      - run: pnpm --filter @antkit/docs build
+        env:
+          DOCS_BASE: ${{ steps.pages.outputs.base_path }}/
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/docs/dist
+
+      - uses: actions/deploy-pages@v4

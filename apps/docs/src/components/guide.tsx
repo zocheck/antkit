@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { link } from '../lib/router';
 
 /**
  * The prose primitives the guide pages are written with. Deliberately four
@@ -40,8 +41,10 @@ export const A = ({
   children: ReactNode;
 }) => (
   <a
-    href={href}
-    {...(href.startsWith('#') ? {} : { target: '_blank', rel: 'noreferrer' })}
+    href={link(href)}
+    // An in-app path or a `#id` stays in this tab; only a real outside link
+    // opens a new one.
+    {...(/^[a-z]+:/i.test(href) ? { target: '_blank', rel: 'noreferrer' } : {})}
     className="font-medium text-foreground underline underline-offset-4 hover:text-primary"
   >
     {children}

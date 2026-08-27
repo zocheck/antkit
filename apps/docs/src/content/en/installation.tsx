@@ -2,6 +2,7 @@ import { CodeBlock } from '../../components/code-block';
 import { A, C, P, Section, Table } from '../../components/guide';
 import { REGISTRY } from '../../registry';
 import type { GuideMeta } from '../../lib/types';
+import { link } from '../../lib/router';
 
 export const meta: GuideMeta = {
   title: 'Installation',
@@ -334,7 +335,7 @@ export const Content = () => (
       <P>
         Everything else worth knowing is on the component pages, or in the JSDoc
         block at the call site. Start with{' '}
-        <A href="/components/button">Button</A>.
+        <A href={link('/components/button')}>Button</A>.
       </P>
     </Section>
   </>

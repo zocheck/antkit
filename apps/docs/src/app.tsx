@@ -20,7 +20,7 @@ import { LanguageSwitch } from './components/language-switch';
 import { Nav } from './components/nav';
 import { SearchDialog, useSearchDialog } from './components/search-dialog';
 import { LocaleProvider, useLocale as useDocsLocale, useT } from './lib/i18n';
-import { useLinkRouting, useRoute } from './lib/router';
+import { link, useLinkRouting, useRoute } from './lib/router';
 import { ComponentPage } from './pages/component-page';
 import { Guide } from './pages/guide';
 import { Home } from './pages/home';
@@ -118,12 +118,12 @@ const TopLinks = ({ page }: { page: Page }) => {
   return (
     <nav className="hidden items-center gap-1 md:flex">
       <TopLink
-        href="/introduction"
+        href={link('/introduction')}
         label={t.chrome.docs}
         active={page.kind === 'guide'}
       />
       <TopLink
-        href="/components/button"
+        href={link('/components/button')}
         label={t.chrome.components}
         active={page.kind === 'component'}
       />

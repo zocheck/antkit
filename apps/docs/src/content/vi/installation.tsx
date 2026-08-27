@@ -2,6 +2,7 @@ import { CodeBlock } from '../../components/code-block';
 import { A, C, P, Section, Table } from '../../components/guide';
 import { REGISTRY } from '../../registry';
 import type { GuideMeta } from '../../lib/types';
+import { link } from '../../lib/router';
 
 export const meta: GuideMeta = {
   title: 'Cài đặt',
@@ -328,7 +329,7 @@ export const Content = () => (
       />
       <P>
         Còn lại nằm hết ở trang từng component, hoặc trong khối JSDoc ngay tại
-        chỗ gọi. Bắt đầu từ <A href="/components/button">Button</A>.
+        chỗ gọi. Bắt đầu từ <A href={link('/components/button')}>Button</A>.
       </P>
     </Section>
   </>

@@ -43,6 +43,15 @@ export const useRoute = () => {
 /** The `href` a route wants on an `<a>`. Empty path is the landing page. */
 export const href = (path = '') => `${BASE}/${trim(path)}`;
 
+/**
+ * What an `<a>` should carry. In-app paths are written as `/installation`
+ * everywhere — including inside a guide's prose — and only become
+ * base-relative here, so a build served from a subdirectory does not need
+ * every author to know about it. Anything else is left alone.
+ */
+export const link = (target: string) =>
+  target.startsWith('/') ? href(target) : target;
+
 export const navigate = (path: string) => {
   globalThis.history.pushState(null, '', href(path));
   globalThis.dispatchEvent(new Event(ROUTE_EVENT));
