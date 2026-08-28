@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState } from 'react';
+import { createElement, Fragment, useMemo, useState } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 
 import { cn } from '../../utils';
@@ -556,35 +556,44 @@ export const Table = <TRecord,>({
                     }
                   >
                     <div className="flex select-none items-center justify-between gap-1">
-                      <button
-                        type="button"
-                        disabled={!sortable}
-                        onClick={() => sortable && toggleSort(key)}
-                        className={cn(
-                          'flex w-full min-w-0 items-center gap-1.5 rounded-md text-xs font-medium transition-colors',
-                          'outline-hidden focus-visible:ring-2 focus-visible:ring-ring',
-                          sortable
-                            ? '-ml-2 h-8 cursor-pointer px-2 hover:bg-accent hover:text-accent-foreground'
-                            : 'disabled:pointer-events-none',
-                        )}
-                      >
-                        {!!column.icon && (
-                          <span className="flex size-3.5 shrink-0 items-center justify-center text-muted-foreground [&>svg]:size-3.5">
-                            {column.icon}
+                      {/*
+                        Only a sortable header is a button. A plain one stays a
+                        `div` so a `title` carrying its own control — a
+                        select-all checkbox, say — is not nested inside one.
+                      */}
+                      {createElement(
+                        sortable ? 'button' : 'div',
+                        {
+                          ...(sortable && {
+                            type: 'button' as const,
+                            onClick: () => toggleSort(key),
+                          }),
+                          className: cn(
+                            'flex w-full min-w-0 items-center gap-1.5 rounded-md text-xs font-medium transition-colors',
+                            'outline-hidden focus-visible:ring-2 focus-visible:ring-ring',
+                            sortable &&
+                              '-ml-2 h-8 cursor-pointer px-2 hover:bg-accent hover:text-accent-foreground',
+                          ),
+                        },
+                        <>
+                          {!!column.icon && (
+                            <span className="flex size-3.5 shrink-0 items-center justify-center text-muted-foreground [&>svg]:size-3.5">
+                              {column.icon}
+                            </span>
+                          )}
+                          <span className="flex-1 truncate text-left">
+                            {column.title}
                           </span>
-                        )}
-                        <span className="flex-1 truncate text-left">
-                          {column.title}
-                        </span>
-                        {sortable &&
-                          (active === 'asc' ? (
-                            <ArrowUpIcon className="size-3 shrink-0" />
-                          ) : active === 'desc' ? (
-                            <ArrowDownIcon className="size-3 shrink-0" />
-                          ) : (
-                            <ChevronsUpDownIcon className="size-3 shrink-0 opacity-40" />
-                          ))}
-                      </button>
+                          {sortable &&
+                            (active === 'asc' ? (
+                              <ArrowUpIcon className="size-3 shrink-0" />
+                            ) : active === 'desc' ? (
+                              <ArrowDownIcon className="size-3 shrink-0" />
+                            ) : (
+                              <ChevronsUpDownIcon className="size-3 shrink-0 opacity-40" />
+                            ))}
+                        </>,
+                      )}
 
                       {column.resizable && (
                         <span
