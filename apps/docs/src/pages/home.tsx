@@ -18,6 +18,7 @@ import { useT } from '../lib/i18n';
 import { prefersReducedMotion, useReveal } from '../lib/use-reveal';
 import { GROUPS, REGISTRY } from '../registry';
 import type { HomeSection } from '../lib/types';
+import { link } from '../lib/router';
 
 const API_SNIPPET = `<Form form={form} onFinish={save}>
   <Form.Item
@@ -183,7 +184,7 @@ const NameTicker = () => (
       {REGISTRY.map((entry) => (
         <MarqueeItem key={entry.slug}>
           <a
-            href={`/components/${entry.slug}`}
+            href={link(`/components/${entry.slug}`)}
             className="block rounded-full border border-border px-4 py-1.5 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:bg-accent hover:text-foreground"
           >
             {entry.title}
@@ -234,7 +235,7 @@ const Gallery = () => {
         return (
           <Reveal key={group} delay={index * STEP_MS}>
             <a
-              href={`/components/${entries[0].slug}`}
+              href={link(`/components/${entries[0].slug}`)}
               className="group grid h-full content-start gap-3 rounded-xl border border-border bg-card p-5 transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
             >
               <div className="flex items-center gap-2.5">
@@ -313,12 +314,12 @@ export const Home = () => {
                   <ArrowRightIcon className="transition-transform group-hover/cta:translate-x-1" />
                 }
               >
-                <a href="/installation" className="group/cta">
+                <a href={link('/installation')} className="group/cta">
                   {home.ctaStart}
                 </a>
               </Button>
               <Button asChild size="lg" variant="outline">
-                <a href="/components/button">{home.ctaBrowse}</a>
+                <a href={link('/components/button')}>{home.ctaBrowse}</a>
               </Button>
             </div>
 
@@ -381,7 +382,7 @@ export const Home = () => {
 
           <Reveal className="justify-self-start">
             <Button asChild variant="outline">
-              <a href="/components/button">{home.gallery.cta}</a>
+              <a href={link('/components/button')}>{home.gallery.cta}</a>
             </Button>
           </Reveal>
         </section>
@@ -402,7 +403,7 @@ export const Home = () => {
                   <ArrowRightIcon className="transition-transform group-hover/cta:translate-x-1" />
                 }
               >
-                <a href="/installation" className="group/cta">
+                <a href={link('/installation')} className="group/cta">
                   {home.install.cta}
                 </a>
               </Button>

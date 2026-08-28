@@ -1,11 +1,12 @@
 import { Brand } from './brand';
 import { useT } from '../lib/i18n';
+import { link } from '../lib/router';
 
 /** Only the landing page carries this — a doc page ends on its own content. */
 export const Footer = ({ github }: { github: string }) => {
   const t = useT();
 
-  const link = 'text-muted-foreground transition-colors hover:text-foreground';
+  const item = 'text-muted-foreground transition-colors hover:text-foreground';
 
   return (
     <footer className="border-t border-border">
@@ -13,13 +14,13 @@ export const Footer = ({ github }: { github: string }) => {
         <Brand />
 
         <nav className="flex flex-wrap gap-x-6 gap-y-2">
-          <a href="/introduction" className={link}>
+          <a href={link('/introduction')} className={item}>
             {t.home.footer.docs}
           </a>
-          <a href="/components/button" className={link}>
+          <a href={link('/components/button')} className={item}>
             {t.home.footer.components}
           </a>
-          <a href={github} target="_blank" rel="noreferrer" className={link}>
+          <a href={github} target="_blank" rel="noreferrer" className={item}>
             {t.home.footer.source}
           </a>
         </nav>

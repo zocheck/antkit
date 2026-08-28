@@ -6,6 +6,7 @@ import { GROUP_ICONS } from '../lib/group-icons';
 import { useT } from '../lib/i18n';
 import { GROUPS, GUIDES, REGISTRY } from '../registry';
 import type { GroupId } from '../lib/types';
+import { link } from '../lib/router';
 
 type Item = { slug: string; label: string; href: string };
 
@@ -118,7 +119,7 @@ export const Nav = ({
         items={GUIDES.map((slug) => ({
           slug,
           label: t.guides[slug] ?? slug,
-          href: `/${slug}`,
+          href: link(`/${slug}`),
         }))}
         current={current}
         onNavigate={onNavigate}
@@ -133,7 +134,7 @@ export const Nav = ({
             (entry) => ({
               slug: entry.slug,
               label: entry.title,
-              href: `/components/${entry.slug}`,
+              href: link(`/components/${entry.slug}`),
             }),
           )}
           current={current}

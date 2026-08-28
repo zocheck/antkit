@@ -46,7 +46,7 @@ export const meta: DemoMeta = {
           name: 'className',
           type: 'string',
           description:
-            'Merged with tailwind-merge, so your `h-10` or `pl-9` beats the default.',
+            'Merged with tailwind-merge, so your `h-11` or `pl-9` beats the default.',
         },
       ],
     },

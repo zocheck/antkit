@@ -27,7 +27,20 @@ const spaFallback = (): Plugin => ({
   },
 });
 
+/**
+ * Where the built site will be served from. A GitHub project page lives under
+ * `/<repo>/`, so the deploy workflow passes that in; `pnpm dev` and a custom
+ * domain both want the root, which is the default.
+ *
+ * Nothing else needs to know: `lib/router` reads `import.meta.env.BASE_URL`,
+ * and every in-app `href` goes through its `link()`.
+ */
+declare const process: { env: Record<string, string | undefined> };
+
+const base = process.env.DOCS_BASE ?? '/';
+
 export default defineConfig({
+  base,
   plugins: [react(), tailwindcss(), spaFallback()],
   server: { port: 4000 },
   preview: { port: 4000 },

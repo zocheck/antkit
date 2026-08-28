@@ -3,6 +3,7 @@ import { CodeBlock } from '../../components/code-block';
 import { useT } from '../../lib/i18n';
 import { GROUPS, REGISTRY } from '../../registry';
 import type { GuideMeta } from '../../lib/types';
+import { link } from '../../lib/router';
 
 export const meta: GuideMeta = {
   title: 'Introduction',
@@ -151,7 +152,10 @@ export const Content = () => {
           No user-facing string is hard-coded either. Components take their copy
           through props, or through <C>ConfigProvider</C> for the handful of
           built-in labels — see{' '}
-          <A href="/installation/labels">Localising the built-in labels</A>.
+          <A href={link('/installation/labels')}>
+            Localising the built-in labels
+          </A>
+          .
         </P>
       </Section>
 
@@ -169,7 +173,7 @@ export const Content = () => {
           package (<C>@source</C>), and a bundler that ignores TypeScript inside{' '}
           <C>node_modules</C> has to be told not to — <C>transpilePackages</C>{' '}
           in Next.js, nothing at all in Vite.{' '}
-          <A href="/installation">Installation</A> covers both.
+          <A href={link('/installation')}>Installation</A> covers both.
         </P>
       </Section>
 
@@ -223,7 +227,7 @@ export const Content = () => {
                   {entries.map((entry) => (
                     <a
                       key={entry.slug}
-                      href={`/components/${entry.slug}`}
+                      href={link(`/components/${entry.slug}`)}
                       className="rounded-xl border border-border p-3 transition-colors hover:border-primary hover:bg-accent/40"
                     >
                       <p className="font-medium">{entry.title}</p>
@@ -281,7 +285,7 @@ export const Content = () => {
           <C>list_components</C>, <C>get_component</C>, <C>search_components</C>
           , <C>get_guide</C>. It answers from the version installed in the
           project, so a name it returns is a name that exists.{' '}
-          <A href="/installation/mcp">Installation</A> has the setup.
+          <A href={link('/installation/mcp')}>Installation</A> has the setup.
         </P>
       </Section>
 
@@ -317,8 +321,8 @@ export const Content = () => {
           <A href="https://github.com/zocheck/antkit">
             github.com/zocheck/antkit
           </A>
-          . Ready to install? <A href="/installation">Installation</A> is two
-          commands and a stylesheet.
+          . Ready to install? <A href={link('/installation')}>Installation</A>{' '}
+          is two commands and a stylesheet.
         </P>
       </Section>
     </>

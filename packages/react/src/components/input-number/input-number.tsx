@@ -57,8 +57,8 @@ export type InputNumberProps = Omit<
 
 const SIZE_CLASS = {
   sm: 'h-8 text-sm',
-  default: 'h-9',
-  lg: 'h-10 text-base',
+  default: 'h-[38px]',
+  lg: 'h-11 text-base',
 } as const;
 
 /**

@@ -1,8 +1,9 @@
 import pkg from '@antkit/react/package.json';
+import { link } from '../lib/router';
 
 /** Wordmark plus the version of `@antkit/react` these docs are built against. */
 export const Brand = ({ className = '' }: { className?: string }) => (
-  <a href="/" className={`flex items-center gap-2 ${className}`}>
+  <a href={link('/')} className={`flex items-center gap-2 ${className}`}>
     <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
       {/*
         Three segments on a diagonal: an ant at a glance, and — unlike the
